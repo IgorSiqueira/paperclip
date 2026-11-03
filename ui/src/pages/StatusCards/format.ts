@@ -1,10 +1,11 @@
 import type { StatusCardRefreshPolicy, StatusCardUpdate } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 /** "1.1k tok" / "940 tok" — compact token count for footers and chips. */
 export function formatTokens(tokens: number | null | undefined): string | null {
   if (tokens === null || tokens === undefined) return null;
-  if (tokens < 1000) return `${tokens} tok`;
-  return `${(tokens / 1000).toFixed(1)}k tok`;
+  if (tokens < 1000) return t("{{tokens}} tok", { tokens });
+  return t("{{toFixed}}k tok", { toFixed: (tokens / 1000).toFixed(1) });
 }
 
 /**
@@ -99,7 +100,7 @@ export function estimateStatusCardCost(policy: StatusCardRefreshPolicy): StatusC
     return {
       cost,
       primary: `~1 rebuild per refresh ≈ ${cost}`,
-      note: "Manual cards only cost tokens when you press Refresh.",
+      note: t("Manual cards only cost tokens when you press Refresh."),
     };
   }
 
@@ -128,17 +129,17 @@ export function estimateStatusCardCost(policy: StatusCardRefreshPolicy): StatusC
 
   return {
     cost,
-    primary: `Up to ~${effective} updates/day (${cadence}${withinHours}) ≈ ${cost}`,
+    primary: t("Up to ~{{effective}} updates/day ({{cadence}}{{withinHours}}) ≈ {{cost}}", { effective, cadence, withinHours, cost }),
     note: cappedByTokenCap
-      ? `Capped by your ${formatTokens(cap!)} daily token cap — the card pauses when it's hit.`
-      : "Only runs when something changed; a cheap no-op check otherwise.",
+      ? t("Capped by your {{formatTokens}} daily token cap — the card pauses when it's hit.", { formatTokens: formatTokens(cap!) })
+      : t("Only runs when something changed; a cheap no-op check otherwise."),
   };
 }
 
 /** "0.4k in / 0.2k out" — the per-update token split shown in history rows. */
 export function formatTokenSplit(inputTokens: number, outputTokens: number): string {
   const fmt = (n: number) => (n < 1000 ? `${n}` : `${(n / 1000).toFixed(1)}k`);
-  return `${fmt(inputTokens)} in / ${fmt(outputTokens)} out`;
+  return t("{{fmt}} in / {{fmt2}} out", { fmt: fmt(inputTokens), fmt2: fmt(outputTokens) });
 }
 
 /** Human label for an update's kind. */
@@ -147,7 +148,7 @@ export function updateKindLabel(kind: StatusCardUpdate["kind"]): string {
     case "compile":
       return "compile";
     case "full":
-      return "full rebuild";
+      return t("full rebuild");
     case "incremental":
       return "incremental";
     default:

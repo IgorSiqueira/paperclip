@@ -8,6 +8,7 @@ import { MarkdownBody } from "@/components/MarkdownBody";
 import { DocumentAnnotationsCountChip, IssueDocumentAnnotations } from "@/components/IssueDocumentAnnotations";
 import { useIssuePlanDocument } from "@/hooks/useIssuePlanDocument";
 import { useLocation } from "@/lib/router";
+import { t } from "@/i18n";
 
 interface IssuePropertiesPlansTabProps {
   issue: Issue;
@@ -54,18 +55,18 @@ export function IssuePropertiesPlansTab({ issue }: IssuePropertiesPlansTabProps)
     return (
       <div className="px-1 py-6 text-sm text-muted-foreground">
         {planDocumentLoading ? (
-          "Loading plan…"
+          t("Loading plan…")
         ) : issue.workMode === "planning" ? (
           <div className="space-y-2">
-            <p>This task is in plan mode but no plan document has been written yet.</p>
+            <p>{t("This task is in plan mode but no plan document has been written yet.")}</p>
             {pendingPlanConfirmation ? (
               <p className="text-amber-foreground">
-                A plan confirmation is pending, but the plan document it should confirm is missing.
+                {t("A plan confirmation is pending, but the plan document it should confirm is missing.")}
               </p>
             ) : null}
           </div>
         ) : (
-          "No plan yet. The plan document, accepted plans, and their revisions will appear here."
+          t("No plan yet. The plan document, accepted plans, and their revisions will appear here.")
         )}
       </div>
     );
@@ -80,12 +81,12 @@ export function IssuePropertiesPlansTab({ issue }: IssuePropertiesPlansTabProps)
       {planDocument ? (
         <section data-testid="issue-plan-document" className="space-y-2">
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
-            {`Revision ${planDocument.latestRevisionNumber ?? 1} · updated ${new Date(planDocument.updatedAt).toLocaleString([], {
+            {t("Revision {{latestRevisionNumber}} · updated {{toLocaleString}}", { latestRevisionNumber: planDocument.latestRevisionNumber ?? 1, toLocaleString: new Date(planDocument.updatedAt).toLocaleString([], {
               month: "short",
               day: "numeric",
               hour: "numeric",
               minute: "2-digit",
-            })}`}
+            }) })}
             <DocumentAnnotationsCountChip
               issueId={issue.id}
               docKey="plan"

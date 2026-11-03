@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { InlineBanner } from "@/components/InlineBanner";
 import { ConnectionChoiceList } from "../ConnectionChoiceList";
+import { t } from "@/i18n";
 
 /** Shared presentation for account reuse, including the requested external app. */
 export function RemoteMcpAccountChoice({
@@ -27,26 +28,22 @@ export function RemoteMcpAccountChoice({
       <div>
         <h1 className="text-xl font-bold">
           {upstreamServiceName
-            ? `Connect ${upstreamServiceName} through ${providerName}`
-            : `Connect ${providerName}`}
+            ? t("Connect {{upstreamServiceName}} through {{providerName}}", { upstreamServiceName, providerName })
+            : t("Connect {{providerName}}", { providerName })}
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Use an existing connection or connect a new account. Existing access
-          stays unchanged.
+          {t("Use an existing connection or connect a new account. Existing access stays unchanged.")}
         </p>
       </div>
       {upstreamServiceName && (
         <InlineBanner compact>
-          {providerName} is an external service that handles the connection and
-          requests to {upstreamServiceName}. Reusing this account does not yet
-          verify app access; the agent will check it and guide any additional
-          authorization.
+          {providerName} {t("is an external service that handles the connection and requests to")} {upstreamServiceName}{t(". Reusing this account does not yet verify app access; the agent will check it and guide any additional authorization.")}
         </InlineBanner>
       )}
       <ConnectionChoiceList
         choices={connections.map((connection) => ({
           ...connection,
-          description: "Provider account available",
+          description: t("Provider account available"),
         }))}
         pendingId={pendingId}
         onSelect={onSelect}
@@ -62,10 +59,10 @@ export function RemoteMcpAccountChoice({
           disabled={Boolean(pendingId)}
           onClick={onCancel}
         >
-          Cancel
+          {t("Cancel")}
         </Button>
         <Button disabled={Boolean(pendingId)} onClick={onConnectNew}>
-          Connect new
+          {t("Connect new")}
         </Button>
       </div>
     </div>

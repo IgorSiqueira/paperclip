@@ -44,6 +44,8 @@
     "release:rollback": "./scripts/rollback-latest.sh",
     "release:bootstrap-package": "node scripts/bootstrap-npm-package.mjs",
     "check:tokens": "node scripts/check-forbidden-tokens.mjs",
+    "check:i18n": "node cli/node_modules/tsx/dist/cli.mjs scripts/i18n-check.ts",
+    "i18n:codemod": "node cli/node_modules/tsx/dist/cli.mjs scripts/i18n-codemod.ts",
     "check:token-gates": "node scripts/check-token-gates.mjs && node scripts/sync-agent-palette-tokens.mjs --check && node scripts/sync-cliplab-character.mjs --check",
     "check:node-version": "node scripts/check-node-version-policy.mjs",
     "check:no-git-push": "node scripts/check-no-git-push.mjs",

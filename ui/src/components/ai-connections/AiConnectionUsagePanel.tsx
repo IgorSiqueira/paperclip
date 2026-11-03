@@ -5,6 +5,7 @@ import { aiConnectionsApi } from "@/api/ai-connections";
 import { Button } from "@/components/ui/button";
 import { QuotaBar } from "@/components/QuotaBar";
 import { formatDateTime, formatNumber } from "@/lib/utils";
+import { t } from "@/i18n";
 
 const usageNumber = (value: number) => formatNumber(value, { maximumFractionDigits: 20 });
 const amount = (value: number, unit: string | null) => unit === "USD"
@@ -61,14 +62,14 @@ function overageSummary(usage: AiConnectionUsage) {
 
 function usageError(usage: AiConnectionUsage) {
   switch (usage.errorCode) {
-    case "authentication_required": return "Sign in again to check usage.";
-    case "permission_denied": return "Usage access denied.";
-    case "rate_limited": return "Too many checks. Try again later.";
-    case "provider_unavailable": return "Provider unavailable. Try again.";
-    case "invalid_response": return "Couldn’t read usage. Try again.";
-    case "connection_unavailable": return "Reconnect to check usage.";
-    case "unsupported": return "Usage unavailable.";
-    default: return usage.message ?? "Usage unavailable.";
+    case "authentication_required": return t("Sign in again to check usage.");
+    case "permission_denied": return t("Usage access denied.");
+    case "rate_limited": return t("Too many checks. Try again later.");
+    case "provider_unavailable": return t("Provider unavailable. Try again.");
+    case "invalid_response": return t("Couldn’t read usage. Try again.");
+    case "connection_unavailable": return t("Reconnect to check usage.");
+    case "unsupported": return t("Usage unavailable.");
+    default: return usage.message ?? t("Usage unavailable.");
   }
 }
 
@@ -79,20 +80,20 @@ export function AiConnectionUsagePanel({ account, observation, cachedOnly = fals
   const supported = supportsAiConnectionUsage(account.provider, account.method);
   const usage = cachedOnly ? observation : probe.isSuccess ? probe.data : undefined;
   return (
-    <section aria-label="Account usage limits" className="space-y-3">
+    <section aria-label={t("Account usage limits")} className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h3 className="text-sm font-semibold">Usage</h3>
+        <h3 className="text-sm font-semibold">{t("Usage")}</h3>
         {supported && !cachedOnly && <Button variant="outline" size="sm" disabled={probe.isPending || account.status !== "connected"} onClick={() => probe.mutate()}>
-          {probe.isPending ? "Checking…" : usage?.status === "ok" ? "Refresh" : "Check usage"}
+          {probe.isPending ? t("Checking…") : usage?.status === "ok" ? t("Refresh") : t("Check usage")}
         </Button>}
       </div>
-      {cachedOnly && !usage && <p className="text-xs text-muted-foreground">Usage not observed.</p>}
-      {!supported && <p className="text-xs text-muted-foreground">Unavailable for this sign-in method.</p>}
+      {cachedOnly && !usage && <p className="text-xs text-muted-foreground">{t("Usage not observed.")}</p>}
+      {!supported && <p className="text-xs text-muted-foreground">{t("Unavailable for this sign-in method.")}</p>}
       {probe.error && <p role="alert" className="text-sm text-destructive">{probe.error.message}</p>}
       {usage && usage.status !== "ok" && <p role={usage.status === "unsupported" ? "status" : "alert"} className="text-sm text-muted-foreground">{usageError(usage)}</p>}
       {usage?.status === "ok" && (
         <div className="space-y-3" aria-live="polite">
-          {usage.limits.length === 0 && <p className="text-xs text-muted-foreground">Usage not reported.</p>}
+          {usage.limits.length === 0 && <p className="text-xs text-muted-foreground">{t("Usage not reported.")}</p>}
           {usage.limits.map((window) => {
             const details = limitDetails(window);
             return <div key={window.id} className="space-y-1.5">
@@ -105,10 +106,10 @@ export function AiConnectionUsagePanel({ account, observation, cachedOnly = fals
             </div>;
           })}
           {usage.overage && <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-            <span className="text-muted-foreground">Overage</span>
+            <span className="text-muted-foreground">{t("Overage")}</span>
             <span className="font-mono">{overageSummary(usage)}</span>
           </div>}
-          <p className="text-xs text-muted-foreground">Updated <time className="font-mono" dateTime={usage.checkedAt} title={formatDateTime(usage.checkedAt)}>{formatDateTime(usage.checkedAt, { includeYear: false })}</time>{usage.planType ? ` · ${usage.planType}` : ""}</p>
+          <p className="text-xs text-muted-foreground">{t("Updated")} <time className="font-mono" dateTime={usage.checkedAt} title={formatDateTime(usage.checkedAt)}>{formatDateTime(usage.checkedAt, { includeYear: false })}</time>{usage.planType ? ` · ${usage.planType}` : ""}</p>
         </div>
       )}
     </section>

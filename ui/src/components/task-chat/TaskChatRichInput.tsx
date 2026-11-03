@@ -6,6 +6,7 @@ import {
   type MentionOption,
 } from "@/components/MarkdownEditor";
 import { Button } from "@/components/ui/button";
+import { t } from "@/i18n";
 
 interface TaskChatRichInputProps {
   value: string;
@@ -37,7 +38,7 @@ export function TaskChatRichInput({
   onUploadingChange,
   ariaLabelledBy,
   testId = "task-chat-rich-input",
-  attachAriaLabel = "Attach image",
+  attachAriaLabel = t("Attach image"),
   showImageAttachControls = false,
   questionAnswer = false,
 }: TaskChatRichInputProps) {
@@ -135,9 +136,9 @@ export function TaskChatRichInput({
             ) : (
               <ImagePlus aria-hidden className="h-3.5 w-3.5" />
             )}
-            Attach image
+            {t("Attach image")}
           </Button>
-          <span>or drop/paste an image into the note</span>
+          <span>{t("or drop/paste an image into the note")}</span>
         </div>
       ) : null}
       {uploadError ? (

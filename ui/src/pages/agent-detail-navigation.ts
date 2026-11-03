@@ -1,4 +1,5 @@
 import { auditSectionHref, type AuditSection } from "./audit/audit-navigation";
+import { t } from "@/i18n";
 
 export type AgentAuditView = Extract<AuditSection, "activity" | "runs" | "costs" | "budgets">;
 
@@ -24,33 +25,33 @@ export const AGENT_DETAIL_NAVIGATION: ReadonlyArray<{
   items: ReadonlyArray<{ value: AgentLocalDetailView; label: string }>;
 }> = [
   {
-    label: "Agent",
+    label: t("Agent"),
     items: [
-      { value: "overview", label: "Overview" },
-      { value: "instructions", label: "Identity" },
-      { value: "runtime", label: "Harness / Runtime" },
-      { value: "secrets", label: "Secrets & variables" },
-      { value: "permissions", label: "Permissions / Trust" },
-      { value: "advanced", label: "Advanced" },
+      { value: "overview", label: t("Overview") },
+      { value: "instructions", label: t("Identity") },
+      { value: "runtime", label: t("Harness / Runtime") },
+      { value: "secrets", label: t("Secrets & variables") },
+      { value: "permissions", label: t("Permissions / Trust") },
+      { value: "advanced", label: t("Advanced") },
     ],
   },
   {
-    label: "Audit",
+    label: t("Audit"),
     items: [
-      { value: "activity", label: "Activity" },
-      { value: "runs", label: "Runs" },
-      { value: "costs", label: "Costs" },
-      { value: "budgets", label: "Budgets" },
+      { value: "activity", label: t("Activity") },
+      { value: "runs", label: t("Runs") },
+      { value: "costs", label: t("Costs") },
+      { value: "budgets", label: t("Budgets") },
     ],
   },
 ] as const;
 
 const HIDDEN_VIEW_LABELS: Partial<Record<AgentLocalDetailView, string>> = {
-  skills: "Skills",
-  tools: "Tools",
-  channels: "Channels",
+  skills: t("Skills"),
+  tools: t("Tools"),
+  channels: t("Channels"),
   "api-keys": "API Keys",
-  revisions: "Agent history",
+  revisions: t("Agent history"),
 };
 
 export const AGENT_AUDIT_VIEWS: ReadonlySet<AgentLocalDetailView> = new Set(["activity", "runs", "costs", "budgets"]);
@@ -61,7 +62,7 @@ export function isAgentAuditView(view: AgentDetailView): view is AgentAuditView 
 
 export function agentDetailViewLabel(view: AgentLocalDetailView): string {
   const item = AGENT_DETAIL_NAVIGATION.flatMap((section) => section.items).find((entry) => entry.value === view);
-  return item?.label ?? HIDDEN_VIEW_LABELS[view] ?? "Overview";
+  return item?.label ?? HIDDEN_VIEW_LABELS[view] ?? t("Overview");
 }
 
 export function parseAgentDetailView(value: string | null): AgentLocalDetailView {

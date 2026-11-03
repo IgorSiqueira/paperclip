@@ -1,13 +1,7 @@
-import en from "./locales/en.json";
-
 const MAX_STRING_LENGTH = 2_000;
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
-}
-
-function formatPath(path: string[]) {
-  return path.length > 0 ? path.join(".") : "<root>";
 }
 
 function interpolationPlaceholders(value: string) {
@@ -26,95 +20,66 @@ function urlsIn(value: string) {
   return Array.from(value.matchAll(/\bhttps?:\/\/[^\s<>"')]+/gi), (match) => match[0]).sort();
 }
 
-function hasBlockedData(value: string, englishValue: string) {
+function hasBlockedData(value: string, reference: string) {
   const checks: Array<[boolean, boolean, string]> = [
-    [/<script\b/i.test(value), /<script\b/i.test(englishValue), "<script"],
-    [hasEventHandlerAttribute(value), hasEventHandlerAttribute(englishValue), "event-handler attribute"],
-    [/\bjavascript\s*:/i.test(value), /\bjavascript\s*:/i.test(englishValue), "javascript:"],
-    [/\bdata\s*:/i.test(value), /\bdata\s*:/i.test(englishValue), "data:"],
-    [hasRawHtml(value), hasRawHtml(englishValue), "raw HTML tag"],
+    [/<script\b/i.test(value), /<script\b/i.test(reference), "<script"],
+    [hasEventHandlerAttribute(value), hasEventHandlerAttribute(reference), "event-handler attribute"],
+    [/\bjavascript\s*:/i.test(value), /\bjavascript\s*:/i.test(reference), "javascript:"],
+    [/\bdata\s*:/i.test(value), /\bdata\s*:/i.test(reference), "data:"],
+    [hasRawHtml(value), hasRawHtml(reference), "raw HTML tag"],
   ];
 
   const blocked = checks
-    .filter(([candidateHas, englishHas]) => candidateHas && !englishHas)
+    .filter(([candidateHas, referenceHas]) => candidateHas && !referenceHas)
     .map(([, , blockedPayload]) => blockedPayload);
 
-  const englishUrls = new Set(urlsIn(englishValue));
-  const unexpectedUrl = urlsIn(value).find((url) => !englishUrls.has(url));
+  const referenceUrls = new Set(urlsIn(reference));
+  const unexpectedUrl = urlsIn(value).find((url) => !referenceUrls.has(url));
   if (unexpectedUrl) blocked.push("unexpected URL");
 
   return blocked;
 }
 
-function validateString(path: string[], candidateValue: string, englishValue: string, errors: string[]) {
-  const candidatePlaceholders = interpolationPlaceholders(candidateValue);
-  const englishPlaceholders = interpolationPlaceholders(englishValue);
-  if (candidatePlaceholders.join("\u0000") !== englishPlaceholders.join("\u0000")) {
+function validateString(key: string, value: string, errors: string[]) {
+  const candidatePlaceholders = interpolationPlaceholders(value);
+  const referencePlaceholders = interpolationPlaceholders(key);
+  if (candidatePlaceholders.join("\u0000") !== referencePlaceholders.join("\u0000")) {
     errors.push(
-      `${formatPath(path)} interpolation placeholders must match English exactly: expected ${JSON.stringify(
-        englishPlaceholders,
+      `${JSON.stringify(key)} interpolation placeholders must match the key exactly: expected ${JSON.stringify(
+        referencePlaceholders,
       )}, received ${JSON.stringify(candidatePlaceholders)}`,
     );
   }
 
-  for (const blockedPayload of hasBlockedData(candidateValue, englishValue)) {
-    errors.push(`${formatPath(path)} contains disallowed ${blockedPayload}`);
+  for (const blockedPayload of hasBlockedData(value, key)) {
+    errors.push(`${JSON.stringify(key)} contains disallowed ${blockedPayload}`);
   }
 
-  const relativeLimit = Math.max(englishValue.length * 4 + 64, englishValue.length + 128);
+  const relativeLimit = Math.max(key.length * 4 + 64, key.length + 128);
   const lengthLimit = Math.min(MAX_STRING_LENGTH, relativeLimit);
-  if (candidateValue.length > lengthLimit) {
-    errors.push(`${formatPath(path)} is too long: ${candidateValue.length} characters exceeds ${lengthLimit}`);
+  if (value.length > lengthLimit) {
+    errors.push(`${JSON.stringify(key)} is too long: ${value.length} characters exceeds ${lengthLimit}`);
   }
 }
 
-function validateNode(path: string[], candidate: unknown, englishReference: unknown, errors: string[]) {
-  if (typeof englishReference === "string") {
-    if (typeof candidate !== "string") {
-      errors.push(`${formatPath(path)} must be a string`);
-      return;
-    }
-    validateString(path, candidate, englishReference, errors);
-    return;
-  }
-
-  if (!isPlainObject(englishReference)) {
-    errors.push(`${formatPath(path)} has unsupported English reference type`);
-    return;
-  }
-
-  if (!isPlainObject(candidate)) {
-    errors.push(`${formatPath(path)} must be an object`);
-    return;
-  }
-
-  const englishKeys = Object.keys(englishReference).sort();
-  const candidateKeys = Object.keys(candidate).sort();
-  const missingKeys = englishKeys.filter((key) => !candidateKeys.includes(key));
-  const extraKeys = candidateKeys.filter((key) => !englishKeys.includes(key));
-
-  for (const key of missingKeys) {
-    errors.push(`${formatPath([...path, key])} is missing`);
-  }
-  for (const key of extraKeys) {
-    errors.push(`${formatPath([...path, key])} is not defined in English`);
-  }
-
-  for (const key of englishKeys) {
-    if (key in candidate) {
-      validateNode([...path, key], candidate[key], englishReference[key], errors);
-    }
-  }
-}
-
-export function validateLocaleMessages(candidate: unknown, englishReference: unknown = en) {
+export function validateLocaleMessages(candidate: unknown, knownKeys?: ReadonlySet<string>) {
+  if (!isPlainObject(candidate)) return ["<root> must be an object"];
   const errors: string[] = [];
-  validateNode([], candidate, englishReference, errors);
+  for (const [key, value] of Object.entries(candidate)) {
+    if (typeof value !== "string") {
+      errors.push(`${JSON.stringify(key)} must be a string`);
+      continue;
+    }
+    if (knownKeys && !knownKeys.has(key)) {
+      errors.push(`${JSON.stringify(key)} is not used by the UI`);
+    }
+    validateString(key, value, errors);
+  }
   return errors;
 }
 
-export function assertValidLocaleMessages(candidate: unknown, englishReference: unknown = en) {
-  const errors = validateLocaleMessages(candidate, englishReference);
+export function assertValidLocaleMessages(candidate: unknown, knownKeys?: ReadonlySet<string>) {
+  const errors = validateLocaleMessages(candidate, knownKeys);
   if (errors.length > 0) {
     throw new Error(`Invalid locale messages:\n${errors.join("\n")}`);
   }

@@ -9,6 +9,7 @@ import type {
 } from "./task-chat-model";
 import { TaskChatStatusPill } from "./TaskChatStatusPill";
 import { TaskChatAgentIdentity } from "./TaskChatBubble";
+import { t } from "@/i18n";
 
 interface TaskChatTurnProps {
   item: TaskChatTurnItem;
@@ -100,12 +101,12 @@ export function TaskChatTurn({
             />
           ) : null}
           {!item.historical ? <span className="min-w-0 truncate">
-            {item.continuedAfterSteering ? "Continued after steering · " : ""}
+            {item.continuedAfterSteering ? t("Continued after steering · ") : ""}
             {item.summary.durationLabel
-              ? `${item.summary.failed ? "Stopped" : "Worked"} for ${item.summary.durationLabel}`
+              ? (item.summary.failed ? t("Stopped for {{durationLabel}}", { durationLabel: item.summary.durationLabel }) : t("Worked for {{durationLabel}}", { durationLabel: item.summary.durationLabel }))
               : item.summary.failed
-                ? "Stopped"
-                : "Worked"}
+                ? t("Stopped")
+                : t("Worked")}
           </span> : null}
         </div> : null}
         {item.items.length > 0 ? (
@@ -206,11 +207,11 @@ export function TaskChatTurn({
         <SummaryIcon className="h-3.5 w-3.5 shrink-0" />
       ) : null}
       <span>
-        {item.historical ? "Activity" : item.standaloneHeader && item.summary.durationLabel
-          ? `${item.summary.failed ? "Stopped" : "Worked"} for ${item.summary.durationLabel}`
+        {item.historical ? t("Activity") : item.standaloneHeader && item.summary.durationLabel
+          ? (item.summary.failed ? t("Stopped for {{durationLabel}}", { durationLabel: item.summary.durationLabel }) : t("Worked for {{durationLabel}}", { durationLabel: item.summary.durationLabel }))
           : item.summary.failed
-            ? "Stopped"
-            : "Worked"}
+            ? t("Stopped")
+            : t("Worked")}
       </span>
       {!item.standaloneHeader && turnSummaryMetrics(item.summary) ? (
         // Time/tools/tokens is demoted, not deleted (PAP-502): it stays in the

@@ -13,6 +13,7 @@ import { AsciiArtAnimation } from "@/components/AsciiArtAnimation";
 import { PaperclipLoading } from "@/components/AnimatedPaperclipIcon";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { PaperclipLockup } from "../components/PaperclipLockup";
+import { t } from "@/i18n";
 
 type AuthMode = "sign_in" | "sign_up";
 
@@ -92,7 +93,7 @@ export function AuthPage() {
 
   // A health/session failure must not be mistaken for a self-hosted instance.
   if (healthQuery.error || sessionError) {
-    return <p role="alert" className="p-6 text-sm text-destructive">Unable to check sign-in. Refresh and try again.</p>;
+    return <p role="alert" className="p-6 text-sm text-destructive">{t("Unable to check sign-in. Refresh and try again.")}</p>;
   }
 
   if (healthQuery.data?.cloud) {
@@ -112,12 +113,12 @@ export function AuthPage() {
           </div>
 
           <h1 className="text-xl font-semibold">
-            {mode === "sign_in" ? "Sign in to Paperclip" : "Create your Paperclip account"}
+            {mode === "sign_in" ? t("Sign in to Paperclip") : t("Create your Paperclip account")}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {mode === "sign_in"
-              ? "Use your email and password to access this instance."
-              : "Create an account for this instance. Email confirmation is not required in v1."}
+              ? t("Use your email and password to access this instance.")
+              : t("Create an account for this instance. Email confirmation is not required in v1.")}
           </p>
 
           <form
@@ -136,7 +137,7 @@ export function AuthPage() {
           >
             {mode === "sign_up" && (
               <div>
-                <label htmlFor="name" className="text-xs text-muted-foreground mb-1 block">Name</label>
+                <label htmlFor="name" className="text-xs text-muted-foreground mb-1 block">{t("Name")}</label>
                 <input
                   id="name"
                   name="name"
@@ -153,7 +154,7 @@ export function AuthPage() {
               </div>
             )}
             <div>
-              <label htmlFor="email" className="text-xs text-muted-foreground mb-1 block">Email</label>
+              <label htmlFor="email" className="text-xs text-muted-foreground mb-1 block">{t("Email")}</label>
               <input
                 id="email"
                 name="email"
@@ -170,7 +171,7 @@ export function AuthPage() {
               />
             </div>
             <div>
-              <label htmlFor="password" className="text-xs text-muted-foreground mb-1 block">Password</label>
+              <label htmlFor="password" className="text-xs text-muted-foreground mb-1 block">{t("Password")}</label>
               <input
                 id="password"
                 name="password"
@@ -197,15 +198,15 @@ export function AuthPage() {
               className={`w-full ${!canSubmit && !mutation.isPending ? "opacity-50" : ""}`}
             >
               {mutation.isPending
-                ? "Working…"
+                ? t("Working…")
                 : mode === "sign_in"
-                  ? "Sign In"
-                  : "Create Account"}
+                  ? t("Sign In")
+                  : t("Create Account")}
             </Button>
           </form>
 
           <div className="mt-5 text-sm text-muted-foreground">
-            {mode === "sign_in" ? "Need an account?" : "Already have an account?"}{" "}
+            {mode === "sign_in" ? t("Need an account?") : t("Already have an account?")}{" "}
             <button
               type="button"
               className="font-medium text-foreground underline underline-offset-2"
@@ -214,7 +215,7 @@ export function AuthPage() {
                 setMode(mode === "sign_in" ? "sign_up" : "sign_in");
               }}
             >
-              {mode === "sign_in" ? "Create one" : "Sign in"}
+              {mode === "sign_in" ? t("Create one") : t("Sign in")}
             </button>
           </div>
         </div>

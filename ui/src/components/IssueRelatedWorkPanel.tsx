@@ -4,6 +4,7 @@ import { ExternalObjectPill } from "./ExternalObjectPill";
 import type { IssueExternalObjectGroup } from "../hooks/useIssueExternalObjects";
 import { externalObjectToneSeverity } from "../lib/external-objects";
 import { Badge } from "@/components/ui/badge";
+import { t } from "@/i18n";
 
 type GroupedSource = {
   label: string;
@@ -111,30 +112,30 @@ function ExternalObjectsSection({
   return (
     <section className="space-y-3 rounded-lg border border-border p-3">
       <div className="space-y-1">
-        <h3 className="text-sm font-semibold">External objects</h3>
+        <h3 className="text-sm font-semibold">{t("External objects")}</h3>
         <p className="text-xs text-muted-foreground">
-          Remote work referenced from this issue — pull requests, deployments, tickets in other systems, and more.
+          {t("Remote work referenced from this issue — pull requests, deployments, tickets in other systems, and more.")}
         </p>
       </div>
 
       {isError ? ( // query-error-ok: set only for a real failure (useIssueExternalObjects keeps data through outages)
         <p className="text-xs text-muted-foreground">
-          Couldn't load external objects.{" "}
+          {t("Couldn't load external objects.")}{" "}
           {onRetry ? (
             <button
               type="button"
               onClick={onRetry}
               className="text-primary underline-offset-2 hover:underline"
             >
-              Retry
+              {t("Retry")}
             </button>
           ) : null}
         </p>
       ) : isLoading ? (
-        <p className="text-xs text-muted-foreground">Loading external objects…</p>
+        <p className="text-xs text-muted-foreground">{t("Loading external objects…")}</p>
       ) : sorted.length === 0 ? (
         <p className="text-xs text-muted-foreground">
-          This issue does not reference any external objects yet.
+          {t("This issue does not reference any external objects yet.")}
         </p>
       ) : (
         <ul className="-mx-1 flex flex-col">
@@ -191,10 +192,10 @@ export function IssueRelatedWorkPanel({
   return (
     <div className="space-y-3">
       <Section
-        title="References"
-        description="Other tasks this task currently points at in its title, description, comments, or documents."
+        title={t("References")}
+        description={t("Other tasks this task currently points at in its title, description, comments, or documents.")}
         items={outbound}
-        emptyLabel="This task does not reference any other tasks yet."
+        emptyLabel={t("This task does not reference any other tasks yet.")}
       />
       {externalObjectsEnabled ? (
         <ExternalObjectsSection
@@ -205,10 +206,10 @@ export function IssueRelatedWorkPanel({
         />
       ) : null}
       <Section
-        title="Referenced by"
-        description="Other tasks that currently point at this task."
+        title={t("Referenced by")}
+        description={t("Other tasks that currently point at this task.")}
         items={inbound}
-        emptyLabel="No other tasks reference this task yet."
+        emptyLabel={t("No other tasks reference this task yet.")}
       />
     </div>
   );

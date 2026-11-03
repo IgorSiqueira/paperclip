@@ -1,9 +1,5 @@
 {
-  "app": {
-    "noCompanies": {
-      "title": "Vytvořte svou první společnost",
-      "description": "Začněte vytvořením společnosti.",
-      "newCompany": "Nová společnost"
-    }
-  }
+  "Create your first organization": "Vytvořte svou první společnost",
+  "Get started by creating an organization.": "Začněte vytvořením společnosti.",
+  "New Organization": "Nová společnost"
 }

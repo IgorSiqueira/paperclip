@@ -8,6 +8,7 @@ import {
   type ChatEndpointSetupAction,
 } from "@/api/chatEndpoints";
 import { sanitizedSetupErrorMessage } from "./chat-setup-error";
+import { t } from "@/i18n";
 
 export function PhotonConnectStep({
   endpoint,
@@ -46,10 +47,9 @@ export function PhotonConnectStep({
   return (
     <div className="space-y-5">
       <div className="space-y-2">
-        <h1 className="text-xl font-bold">Connect iMessage Photon</h1>
+        <h1 className="text-xl font-bold">{t("Connect iMessage Photon")}</h1>
         <p className="text-sm text-muted-foreground">
-          Connect {agentName} to Photon Cloud. Pro supports direct messages through
-          a shared line. Dedicated numbers also support individually enabled groups.
+          {t("Connect")} {agentName} {t("to Photon Cloud. Pro supports direct messages through a shared line. Dedicated numbers also support individually enabled groups.")}
         </p>
         <p className="text-sm">
           <a
@@ -58,7 +58,7 @@ export function PhotonConnectStep({
             target="_blank"
             rel="noreferrer"
           >
-            Photon dashboard
+            {t("Photon dashboard")}
           </a>
           {" · "}
           <a
@@ -67,19 +67,18 @@ export function PhotonConnectStep({
             target="_blank"
             rel="noreferrer"
           >
-            Photon line setup
+            {t("Photon line setup")}
           </a>
         </p>
       </div>
       {repairing && (
         <p className="text-sm text-muted-foreground">
-          Reconnect keeps this project and{" "}
-          {endpoint.photonAllocation === "shared" ? "shared DM allocation" : endpoint.botExternalId ?? "dedicated number"}. Leave the secret blank
-          to reuse the saved connection.
+          {t("Reconnect keeps this project and")}{" "}
+          {endpoint.photonAllocation === "shared" ? t("shared DM allocation") : endpoint.botExternalId ?? t("dedicated number")}{t(". Leave the secret blank to reuse the saved connection.")}
         </p>
       )}
       <label className="grid gap-2 text-sm font-medium">
-        Project ID
+        {t("Project ID")}
         <Input
           value={projectId}
           autoComplete="off"
@@ -91,7 +90,7 @@ export function PhotonConnectStep({
         />
       </label>
       <label className="grid gap-2 text-sm font-medium">
-        Project secret
+        {t("Project secret")}
         <Input
           type="password"
           value={projectSecret}
@@ -110,7 +109,7 @@ export function PhotonConnectStep({
         }
         onClick={() => inspection.mutate()}
       >
-        {inspection.isPending ? "Inspecting Photon…" : "Inspect Photon project"}
+        {inspection.isPending ? t("Inspecting Photon…") : t("Inspect Photon project")}
       </Button>
       {inspection.isError && (
         <p role="alert" className="text-sm text-destructive">
@@ -120,20 +119,18 @@ export function PhotonConnectStep({
       {inspection.data && (
         <fieldset className="space-y-3">
           <legend className="text-sm font-medium">
-            {inspection.data.allocation === "shared" ? "Shared DMs" : "Dedicated numbers"} in {inspection.data.projectName}
+            {inspection.data.allocation === "shared" ? t("Shared DMs") : t("Dedicated numbers")} {t("in")} {inspection.data.projectName}
           </legend>
           {!inspection.data.eligible && (
             <p role="alert" className="text-sm text-destructive">
               {inspection.data.allocation === "shared"
-                ? "This shared project already belongs to another channel. Use a separate Photon project for each agent."
-                : "No eligible dedicated number is available. Check the line allocation in Photon and existing Paperclip channels."}
+                ? t("This shared project already belongs to another channel. Use a separate Photon project for each agent.")
+                : t("No eligible dedicated number is available. Check the line allocation in Photon and existing Paperclip channels.")}
             </p>
           )}
           {inspection.data.allocation === "shared" && inspection.data.eligible && (
             <p className="text-sm text-muted-foreground">
-              Direct messages only. Enroll each test sender in your Photon project's Users page,
-              then use the number Photon assigns to that sender. Paperclip identity linking is
-              still required. Groups cannot be enabled on this channel.
+              {t("Direct messages only. Enroll each test sender in your Photon project's Users page, then use the number Photon assigns to that sender. Paperclip identity linking is still required. Groups cannot be enabled on this channel.")}
             </p>
           )}
           {inspection.data.lines.map((line) => (
@@ -181,10 +178,10 @@ export function PhotonConnectStep({
           }
         >
           {pending
-            ? "Connecting…"
+            ? t("Connecting…")
             : repairing
-              ? "Reconnect Photon"
-              : inspection.data?.allocation === "shared" ? "Connect shared DMs" : "Connect selected number"}
+              ? t("Reconnect Photon")
+              : inspection.data?.allocation === "shared" ? t("Connect shared DMs") : t("Connect selected number")}
         </Button>
       </div>
     </div>

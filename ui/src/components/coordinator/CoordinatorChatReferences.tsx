@@ -1,6 +1,7 @@
 import { createContext, useContext, useMemo, type ReactNode } from "react";
 import { useAgentChatNavigation } from "@/hooks/useAgentChatNavigation";
 import { agentRouteRef } from "@/lib/utils";
+import { t } from "@/i18n";
 
 type ChatReference = { label: string; href: string };
 export const CoordinatorChatReferences = createContext<ReadonlyMap<string, ChatReference>>(new Map());
@@ -13,7 +14,7 @@ function ActiveChatReferences({ children }: { children: ReactNode }) {
     for (const chat of chats.data ?? []) {
       const agent = agents.data?.find(candidate => candidate.id === chat.conversationAgentId);
       if (!agent) continue;
-      const reference = { label: `Chat with ${agent.name}`, href: `/chats/${encodeURIComponent(agentRouteRef(agent))}` };
+      const reference = { label: t("Chat with {{name}}", { name: agent.name }), href: `/chats/${encodeURIComponent(agentRouteRef(agent))}` };
       result.set(chat.id.toLowerCase(), reference);
       if (chat.identifier) result.set(chat.identifier.toLowerCase(), reference);
     }

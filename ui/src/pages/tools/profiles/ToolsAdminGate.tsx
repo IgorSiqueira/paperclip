@@ -5,6 +5,7 @@ import { Link } from "@/lib/router";
 import { accessApi } from "@/api/access";
 import { queryKeys } from "@/lib/queryKeys";
 import { useCompany } from "@/context/CompanyContext";
+import { t } from "@/i18n";
 
 /**
  * Best-effort admin gate for the access-profiles surface, mirroring
@@ -21,7 +22,7 @@ export function ToolsAdminGate({ children }: { children: ReactNode }) {
   });
 
   if (boardAccess.isLoading) {
-    return <div className="mx-auto max-w-xl py-10 text-sm text-muted-foreground">Loading…</div>;
+    return <div className="mx-auto max-w-xl py-10 text-sm text-muted-foreground">{t("Loading…")}</div>;
   }
 
   const data = boardAccess.data;
@@ -40,13 +41,12 @@ export function ToolsAdminGate({ children }: { children: ReactNode }) {
         <div className="flex flex-col gap-3 rounded-lg border border-border bg-card p-6">
           <div className="flex items-center gap-2 text-foreground">
             <ShieldAlert className="h-5 w-5 text-muted-foreground" />
-            <h1 className="text-lg font-semibold">Access profiles require editing access</h1>
+            <h1 className="text-lg font-semibold">{t("Access profiles require editing access")}</h1>
           </div>
           <p className="text-sm text-muted-foreground">
-            Access profiles decide which tools your agents can use. Ask a company editor to set these up, or
-            head back to{" "}
+            {t("Access profiles decide which tools your agents can use. Ask a company editor to set these up, or head back to")}{" "}
             <Link to="/apps" className="font-medium text-primary hover:underline">
-              your apps
+              {t("your apps")}
             </Link>
             .
           </p>

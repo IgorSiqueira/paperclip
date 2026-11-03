@@ -13,6 +13,7 @@ import { TaskRowGroup } from "./TaskRowGroup";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { useTaskRowBudget } from "../hooks/useTaskRowBudget";
+import { t } from "@/i18n";
 
 export type TaskListItem = {
   issue: Issue;
@@ -121,26 +122,26 @@ export function TaskList({ items, allItems = items, initialColumns = defaultTask
   };
   const groups = new Map<string, Issue[]>();
   for (const root of roots) {
-    const label = groupBy === "status" ? issueFilterLabel(root.status) : groupBy === "project" ? root.project?.name ?? "No project" : "";
+    const label = groupBy === "status" ? issueFilterLabel(root.status) : groupBy === "project" ? root.project?.name ?? t("No project") : "";
     groups.set(label, [...(groups.get(label) ?? []), root]);
   }
   return (
     <TaskListViewport visibleColumns={columns} columnOrder={columnOrder} controls={<TaskListColumnSettings visibleColumns={columns} onVisibleColumnsChange={updateColumns} onColumnOrderChange={setColumnOrder} onResetDefaults={() => setSort(undefined)} />}>
       <TaskListColumnHeader sort={sort && isTaskListColumnSort(sort) ? sort : undefined} onSortChange={setSort} onColumnOrderChange={setColumnOrder} />
       {items.length === 0 ? emptyState : (
-        <div aria-label={`${density} task list`}>
+        <div aria-label={t("{{density}} task list", { density })}>
           {[...groups].map(([label, groupRoots]) => groupRoots.some(issue => renderedIds.has(issue.id)) ? (
             <Fragment key={label}>
               {label ? <IssueGroupHeader label={label} className="task-list-group-heading" trailing={<span className="text-xs text-muted-foreground">{groupRoots.length}</span>} /> : null}
-              {groupRoots.filter(issue => renderedIds.has(issue.id)).map(issue => <TaskRowGroup key={issue.id} role="rowgroup" aria-label={`${issue.title} task group`}
+              {groupRoots.filter(issue => renderedIds.has(issue.id)).map(issue => <TaskRowGroup key={issue.id} role="rowgroup" aria-label={t("{{title}} task group", { title: issue.title })}
                 data-density={density} className={childMap.get(issue.id)?.length ? undefined : "task-row-deferred"}>{renderBranch(issue, 0)}</TaskRowGroup>)}
             </Fragment>
           ) : null)}
         </div>
       )}
       {hasMore ? <div ref={sentinel} className="flex items-center gap-3 py-2 text-sm text-muted-foreground">
-        <span>Rendering {Math.min(limit, rowIds.length)} of {rowIds.length} tasks</span>
-        <Button variant="outline" size="sm" onClick={loadMore}>Show more tasks</Button>
+        <span>{t("Rendering")} {Math.min(limit, rowIds.length)} {t("of")} {rowIds.length} {t("tasks")}</span>
+        <Button variant="outline" size="sm" onClick={loadMore}>{t("Show more tasks")}</Button>
       </div> : null}
     </TaskListViewport>
   );

@@ -2,6 +2,7 @@ import { lazy } from "react";
 import { useDialogActions, useDialogState } from "../context/DialogContext";
 import { DeferredOverlay } from "./DeferredOverlay";
 import { NewIssueDialog } from "./NewIssueDialog";
+import { t } from "@/i18n";
 
 const NewProjectDialog = lazy(() => import("./NewProjectDialog").then((module) => ({ default: module.NewProjectDialog })));
 const NewGoalDialog = lazy(() => import("./NewGoalDialog").then((module) => ({ default: module.NewGoalDialog })));
@@ -11,9 +12,9 @@ export function BoardDialogs() {
   const { newIssueOpen, newProjectOpen, newGoalOpen, newAgentOpen } = useDialogState();
   const { closeNewIssue, closeNewProject, closeNewGoal, closeNewAgent } = useDialogActions();
   return <>
-    <DeferredOverlay requested={newIssueOpen} title="New task" onClose={closeNewIssue}><NewIssueDialog /></DeferredOverlay>
-    <DeferredOverlay requested={newProjectOpen} title="New project" onClose={closeNewProject}><NewProjectDialog /></DeferredOverlay>
-    <DeferredOverlay requested={newGoalOpen} title="New goal" onClose={closeNewGoal}><NewGoalDialog /></DeferredOverlay>
-    <DeferredOverlay requested={newAgentOpen} title="New agent" onClose={closeNewAgent}><NewAgentDialog /></DeferredOverlay>
+    <DeferredOverlay requested={newIssueOpen} title={t("New task")} onClose={closeNewIssue}><NewIssueDialog /></DeferredOverlay>
+    <DeferredOverlay requested={newProjectOpen} title={t("New project")} onClose={closeNewProject}><NewProjectDialog /></DeferredOverlay>
+    <DeferredOverlay requested={newGoalOpen} title={t("New goal")} onClose={closeNewGoal}><NewGoalDialog /></DeferredOverlay>
+    <DeferredOverlay requested={newAgentOpen} title={t("New agent")} onClose={closeNewAgent}><NewAgentDialog /></DeferredOverlay>
   </>;
 }

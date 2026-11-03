@@ -6,6 +6,7 @@ import { IssueReferencePill } from "@/components/IssueReferencePill";
 import { Link, useCaseHref } from "@/lib/router";
 import { copyTextToClipboard } from "@/lib/clipboard";
 import { cn } from "@/lib/utils";
+import { t } from "@/i18n";
 
 // -----------------------------------------------------------------------------
 // CaseFieldsPanel (PAP-12968 §3) — the generic key-value renderer for a case's
@@ -110,7 +111,7 @@ function CopyableCompactValue({
           className="pointer-events-none absolute bottom-full left-1/2 mb-1.5 inline-flex -translate-x-1/2 items-center gap-1 rounded-md bg-foreground px-2 py-1 text-xs whitespace-nowrap text-background"
         >
           <Check className="h-3 w-3 shrink-0" />
-          Copied
+          {t("Copied")}
         </span>
       ) : null}
     </span>
@@ -185,7 +186,7 @@ export function CaseFieldValue({
 
   if (typeof value === "boolean") {
     return value ? (
-      <Check className="h-4 w-4 text-green-600 dark:text-green-400" aria-label="true" />
+      <Check className="h-4 w-4 text-green-600 dark:text-green-400" aria-label={t("true")} />
     ) : (
       <EmptyValue />
     );
@@ -327,10 +328,10 @@ function TableFieldValue({ value, fieldKey }: { value: unknown; fieldKey: string
 export function CaseFieldsTable({ fields }: { fields: Record<string, unknown> }) {
   const rows = flattenCaseFields(fields);
   if (rows.length === 0) {
-    return <p className="text-sm text-muted-foreground">No fields set</p>;
+    return <p className="text-sm text-muted-foreground">{t("No fields set")}</p>;
   }
   return (
-    <table aria-label="Case fields" className="w-full table-fixed border-collapse font-mono text-xs leading-5">
+    <table aria-label={t("Case fields")} className="w-full table-fixed border-collapse font-mono text-xs leading-5">
       <tbody>
         {rows.map(({ id, path, value }) => (
           <tr key={id} className="even:bg-muted/50">
@@ -353,12 +354,12 @@ export function CaseFieldsPanel({ fields }: { fields: Record<string, unknown> })
   return (
     <section className="space-y-2">
       <div className="flex items-baseline gap-2">
-        <h2 className="text-sm font-semibold">Fields</h2>
-        <span className="text-xs text-muted-foreground">from the skill&apos;s schema — rendered generically</span>
+        <h2 className="text-sm font-semibold">{t("Fields")}</h2>
+        <span className="text-xs text-muted-foreground">{t("from the skill's schema — rendered generically")}</span>
       </div>
       <Card className="gap-0 py-0">
         {entries.length === 0 ? (
-          <div className="px-4 py-3 text-sm text-muted-foreground">No fields set</div>
+          <div className="px-4 py-3 text-sm text-muted-foreground">{t("No fields set")}</div>
         ) : (
           <dl className="divide-y divide-border">
             {entries.map(([key, value]) => (

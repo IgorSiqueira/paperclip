@@ -1,9 +1,5 @@
 {
-  "app": {
-    "noCompanies": {
-      "title": "Δημιουργήστε την πρώτη σας εταιρεία",
-      "description": "Ξεκινήστε δημιουργώντας μια εταιρεία.",
-      "newCompany": "Νέα εταιρεία"
-    }
-  }
+  "Create your first organization": "Δημιουργήστε την πρώτη σας εταιρεία",
+  "Get started by creating an organization.": "Ξεκινήστε δημιουργώντας μια εταιρεία.",
+  "New Organization": "Νέα εταιρεία"
 }

@@ -4,6 +4,7 @@ import { isUuidLike } from "@paperclipai/shared";
 import { ApiError } from "@/api/client";
 import { issuesApi } from "@/api/issues";
 import { queryKeys } from "@/lib/queryKeys";
+import { t } from "@/i18n";
 
 type Seen = { id: string; at: number };
 const READ_RETRY_DELAYS = [500, 1_500];
@@ -86,7 +87,7 @@ export function AgentChatReadProvider({ issueId, companyId, userId, children }: 
     if (!scope.busy && scope.retryTimer === null) queueMicrotask(() => { void flush(); });
   }, [issueId, scope, flush]);
   return <ChatReadContext.Provider value={issueId ? seen : null}>
-    {error && <p role="alert" className="text-sm text-destructive">Couldn’t mark this chat read.</p>}
+    {error && <p role="alert" className="text-sm text-destructive">{t("Couldn’t mark this chat read.")}</p>}
     {children}
   </ChatReadContext.Provider>;
 }

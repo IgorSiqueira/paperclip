@@ -7,6 +7,7 @@ import { useSmokeLabEnabled } from "@/hooks/useSmokeLabEnabled";
 import { advancedTabHref } from "@/pages/tools/tool-tabs";
 import { cn } from "@/lib/utils";
 import { failingPaths, runHealth, type SmokeHealth } from "@/pages/tools/smoke-lab-matrix";
+import { t } from "@/i18n";
 
 const HEALTH_DOT: Record<SmokeHealth, string> = {
   green: "bg-emerald-500",
@@ -16,10 +17,10 @@ const HEALTH_DOT: Record<SmokeHealth, string> = {
 };
 
 const HEALTH_LABEL: Record<SmokeHealth, string> = {
-  green: "All paths passing",
-  amber: "Needs a run",
-  red: "Failing paths",
-  unknown: "No runs yet",
+  green: t("All paths passing"),
+  amber: t("Needs a run"),
+  red: t("Failing paths"),
+  unknown: t("No runs yet"),
 };
 
 function formatTime(value: string | Date | null | undefined): string {
@@ -72,14 +73,14 @@ export function SmokeLabDashboardCard({ companyId }: { companyId: string }) {
         <div className="min-w-0">
           <div className="flex items-center gap-2">
             <span className={cn("h-2.5 w-2.5 shrink-0 rounded-full", HEALTH_DOT[health])} />
-            <p className="truncate text-sm font-semibold text-foreground">Integration smoke</p>
+            <p className="truncate text-sm font-semibold text-foreground">{t("Integration smoke")}</p>
           </div>
           <p className="mt-0.5 truncate text-xs text-muted-foreground">
             {HEALTH_LABEL[health]}
             {failing.length > 0 && `: ${failing.join(", ")}`}
           </p>
           <p className="mt-0.5 truncate text-(length:--text-micro) text-muted-foreground/80">
-            {latestRun ? `Last run ${formatTime(latestRun.startedAt)}` : "Run one from the Smoke Lab tab"}
+            {latestRun ? t("Last run {{formatTime}}", { formatTime: formatTime(latestRun.startedAt) }) : t("Run one from the Smoke Lab tab")}
           </p>
         </div>
       </div>

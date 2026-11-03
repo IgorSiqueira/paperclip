@@ -1,9 +1,5 @@
 {
-  "app": {
-    "noCompanies": {
-      "title": "Erstellen Sie Ihr erstes Unternehmen",
-      "description": "Beginnen Sie, indem Sie ein Unternehmen erstellen.",
-      "newCompany": "Neues Unternehmen"
-    }
-  }
+  "Create your first organization": "Erstellen Sie Ihr erstes Unternehmen",
+  "Get started by creating an organization.": "Beginnen Sie, indem Sie ein Unternehmen erstellen.",
+  "New Organization": "Neues Unternehmen"
 }

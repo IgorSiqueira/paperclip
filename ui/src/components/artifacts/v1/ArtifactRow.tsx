@@ -11,6 +11,7 @@ import { usePreviewFailure } from "./ArtifactPrint";
 import { ROW_ICON, ROW_PLAY } from "./geometry";
 import { glyphOf, isAudio, labelOf, previewSourceOf, treatmentOf, type ArtifactSubject } from "./kinds";
 import { panelDateLabel } from "./when";
+import { t } from "@/i18n";
 
 /**
  * One row, from the panel mock (node 2096:87691) and reused in the thread:
@@ -53,7 +54,7 @@ function IconGlyph({ subject }: { subject: ArtifactSubject }) {
 }
 
 /** The mock labels Markdown documents DOC; every other type is its extension. */
-const iconLabel = (subject: ArtifactSubject) => (subject.kind === "document" ? "DOC" : labelOf(subject));
+const iconLabel = (subject: ArtifactSubject) => (subject.kind === "document" ? t("DOC") : labelOf(subject));
 
 export function ArtifactRowIcon({ subject }: { subject: ArtifactSubject }) {
   return (
@@ -147,7 +148,7 @@ export function ArtifactRow({ subject, to, href, external = false, onClick, expa
       </span>
     </>
   );
-  const label = `Open ${name}`;
+  const label = t("Open {{name}}", { name });
   const control = to ? (
     <Link to={to} aria-label={label} data-testid={`${testId}-open`} className={CONTROL_CLASS}>
       {content}

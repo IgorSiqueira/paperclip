@@ -1,9 +1,5 @@
 {
-  "app": {
-    "noCompanies": {
-      "title": "建立您的第一家公司",
-      "description": "從建立公司開始。",
-      "newCompany": "新公司"
-    }
-  }
+  "Create your first organization": "建立您的第一家公司",
+  "Get started by creating an organization.": "從建立公司開始。",
+  "New Organization": "新公司"
 }

@@ -7,11 +7,12 @@ import {
 } from "@/api/cases";
 import { ImageGalleryModal, type GalleryMediaItem } from "@/components/ImageGalleryModal";
 import { cn } from "@/lib/utils";
+import { t } from "@/i18n";
 
 function humanBytes(size: number): string {
   if (size < 1024) return `${size} B`;
-  if (size < 1024 * 1024) return `${(size / 1024).toFixed(0)} KB`;
-  return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+  if (size < 1024 * 1024) return t("{{toFixed}} KB", { toFixed: (size / 1024).toFixed(0) });
+  return t("{{toFixed}} MB", { toFixed: (size / (1024 * 1024)).toFixed(1) });
 }
 
 /**
@@ -36,7 +37,7 @@ export function CaseAttachmentsGallery({ attachments }: { attachments: CaseAttac
   );
 
   if (attachments.length === 0) {
-    return <p className="text-xs text-muted-foreground">No attachments.</p>;
+    return <p className="text-xs text-muted-foreground">{t("No attachments.")}</p>;
   }
 
   return (

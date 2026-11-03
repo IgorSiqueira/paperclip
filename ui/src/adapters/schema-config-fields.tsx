@@ -13,6 +13,7 @@ import {
 } from "../components/agent-config-primitives";
 import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover";
 import { ChevronDown } from "lucide-react";
+import { t } from "@/i18n";
 
 // ── Select field (extracted to keep hooks at component top level) ──────
 function SelectField({
@@ -31,7 +32,7 @@ function SelectField({
       <PopoverTrigger asChild>
         <button className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-sm hover:bg-accent/50 transition-colors w-full justify-between">
           <span className={!value ? "text-muted-foreground" : ""}>
-            {selectedOpt?.label ?? value ?? "Select..."}
+            {selectedOpt?.label ?? value ?? t("Select...")}
           </span>
           <ChevronDown className="h-3 w-3 text-muted-foreground" />
         </button>
@@ -139,7 +140,7 @@ function ComboboxField({
           type="text"
           className="flex-1 rounded-l-md border border-r-0 border-border px-2.5 py-1.5 bg-transparent outline-none text-sm font-mono placeholder:text-muted-foreground/40 focus:z-10"
           value={displayValue}
-          placeholder={placeholder ?? "Type or select..."}
+          placeholder={placeholder ?? t("Type or select...")}
           onChange={(e) => {
             setFilter(e.target.value);
             if (!open) setOpen(true);
@@ -190,7 +191,7 @@ function ComboboxField({
             ))}
             {filter && filtered.length === 0 && (
               <div className="px-2 py-1.5 text-sm text-muted-foreground">
-                Use &quot;{filter}&quot; as custom value (press Enter)
+                {t("Use \"")}{filter}{t("\" as custom value (press Enter)")}
               </div>
             )}
           </PopoverContent>

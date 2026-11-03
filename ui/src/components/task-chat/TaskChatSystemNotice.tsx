@@ -23,6 +23,7 @@ import { mapCommentMetadataToSystemNoticeSections } from "@/lib/system-notice-co
 import { timeAgo } from "@/lib/timeAgo";
 import type { TaskChatMessageItem } from "./task-chat-model";
 import { isNoLiveExecutionPathNotice } from "./adjacent-errors";
+import { t } from "@/i18n";
 
 const TONE_ICON: Record<SystemNoticeTone, LucideIcon> = {
   neutral: Info,
@@ -101,7 +102,7 @@ export function TaskChatSystemNotice({
       data-testid="task-chat-system-notice"
       data-tone={streamlined ? tone : undefined}
       role={streamlined ? "group" : undefined}
-      aria-label={streamlined ? `System update: ${title}` : undefined}
+      aria-label={streamlined ? t("System update: {{title}}", { title }) : undefined}
     >
       <div className="flex max-w-(--pct-85) items-center gap-1.5">
         <button
@@ -133,7 +134,7 @@ export function TaskChatSystemNotice({
             disabled={tryAgainNoLiveExecutionPathPending}
             data-testid="task-chat-no-live-path-try-again"
           >
-            {tryAgainNoLiveExecutionPathPending ? "Trying again..." : "Try again"}
+            {tryAgainNoLiveExecutionPathPending ? t("Trying again...") : t("Try again")}
           </Button>
         ) : null}
       </div>
@@ -169,7 +170,7 @@ export function TaskChatSystemNotice({
                 disabled={tryAgainNoLiveExecutionPathPending}
                 data-testid="task-chat-no-live-path-try-again"
               >
-                {tryAgainNoLiveExecutionPathPending ? "Trying again..." : "Try again"}
+                {tryAgainNoLiveExecutionPathPending ? t("Trying again...") : t("Try again")}
               </Button>
             </div>
           ) : null}

@@ -26,6 +26,7 @@ import {
   bindingEnvKey,
   bindingSecretLabel,
 } from "../pages/secrets/proposal-review";
+import { t } from "@/i18n";
 
 /* -------------------------------------------------------------------------- */
 /* Pure model (exported for tests)                                            */
@@ -177,7 +178,7 @@ function DeliveryBadge({ mode }: { mode: "env" | "api" }) {
         variant="outline"
         className="h-5 gap-1 px-1.5 text-(length:--text-nano) font-normal border-sky-500/30 bg-sky-500/10 text-sky-700 dark:text-sky-300"
       >
-        <Variable className="size-3" /> Env var
+        <Variable className="size-3" /> {t("Env var")}
       </Badge>
     );
   }
@@ -186,7 +187,7 @@ function DeliveryBadge({ mode }: { mode: "env" | "api" }) {
       variant="outline"
       className="h-5 gap-1 px-1.5 text-(length:--text-nano) font-normal border-violet-500/30 bg-violet-500/10 text-violet-700 dark:text-violet-300"
     >
-      <ServerCog className="size-3" /> API access
+      <ServerCog className="size-3" /> {t("API access")}
     </Badge>
   );
 }
@@ -285,14 +286,14 @@ export function AgentSecretAccessEditor({
           ))}
         </div>
       ) : (
-        <p className="text-sm text-muted-foreground">No company secret references are bound to this agent yet.</p>
+        <p className="text-sm text-muted-foreground">{t("No company secret references are bound to this agent yet.")}</p>
       )}
 
       {/* Pending binding proposals targeting this agent (PAP-14731). */}
       {bindingProposals.length > 0 && onApproveProposal && onRejectProposal ? (
         <div className="space-y-2">
           <div className="text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">
-            Proposed access
+            {t("Proposed access")}
           </div>
           {bindingProposals.map((proposal) => {
             const secret = bindingSecretLabel(proposal);
@@ -312,7 +313,7 @@ export function AgentSecretAccessEditor({
                     {secret.pending ? <ProposedBadge /> : null}
                   </div>
                   <p className="flex flex-wrap items-center gap-1 text-muted-foreground">
-                    <span>proposed by {proposal.proposedBy.name}</span>
+                    <span>{t("proposed by")} {proposal.proposedBy.name}</span>
                     <span aria-hidden="true">·</span>
                     <span className="truncate italic">“{proposal.justification}”</span>
                   </p>
@@ -333,7 +334,7 @@ export function AgentSecretAccessEditor({
       {/* Editable API-access grants (access.<ALIAS>). */}
       <div className="space-y-2">
         <div className="text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">
-          API access (no env var)
+          {t("API access (no env var)")}
         </div>
         {rows.length > 0 ? (
           <div className="space-y-2">
@@ -356,8 +357,8 @@ export function AgentSecretAccessEditor({
                             if (suggested && suggested !== next) patchRow(row.id, { alias: suggested });
                           }
                         }}
-                        placeholder="ALIAS"
-                        aria-label="Access alias"
+                        placeholder={t("ALIAS")}
+                        aria-label={t("Access alias")}
                         disabled={disabled}
                         className={cn(
                           "h-9 font-mono text-sm",
@@ -450,9 +451,9 @@ export function AgentSecretAccessEditor({
                           });
                         }}
                         disabled={disabled || !selectedSecret}
-                        aria-label="Version"
+                        aria-label={t("Version")}
                       >
-                        <option value="latest">latest</option>
+                        <option value="latest">{t("latest")}</option>
                         {selectedSecret
                           ? Array.from({ length: Math.max(0, selectedSecret.latestVersion) }, (_, index) => {
                               const version = selectedSecret.latestVersion - index;
@@ -470,7 +471,7 @@ export function AgentSecretAccessEditor({
                       type="button"
                       onClick={() => removeRow(row.id)}
                       disabled={disabled}
-                      aria-label="Remove API access"
+                      aria-label={t("Remove API access")}
                       className="mt-1 inline-flex size-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:pointer-events-none disabled:opacity-50"
                     >
                       <Trash2 className="size-3.5" />
@@ -478,10 +479,10 @@ export function AgentSecretAccessEditor({
                   </div>
                   {aliasInvalid ? (
                     <p className="pl-0.5 text-(length:--text-micro) text-destructive">
-                      Invalid alias — use letters, digits and _
+                      {t("Invalid alias — use letters, digits and _")}
                     </p>
                   ) : aliasDuplicate ? (
-                    <p className="pl-0.5 text-(length:--text-micro) text-destructive">Duplicate alias</p>
+                    <p className="pl-0.5 text-(length:--text-micro) text-destructive">{t("Duplicate alias")}</p>
                   ) : null}
                 </div>
               );
@@ -496,12 +497,12 @@ export function AgentSecretAccessEditor({
           className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:pointer-events-none disabled:opacity-50"
         >
           <Plus className="size-3.5" />
-          Add API access
+          {t("Add API access")}
         </button>
       </div>
 
       <p className="text-(length:--text-micro) text-muted-foreground/70">
-        {deliveryModeDescription("api")} The agent reads them by alias through <code>GET /agents/me/secrets</code>.
+        {deliveryModeDescription("api")} {t("The agent reads them by alias through")} <code>GET /agents/me/secrets</code>.
       </p>
     </div>
   );

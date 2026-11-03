@@ -1,9 +1,5 @@
 {
-  "app": {
-    "noCompanies": {
-      "title": "Створіть свою першу компанію",
-      "description": "Почніть зі створення компанії.",
-      "newCompany": "Нова компанія"
-    }
-  }
+  "Create your first organization": "Створіть свою першу компанію",
+  "Get started by creating an organization.": "Почніть зі створення компанії.",
+  "New Organization": "Нова компанія"
 }

@@ -2,6 +2,7 @@ import type { ProviderQuotaResult } from "@paperclipai/shared";
 import { formatDateTime } from "../lib/utils";
 import { QuotaBar } from "./QuotaBar";
 import { quotaUnavailableMessage } from "../lib/quota-refresh";
+import { t } from "@/i18n";
 
 export function AccountQuotaPanels({
   accounts,
@@ -18,12 +19,12 @@ export function AccountQuotaPanels({
           key={account.accountKey ?? account.provider}
         >
           <p className="text-sm font-medium">
-            {account.accountLabel ?? "Subscription account"}
+            {account.accountLabel ?? t("Subscription account")}
           </p>
           {(failed || !account.ok) && (
             <p className="text-sm text-muted-foreground">
               {account.errorFamily === "credentials_unavailable"
-                ? "Connect or reconnect a subscription in AI connections to view its quota."
+                ? t("Connect or reconnect a subscription in AI connections to view its quota.")
                 : quotaUnavailableMessage(account.windows.length > 0)}
             </p>
           )}
@@ -31,9 +32,9 @@ export function AccountQuotaPanels({
             <div key={`${window.label}:${index}`} className="space-y-1 text-sm">
               <div className="flex justify-between gap-3">
                 <span>{window.label}</span>
-                <span className="font-mono text-muted-foreground">{window.valueLabel ?? "Usage not reported"}</span>
+                <span className="font-mono text-muted-foreground">{window.valueLabel ?? t("Usage not reported")}</span>
               </div>
-              {window.resetsAt && <p className="text-xs font-mono text-muted-foreground">Resets {formatDateTime(window.resetsAt)}</p>}
+              {window.resetsAt && <p className="text-xs font-mono text-muted-foreground">{t("Resets")} {formatDateTime(window.resetsAt)}</p>}
             </div>
           ) : (
             <QuotaBar
@@ -56,7 +57,7 @@ export function AccountQuotaPanels({
           ))}
           {account.capturedAt && (
             <p className="text-xs font-mono text-muted-foreground">
-              Last checked {formatDateTime(account.capturedAt)}
+              {t("Last checked")} {formatDateTime(account.capturedAt)}
             </p>
           )}
         </section>

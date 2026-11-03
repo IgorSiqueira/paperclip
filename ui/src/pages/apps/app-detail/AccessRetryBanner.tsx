@@ -1,5 +1,6 @@
 import { ApiError } from "@/api/client";
 import { Button } from "@/components/ui/button";
+import { t } from "@/i18n";
 
 /** GitHub page that resolves a failed Refresh access, such as Unsuspend. */
 function githubAccessRecoveryUrl(error: unknown): string | null {
@@ -28,14 +29,14 @@ export function AccessRetryBanner({ message, error, pending, onRetry }: {
   const recoveryUrl = githubAccessRecoveryUrl(error);
   return (
     <div role="status">
-      <p>{message || "GitHub access could not be checked. Try again."}</p>
+      <p>{message || t("GitHub access could not be checked. Try again.")}</p>
       {recoveryUrl ? (
         <Button asChild variant="outline">
-          <a href={recoveryUrl} target="_blank" rel="noreferrer">Open installation settings on GitHub</a>
+          <a href={recoveryUrl} target="_blank" rel="noreferrer">{t("Open installation settings on GitHub")}</a>
         </Button>
       ) : null}
       <Button variant="outline" disabled={pending} onClick={onRetry}>
-        Retry access
+        {t("Retry access")}
       </Button>
     </div>
   );

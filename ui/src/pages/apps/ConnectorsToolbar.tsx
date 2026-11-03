@@ -1,5 +1,6 @@
 import { ToolbarSearch } from "@/components/ToolbarSearch";
 import { CatalogSourceFilters, type CatalogSource } from "./CatalogSourceFilters";
+import { t } from "@/i18n";
 
 /** Shared catalog search and source filters; data and scope changes stay in Browse. */
 export function ConnectorsToolbar({ query, onQueryChange, source, onSourceChange }: {
@@ -8,9 +9,9 @@ export function ConnectorsToolbar({ query, onQueryChange, source, onSourceChange
   source: CatalogSource;
   onSourceChange: (value: CatalogSource) => void;
 }) {
-  return <header data-canonical-toolbar="connectors" role="toolbar" aria-label="Connectors controls" className="flex flex-wrap items-center gap-3">
+  return <header data-canonical-toolbar="connectors" role="toolbar" aria-label={t("Connectors controls")} className="flex flex-wrap items-center gap-3">
     <div className="w-full">
-      <ToolbarSearch query={query} onQueryChange={onQueryChange} label="Search connectors" placeholder="Search connectors…" inputType="search" />
+      <ToolbarSearch query={query} onQueryChange={onQueryChange} label={t("Search connectors")} placeholder={t("Search connectors…")} inputType="search" />
     </div>
     <CatalogSourceFilters source={source} onChange={onSourceChange} />
   </header>;

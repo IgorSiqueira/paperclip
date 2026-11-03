@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { Upload } from "lucide-react";
+import { t } from "@/i18n";
 
 /** The target can be the host frame when its tab header is rendered by a portal. */
 export function ArtifactDropzone({ children, onUpload, enabled = true, target }: {
@@ -63,11 +64,11 @@ export function ArtifactDropzone({ children, onUpload, enabled = true, target }:
   const overlay = dragging ? (
     <div data-artifact-drop-overlay role="status" className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 border-2 border-dashed border-primary bg-background/95 px-6 text-center">
       <Upload aria-hidden="true" className="size-6 text-primary" />
-      <p className="text-sm font-medium">Drop files to add them to this task</p>
+      <p className="text-sm font-medium">{t("Drop files to add them to this task")}</p>
     </div>
   ) : null;
   return (
-    <section ref={rootRef} aria-label={enabled ? "Artifact uploads" : undefined} className="relative h-full min-h-0">
+    <section ref={rootRef} aria-label={enabled ? t("Artifact uploads") : undefined} className="relative h-full min-h-0">
       {children}
       {target && overlay ? createPortal(overlay, target) : overlay}
     </section>

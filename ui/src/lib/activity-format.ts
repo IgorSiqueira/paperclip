@@ -1,6 +1,7 @@
 import type { Agent } from "@paperclipai/shared";
 import type { CompanyUserProfile } from "./company-members";
 import { formatReviewPolicyValue } from "./review-policy";
+import { t } from "@/i18n";
 
 type ActivityDetails = Record<string, unknown> | null | undefined;
 
@@ -170,17 +171,17 @@ const ISSUE_ACTIVITY_LABELS: Record<string, string> = {
   "issue.monitor_recovery_issue_created": "created a monitor recovery issue",
   "issue.monitor_escalated_to_board": "escalated a monitor to the board",
   "issue.deleted": "deleted the issue",
-  "issue.successful_run_handoff_required": "Run finished without a clear next step",
-  "issue.successful_run_handoff_resolved": "Next step chosen",
-  "issue.successful_run_handoff_escalated": "Run finished without a next step - recovery escalated",
+  "issue.successful_run_handoff_required": t("Run finished without a clear next step"),
+  "issue.successful_run_handoff_resolved": t("Next step chosen"),
+  "issue.successful_run_handoff_escalated": t("Run finished without a next step - recovery escalated"),
   "issue.cross_issue_influence_cap_rejected": "hit the per-run cross-task write cap",
   "issue.cross_issue_influence_observed": "made a cross-task write",
   "issue.attribution_spoof_rejected": "tried to choose its own responsible user",
-  "issue.recovery_action_opened": "Opened a source-scoped recovery action",
-  "issue.workspace_recovered": "Saved work recovered.",
-  "issue.workspace_recovery_requested": "Requested workspace recovery",
-  "issue.recovery_action_resolved": "Resolved the recovery action",
-  "issue.recovery_action_escalated": "Escalated the recovery action",
+  "issue.recovery_action_opened": t("Opened a source-scoped recovery action"),
+  "issue.workspace_recovered": t("Saved work recovered."),
+  "issue.workspace_recovery_requested": t("Requested workspace recovery"),
+  "issue.recovery_action_resolved": t("Resolved the recovery action"),
+  "issue.recovery_action_escalated": t("Escalated the recovery action"),
   "issue.accepted_plan_decomposition_updated": "updated the accepted-plan decomposition",
   "agent.created": "created an agent",
   "agent.updated": "updated the agent",
@@ -190,8 +191,8 @@ const ISSUE_ACTIVITY_LABELS: Record<string, string> = {
   "agent.terminated": "terminated the agent",
   "heartbeat.invoked": "invoked a heartbeat",
   "heartbeat.cancelled": "cancelled a heartbeat",
-  "heartbeat.output_stale_source_resolved": "System folded a stale run",
-  "heartbeat.output_stale_recovery_recursion_refused": "Refused recovery-on-recovery escalation",
+  "heartbeat.output_stale_source_resolved": t("System folded a stale run"),
+  "heartbeat.output_stale_recovery_recursion_refused": t("Refused recovery-on-recovery escalation"),
   "approval.created": "requested approval",
   "approval.approved": "approved",
   "approval.rejected": "rejected",
@@ -288,11 +289,11 @@ function readIssueReferences(details: ActivityDetails, key: string): ActivityIss
 }
 
 function formatUserLabel(userId: string | null | undefined, options: ActivityFormatOptions = {}): string {
-  if (!userId || userId === "local-board") return "Board";
-  if (options.currentUserId && userId === options.currentUserId) return "You";
+  if (!userId || userId === "local-board") return t("Board");
+  if (options.currentUserId && userId === options.currentUserId) return t("You");
   const profile = options.userProfileMap?.get(userId);
   if (profile) return profile.label;
-  return `user ${userId.slice(0, 5)}`;
+  return t("user {{slice}}", { slice: userId.slice(0, 5) });
 }
 
 function formatParticipantLabel(participant: ActivityParticipant, options: ActivityFormatOptions): string {
@@ -489,11 +490,11 @@ export function formatActivityVerb(
   if (action === "issue.stalled_review_decided") {
     const decision = typeof details?.action === "string" ? details.action : null;
     const label = decision ? STALLED_REVIEW_DECISION_LABELS[decision] : null;
-    if (label) return `${label} on`;
+    if (label) return t("{{label}} on", { label });
   }
 
   const outcomeLabel = formatInteractionOutcomeLabel(action, details);
-  if (outcomeLabel) return `${outcomeLabel} on`;
+  if (outcomeLabel) return t("{{outcomeLabel}} on", { outcomeLabel });
 
   const structuredChange = formatStructuredIssueChange({
     action,

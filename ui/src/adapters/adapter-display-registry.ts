@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { OpenCodeLogoIcon } from "@/components/OpenCodeLogoIcon";
 import { pendingAgentSetupDisplayAdapter } from "@/lib/agent-setup-choice";
+import { t } from "@/i18n";
 
 // ---------------------------------------------------------------------------
 // Type suffix parsing
@@ -62,112 +63,112 @@ export interface AdapterDisplayInfo {
 }
 
 const adapterDisplayMap: Record<string, AdapterDisplayInfo> = {
-  antigravity_runtime: { label: "Google Antigravity", description: "Antigravity through Paperclip Runner", icon: Gem, hideFromVisualSelection: true },
-  copilot_runtime: { label: "GitHub Copilot", description: "Copilot through Paperclip Runner", icon: Code, hideFromVisualSelection: true },
-  kimi_runtime: { label: "Kimi Code (Runner)", description: "Kimi Code through Paperclip Runner", icon: Moon, hideFromVisualSelection: true },
+  antigravity_runtime: { label: t("Google Antigravity"), description: t("Antigravity through Paperclip Runner"), icon: Gem, hideFromVisualSelection: true },
+  copilot_runtime: { label: t("GitHub Copilot"), description: t("Copilot through Paperclip Runner"), icon: Code, hideFromVisualSelection: true },
+  kimi_runtime: { label: t("Kimi Code (Runner)"), description: t("Kimi Code through Paperclip Runner"), icon: Moon, hideFromVisualSelection: true },
   acpx_local: {
-    label: "ACPX (retired)",
-    description: "Retired standalone ACPX adapter",
+    label: t("ACPX (retired)"),
+    description: t("Retired standalone ACPX adapter"),
     icon: Bot,
     comingSoon: true,
-    disabledLabel: "Use Claude Code or Codex with the ACP engine",
+    disabledLabel: t("Use Claude Code or Codex with the ACP engine"),
     hideFromVisualSelection: true,
   },
   claude_local: {
-    label: "Claude Code",
-    description: "Claude Code CLI harness",
+    label: t("Claude Code"),
+    description: t("Claude Code CLI harness"),
     icon: Sparkles,
     recommended: true,
   },
   codex_local: {
-    label: "Codex",
-    description: "Codex CLI harness",
+    label: t("Codex"),
+    description: t("Codex CLI harness"),
     icon: Code,
     recommended: true,
   },
   paperclip_runner: {
-    label: "Paperclip Runner",
-    description: "Experimental Rust runner with a Codex provider",
+    label: t("Paperclip Runner"),
+    description: t("Experimental Rust runner with a Codex provider"),
     icon: Cpu,
     experimental: true,
   },
   gemini_local: {
-    label: "Gemini CLI",
-    description: "Gemini CLI harness",
+    label: t("Gemini CLI"),
+    description: t("Gemini CLI harness"),
     icon: Gem,
   },
   grok_local: {
-    label: "Grok Build",
-    description: "Grok Build harness",
+    label: t("Grok Build"),
+    description: t("Grok Build harness"),
     icon: Bot,
   },
   kimi_local: {
-    label: "Kimi Code",
-    description: "Kimi Code CLI harness",
+    label: t("Kimi Code"),
+    description: t("Kimi Code CLI harness"),
     icon: Moon,
   },
   hermes_gateway: {
-    label: "Hermes Gateway",
-    description: "Remote Hermes API server",
+    label: t("Hermes Gateway"),
+    description: t("Remote Hermes API server"),
     icon: Bot,
     hideFromVisualSelection: true,
   },
   hermes_local: {
-    label: "Hermes",
-    description: "Hermes harness",
+    label: t("Hermes"),
+    description: t("Hermes harness"),
     icon: Bot,
   },
   opencode_local: {
-    label: "OpenCode",
-    description: "OpenCode multi-provider harness",
+    label: t("OpenCode"),
+    description: t("OpenCode multi-provider harness"),
     icon: OpenCodeLogoIcon,
   },
   pi_local: {
-    label: "Pi",
-    description: "Pi harness",
+    label: t("Pi"),
+    description: t("Pi harness"),
     icon: Terminal,
   },
   cursor: {
-    label: "Cursor",
-    description: "Cursor CLI harness",
+    label: t("Cursor"),
+    description: t("Cursor CLI harness"),
     icon: MousePointer2,
   },
   // Display-only choice: persisted as paperclip_runner with provider openai_dot.
-  grok_bot: { label: "Grok Bot", experimental: true, icon: Bot, description: "An existing external Bot in Grok" },
+  grok_bot: { label: t("Grok Bot"), experimental: true, icon: Bot, description: t("An existing external Bot in Grok") },
   openai_dot: {
-    label: "OpenAI Dot",
-    description: "Your Dot in ChatGPT",
+    label: t("OpenAI Dot"),
+    description: t("Your Dot in ChatGPT"),
     icon: Bot,
     experimental: true,
   },
   muse: {
-    label: "Muse — Personal agent",
-    description: "Your personal Muse at muse.ai",
+    label: t("Muse — Personal agent"),
+    description: t("Your personal Muse at muse.ai"),
     icon: Bot,
     experimental: true,
   },
   cursor_cloud: {
-    label: "Cursor Cloud",
-    description: "Managed remote Cursor agent",
+    label: t("Cursor Cloud"),
+    description: t("Managed remote Cursor agent"),
     icon: MousePointer2,
   },
   openclaw_gateway: {
-    label: "OpenClaw Gateway",
-    description: "External gateway adapter",
+    label: t("OpenClaw Gateway"),
+    description: t("External gateway adapter"),
     icon: Bot,
     comingSoon: true,
-    disabledLabel: "Invite external agents from the add-agent modal",
+    disabledLabel: t("Invite external agents from the add-agent modal"),
     hideFromVisualSelection: true,
   },
   process: {
-    label: "Process",
-    description: "Internal process adapter",
+    label: t("Process"),
+    description: t("Internal process adapter"),
     icon: Cpu,
     comingSoon: true,
   },
   http: {
-    label: "HTTP",
-    description: "Internal HTTP adapter",
+    label: t("HTTP"),
+    description: t("Internal HTTP adapter"),
     icon: Cpu,
     comingSoon: true,
   },
@@ -214,7 +215,7 @@ export function getAdapterDisplay(type: string): AdapterDisplayInfo {
   const label = withSuffix(humanizeType(type), suffix);
   return {
     label,
-    description: suffix ? `External ${suffix} adapter` : "External adapter",
+    description: suffix ? t("External {{suffix}} adapter", { suffix }) : t("External adapter"),
     icon: Cpu,
   };
 }

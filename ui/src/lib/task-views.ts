@@ -1,4 +1,5 @@
 import type { InboxTab } from "./inbox";
+import { t } from "@/i18n";
 
 /**
  * The single view registry behind the merged Tasks surface (PAP-670).
@@ -49,22 +50,22 @@ export interface TaskViewGroup {
 
 export const TASK_VIEW_GROUPS: TaskViewGroup[] = [
   {
-    label: "My work",
+    label: t("My work"),
     views: [
-      { key: "mine", label: "Mine", surface: "inbox", inboxTab: "mine", hint: "Assigned to you or waiting on you" },
-      { key: "unread", label: "Unread", surface: "inbox", inboxTab: "unread", hint: "Tasks you touched with new activity" },
-      { key: "blocked", label: "Blocked", surface: "inbox", inboxTab: "blocked", hint: "Blocked tasks, grouped by blocker" },
-      { key: "recent", label: "Recent", surface: "inbox", inboxTab: "recent", hint: "Everything you touched lately" },
-      { key: "everything", label: "Everything", surface: "inbox", inboxTab: "all", hint: "Tasks, approvals, failed runs and join requests" },
+      { key: "mine", label: t("Mine"), surface: "inbox", inboxTab: "mine", hint: t("Assigned to you or waiting on you") },
+      { key: "unread", label: t("Unread"), surface: "inbox", inboxTab: "unread", hint: t("Tasks you touched with new activity") },
+      { key: "blocked", label: t("Blocked"), surface: "inbox", inboxTab: "blocked", hint: t("Blocked tasks, grouped by blocker") },
+      { key: "recent", label: t("Recent"), surface: "inbox", inboxTab: "recent", hint: t("Everything you touched lately") },
+      { key: "everything", label: t("Everything"), surface: "inbox", inboxTab: "all", hint: t("Tasks, approvals, failed runs and join requests") },
     ],
   },
   {
-    label: "Organization",
+    label: t("Organization"),
     views: [
-      { key: "all", label: "All tasks", surface: "issues", statuses: [], hint: "Every task in the organization" },
-      { key: "active", label: "Active", surface: "issues", statuses: ["todo", "in_progress", "monitoring", "in_review", "blocked"], hint: "Open tasks, running or not" },
-      { key: "backlog", label: "Backlog", surface: "issues", statuses: ["backlog"], hint: "Not started yet" },
-      { key: "done", label: "Done", surface: "issues", statuses: ["done", "cancelled"], hint: "Completed and cancelled" },
+      { key: "all", label: t("All tasks"), surface: "issues", statuses: [], hint: t("Every task in the organization") },
+      { key: "active", label: t("Active"), surface: "issues", statuses: ["todo", "in_progress", "monitoring", "in_review", "blocked"], hint: t("Open tasks, running or not") },
+      { key: "backlog", label: t("Backlog"), surface: "issues", statuses: ["backlog"], hint: t("Not started yet") },
+      { key: "done", label: t("Done"), surface: "issues", statuses: ["done", "cancelled"], hint: t("Completed and cancelled") },
     ],
   },
 ];

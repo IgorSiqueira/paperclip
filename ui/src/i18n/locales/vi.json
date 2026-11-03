@@ -1,9 +1,5 @@
 {
-  "app": {
-    "noCompanies": {
-      "title": "Tạo công ty đầu tiên của bạn",
-      "description": "Bắt đầu bằng cách tạo một công ty.",
-      "newCompany": "Công ty mới"
-    }
-  }
+  "Create your first organization": "Tạo công ty đầu tiên của bạn",
+  "Get started by creating an organization.": "Bắt đầu bằng cách tạo một công ty.",
+  "New Organization": "Công ty mới"
 }

@@ -3,8 +3,9 @@ import { ChevronRight, CircleHelp } from "lucide-react";
 import { slackAppConfigurationSchema, type SlackAppConfiguration } from "@paperclipai/shared";
 import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { t } from "@/i18n";
 
-export function SlackSetupAdvanced({ children, label = "Advanced" }: { children: ReactNode; label?: string }) {
+export function SlackSetupAdvanced({ children, label = t("Advanced") }: { children: ReactNode; label?: string }) {
   return <details className="group text-sm">
     <summary className="flex cursor-pointer list-none items-center gap-1.5 text-muted-foreground hover:text-foreground">
       <ChevronRight className="size-4 transition-transform group-open:rotate-90" aria-hidden="true" />{label}
@@ -28,7 +29,7 @@ export function SlackAppDetails({ value, readOnly, onChange, onBlur }: {
     ] as const).map(([key, label, maxLength, help]) => <div key={key} className="grid items-center gap-2 sm:grid-cols-2">
       <div className="flex items-center gap-1.5">
         <label htmlFor={`slack-${key}`}>{label}</label>
-        <Tooltip><TooltipTrigger asChild><button type="button" aria-label={`Help with ${label.toLowerCase()}`} className="rounded-sm text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        <Tooltip><TooltipTrigger asChild><button type="button" aria-label={t("Help with {{toLowerCase}}", { toLowerCase: label.toLowerCase() })} className="rounded-sm text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
           <CircleHelp className="size-3.5" aria-hidden="true" />
         </button></TooltipTrigger><TooltipContent className="max-w-xs">{help}</TooltipContent></Tooltip>
       </div>

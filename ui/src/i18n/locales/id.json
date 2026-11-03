@@ -1,9 +1,5 @@
 {
-  "app": {
-    "noCompanies": {
-      "title": "Buat perusahaan pertama Anda",
-      "description": "Mulai dengan membuat perusahaan.",
-      "newCompany": "Perusahaan Baru"
-    }
-  }
+  "Create your first organization": "Buat perusahaan pertama Anda",
+  "Get started by creating an organization.": "Mulai dengan membuat perusahaan.",
+  "New Organization": "Perusahaan Baru"
 }

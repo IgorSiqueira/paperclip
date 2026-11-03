@@ -1,16 +1,17 @@
 import { readIssueSortParams, type IssueSort, type IssueSortField } from "./issue-sort";
+import { t } from "@/i18n";
 
 /** Ordered columns and token references shared by the proposed header and rows. */
 export const taskListColumns = [
-  { id: "task", label: "Task", width: "var(--task-list-column-task)" },
-  { id: "taskId", label: "Task ID", width: "var(--task-list-column-task-id)" },
-  { id: "createdBy", label: "Created by", width: "var(--task-list-column-created-by)" },
-  { id: "assignee", label: "Assignee", width: "var(--task-list-column-assignee)" },
-  { id: "project", label: "Project", width: "var(--task-list-column-project)" },
-  { id: "parentTask", label: "Parent Task", width: "var(--task-list-column-parent)" },
-  { id: "tags", label: "Tags", width: "var(--task-list-column-tags)" },
-  { id: "worktree", label: "Worktree", width: "var(--task-list-column-worktree)" },
-  { id: "lastUpdated", label: "Last updated", width: "var(--task-list-column-updated)" },
+  { id: "task", label: t("Task"), width: "var(--task-list-column-task)" },
+  { id: "taskId", label: t("Task ID"), width: "var(--task-list-column-task-id)" },
+  { id: "createdBy", label: t("Created by"), width: "var(--task-list-column-created-by)" },
+  { id: "assignee", label: t("Assignee"), width: "var(--task-list-column-assignee)" },
+  { id: "project", label: t("Project"), width: "var(--task-list-column-project)" },
+  { id: "parentTask", label: t("Parent Task"), width: "var(--task-list-column-parent)" },
+  { id: "tags", label: t("Tags"), width: "var(--task-list-column-tags)" },
+  { id: "worktree", label: t("Worktree"), width: "var(--task-list-column-worktree)" },
+  { id: "lastUpdated", label: t("Last updated"), width: "var(--task-list-column-updated)" },
 ] as const;
 
 export type TaskListColumnId = (typeof taskListColumns)[number]["id"];

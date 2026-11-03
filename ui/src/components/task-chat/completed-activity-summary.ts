@@ -6,23 +6,24 @@ import {
   type ToolIcon,
 } from "./tool-taxonomy";
 import { protocolActivityPresentation, providerNoticeSeverity } from "./task-chat-activity-presentation";
+import { t } from "@/i18n";
 
 type Activity = TaskChatActivityPhaseItem["items"][number];
 const labels: Record<ToolFamily, string> = {
-  terminal: "Ran commands",
-  grep: "Searched files",
-  search: "Searched files",
-  read: "Read files",
-  edit: "Edited files",
-  web: "Searched the web",
-  plan: "Worked on a plan",
-  question: "Requested input",
-  agent: "Worked with agents",
-  safety: "Reviewed safety",
-  image: "Worked with images",
-  wait: "Waited",
-  mcp: "Used connected tools",
-  other: "Used tools",
+  terminal: t("Ran commands"),
+  grep: t("Searched files"),
+  search: t("Searched files"),
+  read: t("Read files"),
+  edit: t("Edited files"),
+  web: t("Searched the web"),
+  plan: t("Worked on a plan"),
+  question: t("Requested input"),
+  agent: t("Worked with agents"),
+  safety: t("Reviewed safety"),
+  image: t("Worked with images"),
+  wait: t("Waited"),
+  mcp: t("Used connected tools"),
+  other: t("Used tools"),
 };
 
 /** Describe observed activities, never infer success from a finished group. */
@@ -85,23 +86,23 @@ export function completedActivitySummary(items: Activity[]) {
         const label =
           (
             {
-              research: "Searched the web",
-              plan: "Worked on a plan",
-              delegation: "Worked with agents",
-              artifact: "Worked with artifacts",
-              context: "Managed context",
-              memory: "Checked memory",
-              model_identity: "Checked model settings",
-              review: "Worked in review mode",
-              hook: "Ran hooks",
-              safety: "Reviewed safety",
-              terminal: "Ran commands",
-              wait: "Waited",
-              workspace_change: "Worked on files",
-              workspace_file: "Referenced files",
-              resource: "Added resources",
+              research: t("Searched the web"),
+              plan: t("Worked on a plan"),
+              delegation: t("Worked with agents"),
+              artifact: t("Worked with artifacts"),
+              context: t("Managed context"),
+              memory: t("Checked memory"),
+              model_identity: t("Checked model settings"),
+              review: t("Worked in review mode"),
+              hook: t("Ran hooks"),
+              safety: t("Reviewed safety"),
+              terminal: t("Ran commands"),
+              wait: t("Waited"),
+              workspace_change: t("Worked on files"),
+              workspace_file: t("Referenced files"),
+              resource: t("Added resources"),
             } as Record<string, string>
-          )[family] ?? "Used tools";
+          )[family] ?? t("Used tools");
         add(label, p.icon, order);
       }
     }
@@ -111,12 +112,12 @@ export function completedActivitySummary(items: Activity[]) {
       ?? notices.find((notice) => notice.severity === "warning")
       ?? notices[0]!;
     const label = notices.length === 1
-      ? strongest.summary || "Received a provider update"
+      ? strongest.summary || t("Received a provider update")
       : strongest.severity === "error"
-        ? "Provider error reported"
+        ? t("Provider error reported")
         : strongest.severity === "warning"
-          ? "Provider warning reported"
-          : "Received provider updates";
+          ? t("Provider warning reported")
+          : t("Received provider updates");
     // One notice category leaves room for actual work. Keep warnings and errors
     // visible when the compact label truncates other activity categories.
     add(label, strongest.icon, strongest.severity === "info" ? notices[0]!.order : -1);
@@ -129,9 +130,9 @@ export function completedActivitySummary(items: Activity[]) {
     const succeeded = completedFamilies.has(tool.family);
     const label =
       tool.family === "read" && !succeeded
-        ? "Checked files"
+        ? t("Checked files")
         : tool.family === "edit" && !succeeded
-          ? "Worked on files"
+          ? t("Worked on files")
           : labels[tool.family];
     add(label, tool.icon, tool.order);
   }
@@ -151,7 +152,7 @@ export function completedActivitySummary(items: Activity[]) {
   return {
     label:
       values.length > 3
-        ? `${join(values.slice(0, 2).map((v) => v.label))}, and more`
+        ? t("{{join}}, and more", { join: join(values.slice(0, 2).map((v) => v.label)) })
         : fullLabel,
     fullLabel,
     icon: values.length === 1 ? values[0].icon : Layers3,

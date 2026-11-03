@@ -1,4 +1,5 @@
 import type { FolderListItem, FolderListResult } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 /**
  * Pure tree helpers for the skill folder browser (Idea A, PAP-14038).
@@ -148,11 +149,11 @@ export function folderBreadcrumbTrail(
 export function reservedRootLabel(folder: Pick<FolderListItem, "systemKey" | "name">): string {
   switch (folder.systemKey) {
     case "my":
-      return "My Skills";
+      return t("My Skills");
     case "projects":
-      return "Projects";
+      return t("Projects");
     case "bundled":
-      return "Bundled";
+      return t("Bundled");
     default:
       return folder.name;
   }

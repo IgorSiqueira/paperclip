@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { deriveAgentUrlKey, deriveProjectUrlKey, normalizeProjectUrlKey, hasNonAsciiContent } from "@paperclipai/shared";
 import type { BillingType, FinanceDirection, FinanceEventKind } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -88,13 +89,13 @@ export function relativeTime(date: Date | string): string {
   const now = Date.now();
   const then = new Date(date).getTime();
   const diffSec = Math.round((now - then) / 1000);
-  if (diffSec < 60) return "just now";
+  if (diffSec < 60) return t("just now");
   const diffMin = Math.round(diffSec / 60);
-  if (diffMin < 60) return `${diffMin}m ago`;
+  if (diffMin < 60) return t("{{diffMin}}m ago", { diffMin });
   const diffHr = Math.round(diffMin / 60);
-  if (diffHr < 24) return `${diffHr}h ago`;
+  if (diffHr < 24) return t("{{diffHr}}h ago", { diffHr });
   const diffDay = Math.round(diffHr / 24);
-  if (diffDay < 30) return `${diffDay}d ago`;
+  if (diffDay < 30) return t("{{diffDay}}d ago", { diffDay });
   return formatDate(date);
 }
 
@@ -112,37 +113,37 @@ export function formatDurationMs(ms: number): string {
   if (totalSeconds < 60) return `${totalSeconds}s`;
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
-  if (minutes < 60) return seconds > 0 ? `${minutes}m ${seconds}s` : `${minutes}m`;
+  if (minutes < 60) return seconds > 0 ? t("{{minutes}}m {{seconds}}s", { minutes, seconds }) : `${minutes}m`;
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;
   if (hours < 24) {
-    return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`;
+    return remainingMinutes > 0 ? t("{{hours}}h {{remainingMinutes}}m", { hours, remainingMinutes }) : `${hours}h`;
   }
   const days = Math.floor(hours / 24);
   const remainingHours = hours % 24;
-  return remainingHours > 0 ? `${days}d ${remainingHours}h` : `${days}d`;
+  return remainingHours > 0 ? t("{{days}}d {{remainingHours}}h", { days, remainingHours }) : `${days}d`;
 }
 
 /** Map a raw provider slug to a display-friendly name. */
 export function providerDisplayName(provider: string): string {
   const map: Record<string, string> = {
     anthropic: "Anthropic",
-    aws_bedrock: "AWS Bedrock",
+    aws_bedrock: t("AWS Bedrock"),
     openai: "OpenAI",
     openrouter: "OpenRouter",
     chatgpt: "ChatGPT",
     google: "Google",
     cursor: "Cursor",
-    jetbrains: "JetBrains AI",
+    jetbrains: t("JetBrains AI"),
   };
   return map[provider.toLowerCase()] ?? provider;
 }
 
 export function billingTypeDisplayName(billingType: BillingType): string {
   const map: Record<BillingType, string> = {
-    metered_api: "Metered API",
+    metered_api: t("Metered API"),
     subscription_included: "Subscription",
-    subscription_overage: "Subscription overage",
+    subscription_overage: t("Subscription overage"),
     credits: "Credits",
     fixed: "Fixed",
     unknown: "Unknown",
@@ -152,11 +153,11 @@ export function billingTypeDisplayName(billingType: BillingType): string {
 
 export function quotaSourceDisplayName(source: string): string {
   const map: Record<string, string> = {
-    "anthropic-oauth": "Anthropic OAuth",
-    "claude-cli": "Claude CLI",
-    "bedrock": "AWS Bedrock",
-    "codex-rpc": "Codex app server",
-    "codex-wham": "ChatGPT WHAM",
+    "anthropic-oauth": t("Anthropic OAuth"),
+    "claude-cli": t("Claude CLI"),
+    "bedrock": t("AWS Bedrock"),
+    "codex-rpc": t("Codex app server"),
+    "codex-wham": t("ChatGPT WHAM"),
   };
   return map[source] ?? source;
 }
@@ -235,20 +236,20 @@ export function visibleRunCostUsd(
 
 export function financeEventKindDisplayName(eventKind: FinanceEventKind): string {
   const map: Record<FinanceEventKind, string> = {
-    inference_charge: "Inference charge",
-    platform_fee: "Platform fee",
-    credit_purchase: "Credit purchase",
-    credit_refund: "Credit refund",
-    credit_expiry: "Credit expiry",
-    byok_fee: "BYOK fee",
-    gateway_overhead: "Gateway overhead",
-    log_storage_charge: "Log storage",
+    inference_charge: t("Inference charge"),
+    platform_fee: t("Platform fee"),
+    credit_purchase: t("Credit purchase"),
+    credit_refund: t("Credit refund"),
+    credit_expiry: t("Credit expiry"),
+    byok_fee: t("BYOK fee"),
+    gateway_overhead: t("Gateway overhead"),
+    log_storage_charge: t("Log storage"),
     logpush_charge: "Logpush",
-    provisioned_capacity_charge: "Provisioned capacity",
+    provisioned_capacity_charge: t("Provisioned capacity"),
     training_charge: "Training",
-    custom_model_import_charge: "Custom model import",
-    custom_model_storage_charge: "Custom model storage",
-    manual_adjustment: "Manual adjustment",
+    custom_model_import_charge: t("Custom model import"),
+    custom_model_storage_charge: t("Custom model storage"),
+    manual_adjustment: t("Manual adjustment"),
   };
   return map[eventKind];
 }

@@ -4,6 +4,7 @@ import type {
   IssueBlockedInboxReason,
   IssueBlockedInboxSeverity,
 } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 export type BlockedReasonVariant =
   | "needs_decision"
@@ -38,27 +39,27 @@ export const BLOCKED_REASON_VARIANT_ORDER: BlockedReasonVariant[] = [
 ];
 
 export const BLOCKED_VARIANT_LABELS: Record<BlockedReasonVariant, string> = {
-  needs_decision: "Needs decision",
-  stalled: "Blocked chain stalled",
-  needs_attention: "Needs attention",
-  recovery_required: "Recovery required",
-  external_wait: "External wait",
-  owner_paused: "Owner paused",
+  needs_decision: t("Needs decision"),
+  stalled: t("Blocked chain stalled"),
+  needs_attention: t("Needs attention"),
+  recovery_required: t("Recovery required"),
+  external_wait: t("External wait"),
+  owner_paused: t("Owner paused"),
 };
 
 const REASON_LABELS: Record<IssueBlockedInboxReason, string> = {
-  pending_board_decision: "Pending board decision",
-  pending_user_decision: "Pending user decision",
+  pending_board_decision: t("Pending board decision"),
+  pending_user_decision: t("Pending user decision"),
   missing_successful_run_disposition: "Pick disposition",
-  blocked_chain_stalled: "Blocked chain stalled",
-  blocked_by_unassigned_issue: "Unassigned blocker",
-  blocked_by_assigned_backlog_issue: "Parked blocker",
-  blocked_by_cancelled_issue: "Cancelled blocker",
+  blocked_chain_stalled: t("Blocked chain stalled"),
+  blocked_by_unassigned_issue: t("Unassigned blocker"),
+  blocked_by_assigned_backlog_issue: t("Parked blocker"),
+  blocked_by_cancelled_issue: t("Cancelled blocker"),
   in_review_without_action_path: "Review without action path",
-  invalid_review_participant: "Invalid review participant",
-  open_recovery_issue: "Recovery in progress",
+  invalid_review_participant: t("Invalid review participant"),
+  open_recovery_issue: t("Recovery in progress"),
   external_owner_action: "External owner action",
-  blocked_by_uninvokable_assignee: "Owner paused",
+  blocked_by_uninvokable_assignee: t("Owner paused"),
 };
 
 const SEVERITY_RANK: Record<IssueBlockedInboxSeverity, number> = {
@@ -75,7 +76,7 @@ export function blockedReasonVariant(reason: IssueBlockedInboxReason): BlockedRe
 }
 
 export function blockedReasonLabel(reason: IssueBlockedInboxReason): string {
-  return REASON_LABELS[reason] ?? "Stopped";
+  return REASON_LABELS[reason] ?? t("Stopped");
 }
 
 export function blockedVariantLabel(variant: BlockedReasonVariant): string {

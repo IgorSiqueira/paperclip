@@ -2,6 +2,7 @@ import { Copy } from "lucide-react";
 import { useToast } from "@/context/ToastContext";
 import { copyTextToClipboard } from "@/lib/clipboard";
 import { cn } from "@/lib/utils";
+import { t } from "@/i18n";
 
 export function gatewayEndpointUrl(endpointPath: string): string {
   if (typeof window === "undefined") return endpointPath;
@@ -25,11 +26,11 @@ export function CopyableGatewayUrl({
   async function copy() {
     try {
       await copyTextToClipboard(url);
-      pushToast({ title: "Gateway URL copied", tone: "success" });
+      pushToast({ title: t("Gateway URL copied"), tone: "success" });
     } catch {
       pushToast({
-        title: "Copy failed",
-        body: "Clipboard access is unavailable.",
+        title: t("Copy failed"),
+        body: t("Clipboard access is unavailable."),
         tone: "error",
       });
     }
@@ -46,8 +47,8 @@ export function CopyableGatewayUrl({
         "flex min-w-0 max-w-full items-center gap-1 text-left font-mono text-xs text-muted-foreground hover:text-foreground",
         className,
       )}
-      title={`${url} — click to copy`}
-      aria-label="Copy gateway URL"
+      title={t("{{url}} — click to copy", { url })}
+      aria-label={t("Copy gateway URL")}
     >
       <span className="min-w-0 truncate">{url}</span>
       <Copy className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />

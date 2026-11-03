@@ -2,6 +2,7 @@ import { createContext, useContext, useLayoutEffect, useState, type ReactNode } 
 import { Button } from "@/components/ui/button";
 import { FlyoutAppearanceProvider } from "@/components/ui/flyout";
 import { AvatarInitialProvider } from "@/components/ui/avatar-initials";
+import { t } from "@/i18n";
 
 const storageKey = "paperclip.design-proposals.sandbox";
 const DesignSandboxContext = createContext(false);
@@ -33,7 +34,7 @@ export function DesignSandboxProvider({ children }: { children: ReactNode }) {
           const next = !selected;
           setSelected(next);
           try { localStorage.setItem(storageKey, next ? "on" : "off"); } catch { /* Session-only when storage is unavailable. */ }
-        }}>Design proposals: {enabled ? "On" : "Off"}</Button>
+        }}>{t("Design proposals:")} {enabled ? t("On") : t("Off")}</Button>
       </div> : null}
     </FlyoutAppearanceProvider>
   </DesignSandboxContext.Provider>;

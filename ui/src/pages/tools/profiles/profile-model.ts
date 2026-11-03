@@ -5,6 +5,7 @@ import type {
   ToolRiskLevel,
 } from "@paperclipai/shared";
 import type { ToolProfileEntryInput } from "@/api/tools";
+import { t as translate } from "@/i18n";
 
 /**
  * Pure domain model for the prosumer access-profile wizard (PAP-10997).
@@ -31,9 +32,9 @@ export function toolCapability(tool: ToolCatalogEntry): ToolCapability {
 }
 
 export const CAPABILITY_LABEL: Record<ToolCapability, string> = {
-  read: "Read-only",
-  write: "Makes changes",
-  destructive: "Destructive",
+  read: translate("Read-only"),
+  write: translate("Makes changes"),
+  destructive: translate("Destructive"),
 };
 
 // --- App grouping ----------------------------------------------------------
@@ -131,16 +132,16 @@ export function appCheckState(group: AppGroup, selection: AppSelection | undefin
 export function appSelectionLabel(group: AppGroup, selection: AppSelection | undefined): string {
   const total = group.tools.length;
   const state = appCheckState(group, selection);
-  if (state === "unchecked") return "None selected";
+  if (state === "unchecked") return translate("None selected");
   if (selection?.kind === "all" || (selection?.kind === "all_except" && selection.excluded.length === 0)) {
-    return `All ${group.name} tools (${total})`;
+    return translate("All {{name}} tools ({{total}})", { name: group.name, total });
   }
   if (selection?.kind === "all_except") {
     const n = selection.excluded.length;
-    return `All ${group.name} except ${n}`;
+    return translate("All {{name}} except {{n}}", { name: group.name, n });
   }
   const n = selectedToolIds(group, selection).size;
-  return `${n} of ${total} ${group.name} tools`;
+  return translate("{{n}} of {{total}} {{name}} tools", { n, total, name: group.name });
 }
 
 // --- Checkbox reducers -----------------------------------------------------
@@ -368,11 +369,11 @@ export interface TemplateDef {
 }
 
 export const TEMPLATES: TemplateDef[] = [
-  { key: "read_only", title: "Read-only", description: "See and fetch, but never change anything." },
-  { key: "everyday", title: "Everyday work", description: "Read and make routine changes — no destructive tools." },
-  { key: "full_access", title: "Full access", description: "Everything every connected app offers." },
-  { key: "scratch", title: "Start from scratch", description: "An empty profile you build up tool by tool." },
-  { key: "copy", title: "Copy an existing profile", description: "Start from a profile you already have." },
+  { key: "read_only", title: translate("Read-only"), description: translate("See and fetch, but never change anything.") },
+  { key: "everyday", title: translate("Everyday work"), description: translate("Read and make routine changes — no destructive tools.") },
+  { key: "full_access", title: translate("Full access"), description: translate("Everything every connected app offers.") },
+  { key: "scratch", title: translate("Start from scratch"), description: translate("An empty profile you build up tool by tool.") },
+  { key: "copy", title: translate("Copy an existing profile"), description: translate("Start from a profile you already have.") },
 ];
 
 function capabilityPredicate(key: TemplateKey): (tool: ToolCatalogEntry) => boolean {

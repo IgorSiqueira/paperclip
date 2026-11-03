@@ -8,6 +8,7 @@ import {
   chatProviderVisible,
 } from "@/hooks/useChatConnectorsEnabled";
 import { Navigate, useParams, useSearchParams } from "@/lib/router";
+import { t } from "@/i18n";
 
 function ProviderEndpointGate({
   endpointId,
@@ -28,7 +29,7 @@ function ProviderEndpointGate({
           {endpoint.error.message}
         </p>
         <Button variant="outline" onClick={() => void endpoint.refetch()}>
-          Retry
+          {t("Retry")}
         </Button>
       </div>
     );

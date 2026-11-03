@@ -4,23 +4,23 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { t } from "@/i18n";
 
 export function LegacyBoardSendNotice({ onDiscard }: { onDiscard: () => void }) {
   return <AlertDialog>
     <AlertDialogTrigger asChild>
-      <Button size="sm" variant="outline">Discard saved delivery record</Button>
+      <Button size="sm" variant="outline">{t("Discard saved delivery record")}</Button>
     </AlertDialogTrigger>
     <AlertDialogContent>
       <AlertDialogHeader>
-        <AlertDialogTitle>Discard saved delivery record?</AlertDialogTitle>
+        <AlertDialogTitle>{t("Discard saved delivery record?")}</AlertDialogTitle>
         <AlertDialogDescription>
-          First check Activity. Discarding this browser record does not cancel an update
-          that was already accepted. It lets you start a new update.
+          {t("First check Activity. Discarding this browser record does not cancel an update that was already accepted. It lets you start a new update.")}
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel>Keep record</AlertDialogCancel>
-        <AlertDialogAction onClick={onDiscard}>Discard record</AlertDialogAction>
+        <AlertDialogCancel>{t("Keep record")}</AlertDialogCancel>
+        <AlertDialogAction onClick={onDiscard}>{t("Discard record")}</AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>
   </AlertDialog>;

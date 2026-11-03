@@ -1,9 +1,5 @@
 {
-  "app": {
-    "noCompanies": {
-      "title": "तुमची पहिली कंपनी तयार करा",
-      "description": "कंपनी तयार करून सुरुवात करा.",
-      "newCompany": "नवीन कंपनी"
-    }
-  }
+  "Create your first organization": "तुमची पहिली कंपनी तयार करा",
+  "Get started by creating an organization.": "कंपनी तयार करून सुरुवात करा.",
+  "New Organization": "नवीन कंपनी"
 }

@@ -3,6 +3,7 @@ import { SidebarShell } from "./SidebarShell";
 import { DesignPageAside } from "./DesignPageAside";
 import { useScrollbarWhileScrolling } from "./side-panel";
 import { FlyoutAppearanceProvider } from "./ui/flyout";
+import { t } from "@/i18n";
 
 export type DesignPageShellProps = {
   sidebar: ReactNode;
@@ -27,7 +28,7 @@ export function DesignPageShell({
   sidebarStorageKey = "paperclip.design-proposal.sidebar-width",
   headerActions,
   rightSidebar,
-  rightSidebarTitle = "Details",
+  rightSidebarTitle = t("Details"),
   rightSidebarHeader,
   rightSidebarControls,
   rightSidebarMaximized = false,
@@ -39,7 +40,7 @@ export function DesignPageShell({
   const maximized = hasRightSidebar && rightSidebarMaximized;
   return (
     <FlyoutAppearanceProvider><div className="task-row-design-preview design-page-shell" data-testid="design-page-shell" data-aside-maximized={maximized || undefined}>
-      <a href={maximized ? "#design-page-aside-content" : "#design-page-content"} className="design-page-skip-link">Skip to main content</a>
+      <a href={maximized ? "#design-page-aside-content" : "#design-page-content"} className="design-page-skip-link">{t("Skip to main content")}</a>
       <SidebarShell open resizable storageKey={sidebarStorageKey} className="design-page-navigation">{sidebar}</SidebarShell>
       <div className="design-page-main">
         <header className="design-page-header"><h1>{title}</h1>{headerActions && <div className="design-page-header-actions">{headerActions}</div>}</header>
@@ -51,7 +52,7 @@ export function DesignPageShell({
           {rightSidebarHeader && <div className="design-page-aside-tabs">{rightSidebarHeader}</div>}
           {rightSidebarControls && <div className="design-page-aside-controls">{rightSidebarControls}</div>}
         </header>
-        <div id="design-page-aside-content" className="design-page-content scrollbar-while-scrolling" onScroll={handleAsideScroll} role="region" aria-label={`${rightSidebarTitle} content`} tabIndex={0}>{rightSidebar}</div>
+        <div id="design-page-aside-content" className="design-page-content scrollbar-while-scrolling" onScroll={handleAsideScroll} role="region" aria-label={t("{{rightSidebarTitle}} content", { rightSidebarTitle })} tabIndex={0}>{rightSidebar}</div>
       </DesignPageAside>}
     </div></FlyoutAppearanceProvider>
   );

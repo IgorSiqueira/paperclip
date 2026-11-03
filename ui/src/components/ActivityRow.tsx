@@ -10,6 +10,7 @@ import { deriveProjectUrlKey, type ActivityEvent, type Agent } from "@paperclipa
 import type { CompanyUserProfile } from "../lib/company-members";
 import { useState, type ReactNode } from "react";
 import { CellMarquee, HoveredCellContext, useCellMarqueeHover } from "./CellMarquee";
+import { t } from "@/i18n";
 
 function entityLink(entityType: string, entityId: string, name?: string | null): string | null {
   switch (entityType) {
@@ -54,7 +55,7 @@ export function ActivityRow({ event, agentMap, userProfileMap, entityNameMap, en
 
   const actor = event.actorType === "agent" ? agentMap.get(event.actorId) : null;
   const userProfile = event.actorType === "user" ? userProfileMap?.get(event.actorId) : null;
-  const actorName = actor?.name ?? (event.actorType === "system" ? "System" : userProfile?.label ?? (event.actorType === "user" ? "Board" : event.actorId || "Unknown"));
+  const actorName = actor?.name ?? (event.actorType === "system" ? t("System") : userProfile?.label ?? (event.actorType === "user" ? t("Board") : event.actorId || t("Unknown")));
   const actorAvatarUrl = userProfile?.image ?? null;
   const avatar = event.actorType === "agent" ? (
     <AgentAvatar agent={actor} name={actorName} size={24} className="@xl:self-center" />

@@ -24,6 +24,7 @@ import {
 import { TaskChatUsageReadout } from "./TaskChatUsageReadout";
 import { toolActivityPresentation } from "./tool-taxonomy";
 import { useTaskChatShimmer } from "./TaskChatShimmer";
+import { t } from "@/i18n";
 
 type Activity = TaskChatActivityPhaseItem["items"][number];
 
@@ -54,7 +55,7 @@ function presentation(item: Activity, active: boolean) {
     const running = active && Boolean(item.streaming);
     return {
       icon: Brain,
-      label: running ? "Thinking" : "Thought",
+      label: running ? t("Thinking") : t("Thought"),
       target: item.lines
         .filter((line) => line.trim())
         .at(-1)
@@ -96,7 +97,7 @@ function presentation(item: Activity, active: boolean) {
     .join(" · ");
   return {
     icon: Gauge,
-    label: item.label ?? "Token usage",
+    label: item.label ?? t("Token usage"),
     target: usage || item.detail,
     mono: false,
     running: false,
@@ -232,7 +233,7 @@ function ActivityDetails({ item }: { item: Activity }) {
           {item.detail}
         </pre>
       ) : null}
-      {item.decision ? <p>Permission {item.decision}</p> : null}
+      {item.decision ? <p>{t("Permission")} {item.decision}</p> : null}
       {item.diff ? (
         <p className="break-all font-mono">
           {item.diff.path} · +{item.diff.added} −{item.diff.removed}
@@ -390,7 +391,7 @@ export function TaskChatRunnerActivityGroup({
             <ol
               id={historyId}
               className="flex min-w-0 flex-col gap-1"
-              aria-label="Activity history"
+              aria-label={t("Activity history")}
               data-testid="task-chat-runner-activity-list"
             >
               {activities.map((activity, index) => (

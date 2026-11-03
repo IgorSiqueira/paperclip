@@ -1,6 +1,7 @@
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { t } from "@/i18n";
 
 /**
  * Shown above a composer while a send waits for the connection. The text stays
@@ -30,16 +31,16 @@ export function PendingSendNotice({
 }) {
   const replayable = Boolean(onResendNow);
   const title = !replayable
-    ? `We couldn’t confirm whether this ${noun} was sent.`
+    ? t("We couldn’t confirm whether this {{noun}} was sent.", { noun })
     : resending
-      ? "Sending…"
+      ? t("Sending…")
       : stalled
-        ? `Couldn’t send this ${noun} yet.`
-        : "Sending when reconnected…";
+        ? t("Couldn’t send this {{noun}} yet.", { noun })
+        : t("Sending when reconnected…");
   const detail = replayable
-    ? persisted ? `Your ${noun} is saved on this device.`
-      : "Browser storage is unavailable. Keep this tab open or copy your text before leaving."
-    : "It may already be in the conversation. Check it before sending again; Cancel keeps your text.";
+    ? persisted ? t("Your {{noun}} is saved on this device.", { noun })
+      : t("Browser storage is unavailable. Keep this tab open or copy your text before leaving.")
+    : t("It may already be in the conversation. Check it before sending again; Cancel keeps your text.");
   return (
     <div
       role="status"
@@ -55,11 +56,11 @@ export function PendingSendNotice({
       <div className="flex items-center gap-2">
         {onResendNow ? (
           <Button type="button" size="sm" variant="outline" disabled={resending} onClick={onResendNow}>
-            Resend now
+            {t("Resend now")}
           </Button>
         ) : null}
         <Button type="button" size="sm" variant="ghost" disabled={resending} onClick={onCancel}>
-          Cancel
+          {t("Cancel")}
         </Button>
       </div>
     </div>

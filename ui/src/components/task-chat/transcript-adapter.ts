@@ -28,6 +28,7 @@ import {
   toolActivityPresentation,
   toolTaxonomy,
 } from "./tool-taxonomy";
+import { t } from "@/i18n";
 
 const TERMINAL_STATUSES = new Set([
   "failed",
@@ -211,8 +212,8 @@ function thoughtDurationLabel(
   const secs = Math.round((end - start) / 1000);
   if (secs < 1) return undefined;
   return secs < 60
-    ? `Thought for ${secs}s`
-    : `Thought for ${Math.floor(secs / 60)}m ${secs % 60}s`;
+    ? t("Thought for {{secs}}s", { secs })
+    : t("Thought for {{floor}}m {{secs}}s", { floor: Math.floor(secs / 60), secs: secs % 60 });
 }
 
 /** Append token deltas onto the open logical line while preserving real newlines. */
@@ -409,7 +410,7 @@ function providerActivityItem(
                 : "pending";
             return {
               id: stringValue(step.stepId) ?? `${runId}:plan-step:${stepIndex}`,
-              label: stringValue(step.body) ?? "Plan step",
+              label: stringValue(step.body) ?? t("Plan step"),
               status,
             };
           })
@@ -1043,10 +1044,10 @@ export function transcriptToTaskChatItems(
           kind: "usage",
           ...(entry.subtype === "paperclip_runner_session_usage"
             ? {
-                label: "Provider session total",
+                label: t("Provider session total"),
                 detail:
                   entry.text ||
-                  "This cumulative usage can include earlier runs in the resumed provider session.",
+                  t("This cumulative usage can include earlier runs in the resumed provider session."),
               }
             : {}),
           usage: {
@@ -1520,13 +1521,13 @@ function phaseSummary(
     if (count)
       phrases.push({ text: count === 1 ? singular : plural(count), count });
   };
-  add("read", "Read a file", (count) => `Read ${count} files`);
-  add("edit", "Edited a file", (count) => `Edited ${count} files`);
-  add("terminal", "Ran a command", (count) => `Ran ${count} commands`);
+  add("read", "Read a file", (count) => t("Read {{count}} files", { count }));
+  add("edit", "Edited a file", (count) => t("Edited {{count}} files", { count }));
+  add("terminal", "Ran a command", (count) => t("Ran {{count}} commands", { count }));
   const searched = (counts.get("grep") ?? 0) + (counts.get("search") ?? 0);
   if (searched)
     phrases.push({
-      text: searched === 1 ? "Searched once" : `Searched ${searched} times`,
+      text: searched === 1 ? t("Searched once") : t("Searched {{searched}} times", { searched }),
       count: searched,
     });
   const known = new Set(["read", "edit", "terminal", "grep", "search"]);
@@ -1537,7 +1538,7 @@ function phaseSummary(
     ) + generic;
   if (other)
     phrases.push({
-      text: other === 1 ? "Used a tool" : `Used ${other} tools`,
+      text: other === 1 ? t("Used a tool") : t("Used {{other}} tools", { other }),
       count: other,
     });
   const providerCount = (family: TaskChatProviderActivityItem["family"]) =>
@@ -1551,58 +1552,58 @@ function phaseSummary(
     if (count)
       phrases.push({ text: count === 1 ? singular : plural(count), count });
   };
-  addProvider("plan", "Updated the plan", (count) => `Updated ${count} plans`);
+  addProvider("plan", "Updated the plan", (count) => t("Updated {{count}} plans", { count }));
   addProvider(
     "research",
     "Searched once",
-    (count) => `Searched ${count} times`,
+    (count) => t("Searched {{count}} times", { count }),
   );
   addProvider(
     "delegation",
     "Used a subagent",
-    (count) => `Used ${count} subagents`,
+    (count) => t("Used {{count}} subagents", { count }),
   );
   addProvider(
     "model_identity",
     "Updated the model",
-    (count) => `Updated the model ${count} times`,
+    (count) => t("Updated the model {{count}} times", { count }),
   );
   addProvider(
     "context",
     "Compacted context",
-    (count) => `Compacted context ${count} times`,
+    (count) => t("Compacted context {{count}} times", { count }),
   );
   addProvider(
     "artifact",
     "Handled an artifact",
-    (count) => `Handled ${count} artifacts`,
+    (count) => t("Handled {{count}} artifacts", { count }),
   );
   addProvider(
     "review",
     "Changed review mode",
-    (count) => `Changed review mode ${count} times`,
+    (count) => t("Changed review mode {{count}} times", { count }),
   );
-  addProvider("hook", "Ran a hook", (count) => `Ran ${count} hooks`);
+  addProvider("hook", "Ran a hook", (count) => t("Ran {{count}} hooks", { count }));
   addProvider(
     "memory",
     "Referenced memory",
-    (count) => `Referenced memory ${count} times`,
+    (count) => t("Referenced memory {{count}} times", { count }),
   );
   addProvider(
     "safety",
     "Ran a safety review",
-    (count) => `Ran ${count} safety reviews`,
+    (count) => t("Ran {{count}} safety reviews", { count }),
   );
   addProvider(
     "terminal",
     "Sent terminal input",
-    (count) => `Sent terminal input ${count} times`,
+    (count) => t("Sent terminal input {{count}} times", { count }),
   );
-  addProvider("wait", "Waited", (count) => `Waited ${count} times`);
+  addProvider("wait", "Waited", (count) => t("Waited {{count}} times", { count }));
   addProvider(
     "provider_notice",
     "Received a provider notice",
-    (count) => `Received ${count} provider notices`,
+    (count) => t("Received {{count}} provider notices", { count }),
   );
   // A canonical tool-execution row can be the only tool representation for a
   // provider. Avoid double-counting when the adapter also produced native
@@ -1662,8 +1663,8 @@ function phaseSummary(
     phrases.push({
       text:
         workspaceFiles === 1
-          ? "Changed a file"
-          : `Changed ${workspaceFiles} files`,
+          ? t("Changed a file")
+          : t("Changed {{workspaceFiles}} files", { workspaceFiles }),
       count: workspaceFiles,
     });
   if (phrases.length > 0) {
@@ -1683,15 +1684,15 @@ function phaseSummary(
   const protocolCount = items.filter((item) => item.kind === "protocol").length;
   if (protocolCount > 0)
     return protocolCount === 1
-      ? "Runner activity"
-      : `${protocolCount} runner updates`;
-  if (items.some((item) => item.kind === "thinking")) return "Reasoning";
+      ? t("Runner activity")
+      : t("{{protocolCount}} runner updates", { protocolCount });
+  if (items.some((item) => item.kind === "thinking")) return t("Reasoning");
   const interrupted = items.find(
     (item) => item.kind === "marker" && item.variant === "interrupted",
   );
   return interrupted?.kind === "marker"
     ? interrupted.label
-    : "No tool activity";
+    : t("No tool activity");
 }
 
 /**
@@ -1818,13 +1819,13 @@ function formatDurationLabel(ms: number): string | undefined {
   if (totalSec < 60) return `${totalSec}s`;
   const min = Math.floor(totalSec / 60);
   const sec = totalSec % 60;
-  return sec === 0 ? `${min}m` : `${min}m ${sec}s`;
+  return sec === 0 ? `${min}m` : t("{{min}}m {{sec}}s", { min, sec });
 }
 
 function formatTokensLabel(tokens: number): string | undefined {
   if (!Number.isFinite(tokens) || tokens <= 0) return undefined;
   const label = tokens >= 1000 ? `${(tokens / 1000).toFixed(1)}k` : `${tokens}`;
-  return `${label} tokens`;
+  return t("{{label}} tokens", { label });
 }
 
 /** First→last ts span of a transcript, or undefined when unknowable. */
@@ -2163,11 +2164,11 @@ export function deriveRunStatusLabel(entries: readonly TranscriptEntry[]): {
         }
       }
       const selfTalk = flattenSelfTalk(parts.join(""));
-      return { label: "Responding", selfTalk: selfTalk || undefined };
+      return { label: t("Responding"), selfTalk: selfTalk || undefined };
     }
-    if (entry.kind === "thinking") return { label: "Thinking" };
+    if (entry.kind === "thinking") return { label: t("Thinking") };
     if (entry.kind === "system" && entry.text === "Reasoning started")
-      return { label: "Thinking" };
+      return { label: t("Thinking") };
   }
-  return { label: "Running" };
+  return { label: t("Running") };
 }

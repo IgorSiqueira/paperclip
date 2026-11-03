@@ -4,6 +4,7 @@ import { Select as SelectPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "./popover"
+import { t } from "@/i18n";
 
 export const nativeSelectClassName = "w-full rounded-md border border-border bg-background px-2.5 py-1.5 text-sm leading-5 outline-none focus-visible:ring-2 focus-visible:ring-ring"
 
@@ -26,7 +27,7 @@ export function SelectPopover({
   value,
   onValueChange,
   options = [],
-  placeholder = "Select…",
+  placeholder = t("Select…"),
   displayValue,
   "aria-label": ariaLabel,
   "aria-busy": ariaBusy,

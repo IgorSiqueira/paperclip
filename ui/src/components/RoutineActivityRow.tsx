@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ChevronRight } from "lucide-react";
 import type { ActivityEvent } from "@paperclipai/shared";
 import { cn } from "@/lib/utils";
+import { t } from "@/i18n";
 
 export type RoutineActivityEvent = Pick<ActivityEvent, "id" | "action" | "details" | "createdAt">;
 
@@ -40,14 +41,14 @@ function formatDetailValue(value: unknown): string {
 }
 
 const actionLabels: Record<string, string> = {
-  "routine.webhook_test_received": "Connection test passed",
-  "routine.webhook_test_rejected": "Connection test rejected",
-  "routine.webhook_received": "Webhook event received",
-  "routine.webhook_rejected": "Webhook authentication failed",
-  "routine.created": "Routine created", "routine.updated": "Routine updated",
-  "routine.trigger_created": "Trigger added", "routine.trigger_updated": "Trigger updated",
-  "routine.trigger_deleted": "Trigger removed", "routine.trigger_removed": "Trigger removed", "routine.trigger_restored": "Trigger restored", "routine.trigger_setup_finished": "Webhook setup finished", "routine.trigger_secret_rotated": "Webhook key replaced",
-  "routine.run_triggered": "Routine started", "routine.run_created": "Run created",
+  "routine.webhook_test_received": t("Connection test passed"),
+  "routine.webhook_test_rejected": t("Connection test rejected"),
+  "routine.webhook_received": t("Webhook event received"),
+  "routine.webhook_rejected": t("Webhook authentication failed"),
+  "routine.created": t("Routine created"), "routine.updated": t("Routine updated"),
+  "routine.trigger_created": t("Trigger added"), "routine.trigger_updated": t("Trigger updated"),
+  "routine.trigger_deleted": t("Trigger removed"), "routine.trigger_removed": t("Trigger removed"), "routine.trigger_restored": t("Trigger restored"), "routine.trigger_setup_finished": t("Webhook setup finished"), "routine.trigger_secret_rotated": t("Webhook key replaced"),
+  "routine.run_triggered": t("Routine started"), "routine.run_created": t("Run created"),
 };
 function actionLabel(action: string) {
   return actionLabels[action] ?? action.replace(/^routine[._]/, "").replaceAll("_", " ").replaceAll(".", " ").replace(/^./, (char) => char.toUpperCase());

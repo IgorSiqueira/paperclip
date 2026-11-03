@@ -23,6 +23,7 @@ import { findUIAdapter } from "../adapters/registry";
 import {
   summarizeNotice,
 } from "./transcriptPresentation";
+import { t } from "@/i18n";
 
 type JsonValue = null | string | number | boolean | JsonValue[] | { [key: string]: JsonValue };
 type JsonObject = { [key: string]: JsonValue };
@@ -544,13 +545,13 @@ function authorNameForComment(
 ) {
   const authorAgentId = effectiveCommentAuthorAgentId(comment);
   if (authorAgentId) {
-    return agentMap?.get(authorAgentId)?.name ?? (options?.isSystemNotice ? "Paperclip" : authorAgentId.slice(0, 8));
+    return agentMap?.get(authorAgentId)?.name ?? (options?.isSystemNotice ? t("Paperclip") : authorAgentId.slice(0, 8));
   }
   const authorUserId = comment.authorUserId ?? null;
-  if (!authorUserId) return options?.isSystemNotice ? "Paperclip" : "You";
+  if (!authorUserId) return options?.isSystemNotice ? t("Paperclip") : t("You");
   const userLabel = userLabelMap?.get(authorUserId)?.trim();
   if (userLabel) return userLabel;
-  return formatAssigneeUserLabel(authorUserId, currentUserId, userLabelMap) ?? "You";
+  return formatAssigneeUserLabel(authorUserId, currentUserId, userLabelMap) ?? t("You");
 }
 
 function formatStatusLabel(status: string) {
@@ -782,18 +783,18 @@ export function formatDurationWords(ms: number | null) {
   if (ms === null || !Number.isFinite(ms) || ms <= 0) return null;
   const totalSeconds = Math.max(1, Math.round(ms / 1000));
   if (totalSeconds < 60) {
-    return `${totalSeconds} second${totalSeconds === 1 ? "" : "s"}`;
+    return (totalSeconds === 1 ? t("{{totalSeconds}} second", { totalSeconds }) : t("{{totalSeconds}} seconds", { totalSeconds }));
   }
   const totalMinutes = Math.round(totalSeconds / 60);
   if (totalMinutes < 60) {
-    return `${totalMinutes} minute${totalMinutes === 1 ? "" : "s"}`;
+    return (totalMinutes === 1 ? t("{{totalMinutes}} minute", { totalMinutes }) : t("{{totalMinutes}} minutes", { totalMinutes }));
   }
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
   if (minutes === 0) {
-    return `${hours} hour${hours === 1 ? "" : "s"}`;
+    return (hours === 1 ? t("{{hours}} hour", { hours }) : t("{{hours}} hours", { hours }));
   }
-  return `${hours} hour${hours === 1 ? "" : "s"} ${minutes} minute${minutes === 1 ? "" : "s"}`;
+  return (hours === 1 ? (minutes === 1 ? t("{{hours}} hour {{minutes}} minute", { hours, minutes }) : t("{{hours}} hour {{minutes}} minutes", { hours, minutes })) : (minutes === 1 ? t("{{hours}} hours {{minutes}} minute", { hours, minutes }) : t("{{hours}} hours {{minutes}} minutes", { hours, minutes })));
 }
 
 function runDurationLabel(run: {
@@ -811,24 +812,24 @@ function runDurationLabel(run: {
   const stopReason = typeof run.resultJson?.stopReason === "string" ? run.resultJson.stopReason : null;
   switch (run.status) {
     case "succeeded":
-      return durationText ? `Worked for ${durationText}` : "Finished work";
+      return durationText ? t("Worked for {{durationText}}", { durationText }) : t("Finished work");
     case "failed":
     case "error":
-      return durationText ? `Failed after ${durationText}` : "Run failed";
+      return durationText ? t("Failed after {{durationText}}", { durationText }) : t("Run failed");
     case "timed_out":
-      return durationText ? `Timed out after ${durationText}` : "Run timed out";
+      return durationText ? t("Timed out after {{durationText}}", { durationText }) : t("Run timed out");
     case "cancelled":
       if (isOperatorInterruptedRun(run.resultJson, run.errorCode)) {
-        return durationText ? `Interrupted by board after ${durationText}` : "Interrupted by board";
+        return durationText ? t("Interrupted by board after {{durationText}}", { durationText }) : t("Interrupted by board");
       }
       if (stopReason === "paused") {
-        return durationText ? `Paused by board after ${durationText}` : "Paused by board";
+        return durationText ? t("Paused by board after {{durationText}}", { durationText }) : t("Paused by board");
       }
-      return durationText ? `Cancelled after ${durationText}` : "Run cancelled";
+      return durationText ? t("Cancelled after {{durationText}}", { durationText }) : t("Run cancelled");
     case "queued":
-      return "Queued";
+      return t("Queued");
     case "running":
-      return "Working...";
+      return t("Working...");
     default:
       return formatStatusLabel(run.status);
   }
@@ -840,7 +841,7 @@ function createHistoricalRunMessage(run: IssueChatLinkedRun, agentMap?: Map<stri
     id: `run:${run.runId}`,
     role: "system",
     createdAt: toDate(runTimestamp(run)),
-    content: [{ type: "text", text: `${agentName} run ${run.runId.slice(0, 8)} ${formatStatusLabel(run.status)}` }],
+    content: [{ type: "text", text: t("{{agentName}} run {{slice}} {{formatStatusLabel}}", { agentName, slice: run.runId.slice(0, 8), formatStatusLabel: formatStatusLabel(run.status) }) }],
     metadata: {
       custom: {
         kind: "run",
@@ -867,7 +868,7 @@ function createHistoricalTranscriptMessage(args: {
   const agentName = run.agentName ?? agentMap?.get(run.agentId)?.name ?? run.agentId.slice(0, 8);
   const compactedTranscript = compactIssueChatTranscript(transcript, issueChatTranscriptMaxVisibleEntries(run.adapterType));
   const { parts, notices, segments } = buildAssistantPartsFromTranscript(compactedTranscript);
-  const waitingText = hasOutput ? "" : "Run finished";
+  const waitingText = hasOutput ? "" : t("Run finished");
   const content = parts.length > 0
     ? parts
     : waitingText
@@ -1014,13 +1015,13 @@ export function buildAssistantPartsFromTranscript(entries: readonly IssueChatTra
     if (entry.kind === "result") {
       if (entry.isError && entry.errors?.length) {
         for (const error of entry.errors) {
-          orderedParts.push({ type: "reasoning", text: `Run error: ${summarizeNotice(error)}` });
+          orderedParts.push({ type: "reasoning", text: t("Run error: {{summarizeNotice}}", { summarizeNotice: summarizeNotice(error) }) });
         }
       } else if (entry.text) {
         orderedParts.push({
           type: "reasoning",
           text: entry.isError
-            ? `Run error: ${summarizeNotice(entry.text)}`
+            ? t("Run error: {{summarizeNotice}}", { summarizeNotice: summarizeNotice(entry.text) })
             : summarizeNotice(entry.text),
         });
       }
@@ -1111,10 +1112,10 @@ function createLiveRunMessage(args: {
   const { parts, notices, segments } = buildAssistantPartsFromTranscript(compactedTranscript);
   const waitingText =
     run.status === "queued"
-      ? "Queued..."
+      ? t("Queued...")
       : parts.length > 0
         ? ""
-        : "Working...";
+        : t("Working...");
 
   const content = parts;
 

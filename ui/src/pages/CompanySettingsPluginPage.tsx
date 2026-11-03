@@ -5,6 +5,7 @@ import { useCompany } from "@/context/CompanyContext";
 import { QueryErrorState } from "@/components/QueryView";
 import { PluginSlotMount, usePluginSlots } from "@/plugins/slots";
 import { NotFoundPage } from "./NotFound";
+import { t } from "@/i18n";
 
 export function CompanySettingsPluginPage() {
   const params = useParams<{
@@ -42,7 +43,7 @@ export function CompanySettingsPluginPage() {
   useEffect(() => {
     if (!pageSlot) return;
     setBreadcrumbs([
-      { label: "Settings", href: "/company/settings" },
+      { label: t("Settings"), href: "/company/settings" },
       { label: pageSlot.displayName },
     ]);
   }, [pageSlot, setBreadcrumbs]);
@@ -51,22 +52,22 @@ export function CompanySettingsPluginPage() {
     if (hasInvalidCompanyPrefix) {
       return <NotFoundPage scope="invalid_company_prefix" requestedPrefix={routeCompanyPrefix} />;
     }
-    return <div className="text-sm text-muted-foreground">Select an organization to view this page.</div>;
+    return <div className="text-sm text-muted-foreground">{t("Select an organization to view this page.")}</div>;
   }
 
   if (!settingsRoutePath || isLoading) {
-    return <div className="text-sm text-muted-foreground">Loading...</div>;
+    return <div className="text-sm text-muted-foreground">{t("Loading...")}</div>;
   }
 
   // Only a real failure reaches here; an outage keeps `isLoading` true above.
   if (errorMessage) {
-    return <QueryErrorState error={error} action="load plugin extensions" onRetry={retry} className="max-w-xl" />;
+    return <QueryErrorState error={error} action={t("load plugin extensions")} onRetry={retry} className="max-w-xl" />;
   }
 
   if (pageSlots.length > 1) {
     return (
       <div className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
-        Multiple plugins declare the company settings route <code>{settingsRoutePath}</code>. Disable one plugin or change its route.
+        {t("Multiple plugins declare the company settings route")} <code>{settingsRoutePath}</code>{t(". Disable one plugin or change its route.")}
       </div>
     );
   }

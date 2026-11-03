@@ -1,10 +1,11 @@
 import type { HeartbeatRun } from "@paperclipai/shared";
 import { ApiError } from "../api/client";
 import { heartbeatsApi } from "../api/heartbeats";
+import { t } from "@/i18n";
 
 const STOPPED_STATUSES = new Set(["succeeded", "interrupted", "failed", "cancelled", "timed_out"]);
 
-const VERIFICATION_ERROR = "The stop was requested, but stopping could not be verified. Refresh and try Stop again if work is still running.";
+const VERIFICATION_ERROR = t("The stop was requested, but stopping could not be verified. Refresh and try Stop again if work is still running.");
 
 function isStopped(run: HeartbeatRun) {
   if (!STOPPED_STATUSES.has(run.status)) return false;

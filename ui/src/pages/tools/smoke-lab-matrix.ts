@@ -5,6 +5,7 @@ import {
   type SmokeRunStepPath,
   type SmokeRunStepStatus,
 } from "@paperclipai/shared";
+import { t as translate } from "@/i18n";
 
 /**
  * Pure matrix/health helpers for the Smoke Lab tab (PAP-13347 / S2, plan §D3).
@@ -19,13 +20,13 @@ import {
  */
 
 export const SMOKE_PATH_LABELS: Record<SmokeRunStepPath, { title: string; detail: string }> = {
-  P1: { title: "Remote HTTP · OAuth", detail: "HTTP MCP fixture behind the fake OAuth provider" },
-  P2: { title: "Remote HTTP · API key", detail: "HTTP MCP fixture with a static bearer key" },
-  P3: { title: "Local stdio (template)", detail: "stdio fixture via the runtime supervisor" },
-  P4: { title: "Plugin integration", detail: "plugin-provided catalog entry + install flow" },
-  P5: { title: "Paste-a-config import", detail: "prosumer import via Advanced setup" },
-  P6: { title: "Token broker / gateway", detail: "run-scoped connection token, TTL + scope checks" },
-  P7: { title: "Governance surfaces", detail: "profiles, ask-first rules, quarantine" },
+  P1: { title: translate("Remote HTTP · OAuth"), detail: translate("HTTP MCP fixture behind the fake OAuth provider") },
+  P2: { title: translate("Remote HTTP · API key"), detail: translate("HTTP MCP fixture with a static bearer key") },
+  P3: { title: translate("Local stdio (template)"), detail: translate("stdio fixture via the runtime supervisor") },
+  P4: { title: translate("Plugin integration"), detail: translate("plugin-provided catalog entry + install flow") },
+  P5: { title: translate("Paste-a-config import"), detail: translate("prosumer import via Advanced setup") },
+  P6: { title: translate("Token broker / gateway"), detail: translate("run-scoped connection token, TTL + scope checks") },
+  P7: { title: translate("Governance surfaces"), detail: translate("profiles, ask-first rules, quarantine") },
 };
 
 export interface LifecycleStage {
@@ -37,14 +38,14 @@ export interface LifecycleStage {
 
 /** The PAP-12373 governed lifecycle, in order (plan §3). */
 export const LIFECYCLE_STAGES: LifecycleStage[] = [
-  { key: "connect", label: "Connect", match: ["connect", "oauth", "login", "auth"] },
-  { key: "discover", label: "Discover catalog", match: ["discover", "catalog", "list-tools"] },
-  { key: "read", label: "Allowed read", match: ["read", "allowed"] },
-  { key: "write", label: "Ask-first write", match: ["write", "approve", "ask-first", "askfirst", "review"] },
-  { key: "deny", label: "Denied call", match: ["deny", "denied", "block", "forbidden"] },
-  { key: "quarantine", label: "Schema-change quarantine", match: ["quarantine", "schema"] },
-  { key: "revoke", label: "Revoke", match: ["revoke"] },
-  { key: "audit", label: "Audit evidence", match: ["audit", "activity", "evidence"] },
+  { key: "connect", label: translate("Connect"), match: ["connect", "oauth", "login", "auth"] },
+  { key: "discover", label: translate("Discover catalog"), match: ["discover", "catalog", "list-tools"] },
+  { key: "read", label: translate("Allowed read"), match: ["read", "allowed"] },
+  { key: "write", label: translate("Ask-first write"), match: ["write", "approve", "ask-first", "askfirst", "review"] },
+  { key: "deny", label: translate("Denied call"), match: ["deny", "denied", "block", "forbidden"] },
+  { key: "quarantine", label: translate("Schema-change quarantine"), match: ["quarantine", "schema"] },
+  { key: "revoke", label: translate("Revoke"), match: ["revoke"] },
+  { key: "audit", label: translate("Audit evidence"), match: ["audit", "activity", "evidence"] },
 ];
 
 /** Fold a free-form scenario step onto a canonical lifecycle stage, or null. */

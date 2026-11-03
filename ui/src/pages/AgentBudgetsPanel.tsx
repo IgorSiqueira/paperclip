@@ -5,6 +5,7 @@ import { BudgetIncidentCard } from "../components/BudgetIncidentCard";
 import { BudgetPolicyCard } from "../components/BudgetPolicyCard";
 import { PageSkeleton } from "../components/PageSkeleton";
 import { queryKeys } from "../lib/queryKeys";
+import { t } from "@/i18n";
 
 type BudgetAgent = Pick<AgentDetailRecord, "id" | "name" | "status" | "pauseReason" | "budgetMonthlyCents" | "spentMonthlyCents">;
 
@@ -78,10 +79,10 @@ export function AgentBudgetsPanel({ agent, companyId }: { agent: BudgetAgent; co
   return (
     <div className="space-y-4">
       {overview.error && !overview.data ? (
-        <p role="alert" className="text-sm text-destructive">Budget data could not be loaded. Showing the agent's saved monthly budget.</p>
+        <p role="alert" className="text-sm text-destructive">{t("Budget data could not be loaded. Showing the agent's saved monthly budget.")}</p>
       ) : null}
       {policy.error ? (
-        <p role="alert" className="text-sm text-destructive">Could not update {agent.name}'s budget. Review the amount and try again.</p>
+        <p role="alert" className="text-sm text-destructive">{t("Could not update")} {agent.name}{t("'s budget. Review the amount and try again.")}</p>
       ) : null}
       {incidents.map((entry) => (
         <div key={entry.id} className="space-y-2">
@@ -93,8 +94,8 @@ export function AgentBudgetsPanel({ agent, companyId }: { agent: BudgetAgent; co
           />
           {incident.error && incident.variables?.incidentId === entry.id ? (
             <p role="alert" className="text-sm text-destructive">
-              {incident.variables.action === "keep_paused" ? "Could not keep this agent paused." : "Could not raise the budget and resume."}{" "}
-              {incident.error instanceof Error && incident.error.message ? incident.error.message : "Try again."}
+              {incident.variables.action === "keep_paused" ? t("Could not keep this agent paused.") : t("Could not raise the budget and resume.")}{" "}
+              {incident.error instanceof Error && incident.error.message ? incident.error.message : t("Try again.")}
             </p>
           ) : null}
         </div>

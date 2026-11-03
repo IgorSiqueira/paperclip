@@ -7,6 +7,7 @@ import { useConnectivityStore } from "@/lib/connectivity";
 import { classifySendFailure, MAX_ONLINE_RESENDS, resendDelayFor, type SendOutcome } from "@/lib/pending-send";
 import { useAutoResend } from "./useDurableSubmit";
 import { useDraftOwner, useDraftOwnerReader } from "./useDraftOwner";
+import { t } from "@/i18n";
 
 export type DurableAutosaveStatus =
   | "idle"
@@ -27,15 +28,15 @@ export type DurableAutosaveResult =
 export function autosaveLabel(status: DurableAutosaveStatus, error: ErrorDescription | null): string | null {
   switch (status) {
     case "saving":
-      return "Saving…";
+      return t("Saving…");
     case "saved":
-      return "Saved";
+      return t("Saved");
     case "waiting":
-      return "Will save when reconnected";
+      return t("Will save when reconnected");
     case "stalled":
-      return "Automatic saving paused";
+      return t("Automatic saving paused");
     case "error":
-      return error ? `Couldn't save (${error.body.replace(/\.$/, "")})` : "Couldn't save";
+      return error ? t("Couldn't save ({{replace}})", { replace: error.body.replace(/\.$/, "") }) : t("Couldn't save");
     default:
       return null;
   }

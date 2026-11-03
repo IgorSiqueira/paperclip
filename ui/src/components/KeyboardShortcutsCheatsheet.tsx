@@ -1,4 +1,5 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { t } from "@/i18n";
 
 interface ShortcutEntry {
   keys: string[];
@@ -15,48 +16,48 @@ interface ShortcutSection {
 
 const sections: ShortcutSection[] = [
   {
-    title: "Inbox",
+    title: t("Inbox"),
     shortcuts: [
-      { keys: ["j"], label: "Move down" },
-      { keys: ["↓"], label: "Move down" },
-      { keys: ["k"], label: "Move up" },
-      { keys: ["↑"], label: "Move up" },
-      { keys: ["←"], label: "Collapse selected group" },
-      { keys: ["→"], label: "Expand selected group" },
-      { keys: ["Enter"], label: "Open selected item" },
-      { keys: ["a"], label: "Archive item" },
-      { keys: ["y"], label: "Archive item" },
-      { keys: ["r"], label: "Mark as read" },
-      { keys: ["U"], label: "Mark as unread" },
+      { keys: ["j"], label: t("Move down") },
+      { keys: ["↓"], label: t("Move down") },
+      { keys: ["k"], label: t("Move up") },
+      { keys: ["↑"], label: t("Move up") },
+      { keys: ["←"], label: t("Collapse selected group") },
+      { keys: ["→"], label: t("Expand selected group") },
+      { keys: ["Enter"], label: t("Open selected item") },
+      { keys: ["a"], label: t("Archive item") },
+      { keys: ["y"], label: t("Archive item") },
+      { keys: ["r"], label: t("Mark as read") },
+      { keys: ["U"], label: t("Mark as unread") },
     ],
   },
   {
-    title: "Task detail",
+    title: t("Task detail"),
     shortcuts: [
-      { keys: ["y"], label: "Quick-archive back to inbox" },
-      { keys: ["g", "i"], label: "Go to inbox" },
-      { keys: ["g", "c"], label: "Focus comment composer" },
+      { keys: ["y"], label: t("Quick-archive back to inbox") },
+      { keys: ["g", "i"], label: t("Go to inbox") },
+      { keys: ["g", "c"], label: t("Focus comment composer") },
     ],
   },
   {
-    title: "Decisions",
+    title: t("Decisions"),
     shortcuts: [
-      { keys: ["j"], label: "Move down" },
-      { keys: ["↓"], label: "Move down" },
-      { keys: ["k"], label: "Move up" },
-      { keys: ["↑"], label: "Move up" },
-      { keys: ["Enter"], label: "Open or close selected decision" },
-      { keys: ["x"], label: "Dismiss selected decision" },
+      { keys: ["j"], label: t("Move down") },
+      { keys: ["↓"], label: t("Move down") },
+      { keys: ["k"], label: t("Move up") },
+      { keys: ["↑"], label: t("Move up") },
+      { keys: ["Enter"], label: t("Open or close selected decision") },
+      { keys: ["x"], label: t("Dismiss selected decision") },
     ],
   },
   {
-    title: "Global",
+    title: t("Global"),
     shortcuts: [
-      { keys: ["/"], label: "Search current page or quick search" },
-      { keys: ["c"], label: "New task" },
-      { keys: ["["], label: "Toggle sidebar" },
-      { keys: ["]"], label: "Toggle panel" },
-      { keys: ["?"], label: "Show keyboard shortcuts" },
+      { keys: ["/"], label: t("Search current page or quick search") },
+      { keys: ["c"], label: t("New task") },
+      { keys: ["["], label: t("Toggle sidebar") },
+      { keys: ["]"], label: t("Toggle panel") },
+      { keys: ["?"], label: t("Show keyboard shortcuts") },
     ],
   },
 ];
@@ -90,7 +91,7 @@ export function KeyboardShortcutsCheatsheetContent() {
                       <span key={key} className="flex items-center gap-1">
                         {i > 0 && (
                           <span className="text-xs text-muted-foreground">
-                            {shortcut.combo ? "+" : "then"}
+                            {shortcut.combo ? "+" : t("then")}
                           </span>
                         )}
                         <KeyCap>{key}</KeyCap>
@@ -105,7 +106,7 @@ export function KeyboardShortcutsCheatsheetContent() {
       </div>
       <div className="border-t border-border px-5 py-3">
         <p className="text-xs text-muted-foreground">
-          Press <KeyCap>Esc</KeyCap> to close &middot; Shortcuts are disabled in text fields
+          {t("Press")} <KeyCap>{t("Esc")}</KeyCap> {t("to close · Shortcuts are disabled in text fields")}
         </p>
       </div>
     </>
@@ -123,7 +124,7 @@ export function KeyboardShortcutsCheatsheet({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md gap-0 p-0 overflow-hidden" showCloseButton={false}>
         <DialogHeader className="px-5 pt-5 pb-3">
-          <DialogTitle className="text-base">Keyboard shortcuts</DialogTitle>
+          <DialogTitle className="text-base">{t("Keyboard shortcuts")}</DialogTitle>
         </DialogHeader>
         <KeyboardShortcutsCheatsheetContent />
       </DialogContent>

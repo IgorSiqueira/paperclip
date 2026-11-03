@@ -3,6 +3,7 @@ import type { UIAdapterModule } from "../types";
 import { parseCodexStdoutLine, buildPaperclipRunnerConfig } from "@paperclipai/adapter-codex-local/ui";
 import { CodexLocalConfigFields } from "../codex-local/config-fields";
 import { isRunLogOnlyProviderEvent } from "@/components/transcript/run-log-only-events";
+import { t } from "@/i18n";
 
 type JsonRecord = Record<string, unknown>;
 
@@ -446,10 +447,10 @@ function runtimeRequestEntry(
     .filter((choice) => choice.key && choice.label)
     .slice(0, 32);
   const actionLabels: Record<string, string> = {
-    accept: "Allow once",
-    accept_for_session: "Allow for session",
-    decline: "Deny",
-    cancel: "Cancel",
+    accept: t("Allow once"),
+    accept_for_session: t("Allow for session"),
+    decline: t("Deny"),
+    cancel: t("Cancel"),
   };
   const actions = (Array.isArray(request.actions) ? request.actions : [])
     .filter((action): action is string => typeof action === "string" && action in actionLabels)
@@ -713,7 +714,7 @@ function parsePrpEvent(
       : rawStatus === "failed" || rawStatus === "denied" ? "failed"
         : rawStatus === "interrupted" || rawStatus === "cancelled" ? "interrupted"
           : (family === "plan" && payload.complete === true) || eventType.endsWith("completed") || rawStatus === "completed" ? "completed" : "informational";
-    const title = ({ plan: "Plan", tool_execution: "Tool execution", research: "Research", delegation: "Delegation", model_identity: "Model", context: "Context", artifact: "Artifact", review: "Review mode", hook: "Hook", memory: "Memory citation", safety: "Safety review", terminal: "Terminal input", wait: "Intentional wait", provider_notice: "Provider notice" } as const)[family];
+    const title = ({ plan: t("Plan"), tool_execution: t("Tool execution"), research: t("Research"), delegation: t("Delegation"), model_identity: t("Model"), context: t("Context"), artifact: t("Artifact"), review: t("Review mode"), hook: t("Hook"), memory: t("Memory citation"), safety: t("Safety review"), terminal: t("Terminal input"), wait: t("Intentional wait"), provider_notice: t("Provider notice") } as const)[family];
     const summary = family === "model_identity"
       ? text(payload.summary, text(payload.effectiveModel, text(payload.requestedModel, text(payload.provider, eventType))))
       : text(payload.summary, text(payload.name, text(payload.query, eventType)));
@@ -724,13 +725,13 @@ function parsePrpEvent(
   }
   if (eventType === "workspace.file.referenced") {
     const entry = workspaceFileReferenceEntry(payload, ts);
-    return entry ? [entry] : [{ kind: "system", ts, text: "Runner: Ignored an unsafe workspace file reference" }];
+    return entry ? [entry] : [{ kind: "system", ts, text: t("Runner: Ignored an unsafe workspace file reference") }];
   }
   if (eventType.startsWith("runtime_request.")) {
     const request = record(payload.request ?? payload);
     const input = record(request.input);
     if (typeof input.description === "string" && input.description.length > 100_000) {
-      return [{ kind: "system", ts, text: "Runner: Cannot display this input request because its complete context exceeds 100,000 characters. No decision can be submitted from this request." }];
+      return [{ kind: "system", ts, text: t("Runner: Cannot display this input request because its complete context exceeds 100,000 characters. No decision can be submitted from this request.") }];
     }
     const entry = runtimeRequestEntry(eventType, payload, event, ts, state);
     return entry ? [entry] : [];
@@ -747,10 +748,10 @@ function parsePrpEvent(
     const context = record(payload.context);
     const model = text(context.model, text(record(payload.model).name, "Paperclip runner"));
     const sessionId = text(payload.providerSessionId, text(payload.driverSessionId, text(event.normalizedSessionId)));
-    return [{ kind: "system", ts, text: `Paperclip session ${eventType === "session.resumed" ? "resumed" : "started"} · ${model}${sessionId ? ` · ${sessionId}` : ""}` }];
+    return [{ kind: "system", ts, text: (eventType === "session.resumed" ? t("Paperclip session resumed · {{model}}{{value}}", { model, value: sessionId ? ` · ${sessionId}` : "" }) : t("Paperclip session started · {{model}}{{value}}", { model, value: sessionId ? ` · ${sessionId}` : "" })) }];
   }
-  if (eventType === "turn.started") return [{ kind: "system", ts, text: "Turn started" }];
-  if (eventType === "turn.completed") return [{ kind: "system", ts, text: "Turn completed" }];
+  if (eventType === "turn.started") return [{ kind: "system", ts, text: t("Turn started") }];
+  if (eventType === "turn.completed") return [{ kind: "system", ts, text: t("Turn completed") }];
   if (eventType === "turn.failed") return [{ kind: "stderr", ts, text: text(record(payload.error).message, "Turn failed") }];
   if (eventType === "item.started" || eventType === "item.completed") {
     if (payload.kind === "usage") return [usageEntry(payload, ts)];
@@ -819,7 +820,7 @@ export function parsePaperclipRunnerStdoutLine(line: string, ts: string): Transc
 
 export const paperclipRunnerUIAdapter: UIAdapterModule = {
   type: "paperclip_runner",
-  label: "Paperclip Runner",
+  label: t("Paperclip Runner"),
   parseStdoutLine: parsePaperclipRunnerStdoutLine,
   createStdoutParser: () => {
     let state = createParserState();

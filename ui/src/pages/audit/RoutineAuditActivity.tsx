@@ -5,6 +5,7 @@ import { EmptyState } from "@/components/EmptyState";
 import { RoutineActivityRow } from "@/components/RoutineActivityRow";
 import { Button } from "@/components/ui/button";
 import { queryKeys } from "@/lib/queryKeys";
+import { t } from "@/i18n";
 
 export function RoutineAuditActivity({
   companyId,
@@ -30,7 +31,7 @@ export function RoutineAuditActivity({
   if (activity.isLoading) {
     return (
       <div className="border-y border-border py-14 text-center text-sm text-muted-foreground">
-        Loading routine activity…
+        {t("Loading routine activity…")}
       </div>
     );
   }
@@ -39,10 +40,10 @@ export function RoutineAuditActivity({
     return (
       <div className="flex flex-col items-center gap-3 border-y border-border py-14 text-center">
         <p className="text-sm text-muted-foreground">
-          {activity.error instanceof Error ? activity.error.message : "Failed to load routine activity."}
+          {activity.error instanceof Error ? activity.error.message : t("Failed to load routine activity.")}
         </p>
         <Button variant="outline" size="sm" onClick={() => activity.refetch()}>
-          Try again
+          {t("Try again")}
         </Button>
       </div>
     );
@@ -50,11 +51,11 @@ export function RoutineAuditActivity({
 
   const events = activity.data ?? [];
   if (events.length === 0) {
-    return <EmptyState icon={Activity} message="No routine activity yet." />;
+    return <EmptyState icon={Activity} message={t("No routine activity yet.")} />;
   }
 
   return (
-    <div className="border-y border-border" aria-label="Routine activity">
+    <div className="border-y border-border" aria-label={t("Routine activity")}>
       {events.map((event) => (
         <RoutineActivityRow key={event.id} event={event} />
       ))}

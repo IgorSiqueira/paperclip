@@ -24,6 +24,7 @@ import { buildPermissionsForTrustPreset } from "@/lib/trust-policy-ui";
 import { queryKeys } from "@/lib/queryKeys";
 import { GITHUB_APP_CREDENTIAL_FIELDS, GitHubAppRecovery } from "./GitHubConnectionRecovery";
 import type { GitHubConnectionCompleteLocationState } from "./GitHubConnectionComplete";
+import { t } from "@/i18n";
 
 /** Restrict native manifest submission to GitHub registration endpoints. */
 export function gitHubAppManifestAction(
@@ -67,7 +68,7 @@ function GitHubAppManifestForm({
     >
       <input type="hidden" name="manifest" value={JSON.stringify(registration.manifest)} />
       <SetupWizardFooter onSaveExit={onSaveExit} disabled={disabled}>
-        <Button type="submit" disabled={disabled}>Continue to GitHub</Button>
+        <Button type="submit" disabled={disabled}>{t("Continue to GitHub")}</Button>
       </SetupWizardFooter>
     </form>
   );
@@ -187,8 +188,8 @@ export function GitHubChatSetup() {
   }, [connected, bot, selectedAgent, state, queryClient, navigate]);
   useEffect(() => {
     setBreadcrumbs([
-      { label: "Connectors", href: "/apps" },
-      { label: "GitHub Code Review Bot" },
+      { label: t("Connectors"), href: "/apps" },
+      { label: t("GitHub Code Review Bot") },
     ]);
     return () => setBreadcrumbs([]);
   }, [setBreadcrumbs]);
@@ -270,14 +271,14 @@ export function GitHubChatSetup() {
   if (resume && !bot)
     return (
       <div className="mx-auto w-full max-w-3xl space-y-6 px-4 py-6 sm:px-6">
-        <h1 className="text-2xl font-semibold">Resume GitHub setup</h1>
+        <h1 className="text-2xl font-semibold">{t("Resume GitHub setup")}</h1>
         {current.error ? (
           <p role="alert" className="text-sm text-destructive">
-            Could not load this connection. Try again to resume your draft.
+            {t("Could not load this connection. Try again to resume your draft.")}
           </p>
         ) : (
           <p role="status" className="text-sm text-muted-foreground">
-            Loading your draft…
+            {t("Loading your draft…")}
           </p>
         )}
         {footer(current.error ? "Try again" : undefined, async () => {
@@ -300,10 +301,10 @@ export function GitHubChatSetup() {
       )}
       <h1 className="text-2xl font-semibold">
         {!bot
-          ? "Choose agent"
+          ? t("Choose agent")
           : identityOnly || state?.state === "identity"
-              ? "Connect your account"
-              : reconnect && existing ? "Reconnect GitHub" : "Connect GitHub"}
+              ? t("Connect your account")
+              : reconnect && existing ? t("Reconnect GitHub") : t("Connect GitHub")}
       </h1>
       {(error || (!identityOnly && !existing && progress.error) || accounts.error) && (
         <p role="alert" className="text-sm text-destructive">
@@ -313,7 +314,7 @@ export function GitHubChatSetup() {
               : undefined) ||
             (progress.error instanceof Error
               ? progress.error.message
-              : "Could not check GitHub setup. Try again.")}
+              : t("Could not check GitHub setup. Try again."))}
         </p>
       )}
       {!bot ? (
@@ -373,7 +374,7 @@ export function GitHubChatSetup() {
       ) : !identityOnly && !existing && progress.isPending ? (
         <>
           <p role="status" className="text-sm text-muted-foreground">
-            Checking your GitHub connection…
+            {t("Checking your GitHub connection…")}
           </p>
           {footer()}
         </>
@@ -410,16 +411,16 @@ export function GitHubChatSetup() {
           {identityOnly && identityLinked ? (
             <>
               <p role="status" className="text-sm">
-                GitHub account <strong>{legacyIdentity?.login}</strong>{" "}
-                connected. You can now mention this bot on GitHub.
+                {t("GitHub account")} <strong>{legacyIdentity?.login}</strong>{" "}
+                {t("connected. You can now mention this bot on GitHub.")}
               </p>
               {footer()}
             </>
           ) : state?.identity ? (
             <>
               <p className="text-sm">
-                Connect GitHub account <strong>{state.identity.login}</strong>{" "}
-                to your Paperclip account.
+                {t("Connect GitHub account")} <strong>{state.identity.login}</strong>{" "}
+                {t("to your Paperclip account.")}
               </p>
               {footer("Confirm my account", async () => {
                 await githubChatApi.confirmIdentity(
@@ -432,13 +433,12 @@ export function GitHubChatSetup() {
           ) : (
             <>
               <p className="text-sm text-muted-foreground">
-                Link your GitHub account so your mentions use your Paperclip
-                permissions.
+                {t("Link your GitHub account so your mentions use your Paperclip permissions.")}
               </p>
               {(accounts.data?.length ?? 0) > 0 && (
                 <>
                   <Label htmlFor="github-personal-account">
-                    Existing GitHub connection
+                    {t("Existing GitHub connection")}
                   </Label>
                   <select
                     id="github-personal-account"
@@ -450,7 +450,7 @@ export function GitHubChatSetup() {
                       setIdentityLinked(false);
                     }}
                   >
-                    <option value="">Choose an account</option>
+                    <option value="">{t("Choose an account")}</option>
                     {accounts.data
                       ?.filter(
                         (account) =>
@@ -467,7 +467,7 @@ export function GitHubChatSetup() {
                   </select>
                   {legacyIdentity && (
                     <p className="text-sm">
-                      GitHub account: <strong>{legacyIdentity.login}</strong>
+                      {t("GitHub account:")} <strong>{legacyIdentity.login}</strong>
                     </p>
                   )}
                 </>
@@ -477,7 +477,7 @@ export function GitHubChatSetup() {
                   className="text-sm underline"
                   to="/apps/connect?source=github"
                 >
-                  Add a personal GitHub connection, then return to this draft
+                  {t("Add a personal GitHub connection, then return to this draft")}
                 </Link>
               )}
               {footer(
@@ -511,14 +511,14 @@ export function GitHubChatSetup() {
       ) : state?.state === "install" ? (
         <>
           <p role="status" className="text-sm text-muted-foreground">
-            Waiting for GitHub installation or administrator approval…
+            {t("Waiting for GitHub installation or administrator approval…")}
           </p>
           {state.installationUrl && (
             <a
               className="inline-flex items-center gap-1 text-sm underline"
               href={state.installationUrl}
             >
-              Continue installation on GitHub
+              {t("Continue installation on GitHub")}
               <ExternalLink className="size-3" />
             </a>
           )}
@@ -527,8 +527,7 @@ export function GitHubChatSetup() {
       ) : state?.state === "enrollment" ? (
         <>
           <p className="text-sm">
-            Paperclip Cloud receives GitHub events and securely delivers them to
-            this instance.
+            {t("Paperclip Cloud receives GitHub events and securely delivers them to this instance.")}
           </p>
           {footer("Connect Paperclip Cloud", async () => {
             const result = await toolsApi.startCloudConnectorEnrollment(
@@ -547,13 +546,13 @@ export function GitHubChatSetup() {
             {state.message}
           </p>
           <Button variant="ghost" onClick={() => setExisting(true)}>
-            Use existing App credentials
+            {t("Use existing App credentials")}
           </Button>
           {state.restartableRegistrationId && (
             <div className="flex items-center gap-2">
               <Checkbox id="github-app-not-created" checked={appNotCreated} disabled={busy}
                 onCheckedChange={(checked) => setAppNotCreated(checked === true)} />
-              <Label htmlFor="github-app-not-created">I haven't created this App on GitHub.</Label>
+              <Label htmlFor="github-app-not-created">{t("I haven't created this App on GitHub.")}</Label>
             </div>
           )}
           {state.restartableRegistrationId
@@ -569,8 +568,8 @@ export function GitHubChatSetup() {
         <>
           <p role="status" className="text-sm text-muted-foreground">
             {deliveryVerifiedWhileChecking
-              ? "GitHub delivery verified. Checking App and repository access…"
-              : state.message ?? "Checking GitHub access…"}
+              ? t("GitHub delivery verified. Checking App and repository access…")
+              : state.message ?? t("Checking GitHub access…")}
           </p>
           {state.verification?.checks
             .filter(
@@ -587,14 +586,14 @@ export function GitHubChatSetup() {
             className="text-sm underline"
             to={`/apps/chat/${bot.id}/settings`}
           >
-            Connection settings
+            {t("Connection settings")}
           </Link>
           {footer("Try again", refresh)}
         </>
       ) : (
         <>
           <div className="space-y-2">
-            <Label htmlFor="github-owner-type">GitHub account</Label>
+            <Label htmlFor="github-owner-type">{t("GitHub account")}</Label>
             <select
               id="github-owner-type"
               className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
@@ -608,32 +607,32 @@ export function GitHubChatSetup() {
                 else if (choice === "organization") setOwnerLogin("");
               }}
             >
-              <option value="personal">My account</option>
+              <option value="personal">{t("My account")}</option>
               {knownOrganizations.map((login) => (
                 <option key={login.toLowerCase()} value={`organization:${login}`}>{login}</option>
               ))}
-              <option value="organization">Another organization</option>
+              <option value="organization">{t("Another organization")}</option>
             </select>
             {(repositories.isError || connectedBots.isError) && (
               <p role="alert" className="text-sm text-destructive">
-                Could not load some connected GitHub accounts. Choose Another organization to enter a name.
+                {t("Could not load some connected GitHub accounts. Choose Another organization to enter a name.")}
               </p>
             )}
           </div>
           {accountChoice === "organization" && (
             <div className="space-y-2">
-              <Label htmlFor="github-owner-login">Organization</Label>
+              <Label htmlFor="github-owner-login">{t("Organization")}</Label>
               <Input
                 id="github-owner-login"
                 disabled={busy || !!state?.registration}
                 value={ownerLogin}
                 onChange={(event) => setOwnerLogin(event.target.value)}
-                placeholder="GitHub organization name"
+                placeholder={t("GitHub organization name")}
               />
             </div>
           )}
           <div className="space-y-2">
-            <Label htmlFor="github-app-name">App name</Label>
+            <Label htmlFor="github-app-name">{t("App name")}</Label>
             <Input
               id="github-app-name"
               disabled={busy || !!state?.registration}
@@ -651,7 +650,7 @@ export function GitHubChatSetup() {
             className="text-sm text-muted-foreground underline"
             onClick={() => setExisting(true)}
           >
-            I already have an App
+            {t("I already have an App")}
           </button>
           {state?.registration ? (
             <GitHubAppManifestForm registration={state.registration} onSaveExit={exit}

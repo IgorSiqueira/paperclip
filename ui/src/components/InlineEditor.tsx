@@ -8,6 +8,7 @@ import { loadStructuredDraft, saveStructuredDraft } from "../lib/composer-draft"
 
 type StoredInlineDraft = { version: 1; draft: string; base: string };
 import { FoldCurtain } from "./FoldCurtain";
+import { t } from "@/i18n";
 
 interface InlineEditorProps {
   value: string;
@@ -77,7 +78,7 @@ function OwnedInlineEditor({
   onSave,
   as: Tag = "span",
   className,
-  placeholder = "Click to edit...",
+  placeholder = t("Click to edit..."),
   multiline = false,
   nullable = false,
   imageUploadHandler,
@@ -472,9 +473,9 @@ function OwnedInlineEditor({
             )}
             role={autosaveState === "error" ? "alert" : "status"}
           >
-            {autosave.label ?? "Idle"}
+            {autosave.label ?? t("Idle")}
           </span>
-          {autosaveState === "stalled" ? <button type="button" className="ml-2 text-xs text-foreground underline" onClick={autosave.resendNow}>Retry saving</button> : null}
+          {autosaveState === "stalled" ? <button type="button" className="ml-2 text-xs text-foreground underline" onClick={autosave.resendNow}>{t("Retry saving")}</button> : null}
         </div>
       </div>
     );
@@ -521,7 +522,7 @@ function OwnedInlineEditor({
     >
       {value || placeholder}
     </DisplayTag>
-    {autosaveState === "stalled" ? <button type="button" className="text-xs text-foreground underline" onClick={autosave.resendNow}>Retry saving</button> : null}
+    {autosaveState === "stalled" ? <button type="button" className="text-xs text-foreground underline" onClick={autosave.resendNow}>{t("Retry saving")}</button> : null}
     </>
   );
 }

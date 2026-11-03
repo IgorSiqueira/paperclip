@@ -16,6 +16,7 @@ import { DocumentAnnotationLayer, type AnnotationAnchorRect, type PendingAnchor 
 import { DocumentAnnotationPanel } from "./DocumentAnnotationPanel";
 import { DocumentAnnotationPopover } from "./DocumentAnnotationPopover";
 import type { CompanyUserProfile } from "@/lib/company-members";
+import { t } from "@/i18n";
 
 // Width of the right-hand comment gutter on desktop (lg+). The gutter is an
 // in-flow flex column beside the document, so it scrolls with the doc instead
@@ -427,14 +428,14 @@ export function DocumentAnnotationsCountChip({
       onClick={onToggle}
       data-testid={`document-annotation-count-${docKey}`}
       aria-label={openCount === 0
-        ? `Open comments on ${docKey}`
-        : `Open ${openCount} unresolved comments on ${docKey}`}
+        ? t("Open comments on {{docKey}}", { docKey })
+        : t("Open {{openCount}} unresolved comments on {{docKey}}", { openCount, docKey })}
       aria-expanded={panelOpen}
     >
       <MessageSquare className="h-3 w-3" aria-hidden="true" />
       <span className="tabular-nums">{openCount}</span>
       <span className="hidden sm:inline">
-        {openCount === 1 ? "comment" : "comments"}
+        {openCount === 1 ? t("comment") : t("comments")}
       </span>
     </Button>
   );

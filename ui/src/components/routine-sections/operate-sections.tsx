@@ -11,6 +11,7 @@ import { EmptyState } from "../EmptyState";
 import { RoutineHistoryTab } from "../RoutineHistoryTab";
 import { RoutineActivityRow } from "../RoutineActivityRow";
 import { useRoutineDetail } from "./context";
+import { t } from "@/i18n";
 
 export function RunsSection() {
   const { routine, companyId, agents, projects, hasLiveRun, activeIssueId } = useRoutineDetail();
@@ -29,7 +30,7 @@ export function RunsSection() {
       void queryClient.invalidateQueries({ queryKey: queryKeys.routines.detail(routine.id) });
       void queryClient.invalidateQueries({ queryKey: queryKeys.routines.runs(routine.id) });
     },
-    onError: (updateError) => pushToast({ title: "Failed to update task", body: updateError.message, tone: "error" }),
+    onError: (updateError) => pushToast({ title: t("Failed to update task"), body: updateError.message, tone: "error" }),
   });
 
   return (
@@ -75,11 +76,11 @@ export function ActivitySection({ isLoading = false, error }: { isLoading?: bool
     return Array.from(byDay.entries());
   }, [events]);
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">Loading activity…</p>;
+  if (isLoading) return <p className="text-sm text-muted-foreground">{t("Loading activity…")}</p>;
   if (error) return <p role="alert" className="text-sm text-destructive">{error.message}</p>;
 
   if (events.length === 0) {
-    return <EmptyState icon={ActivityIcon} message="No activity yet." />;
+    return <EmptyState icon={ActivityIcon} message={t("No activity yet.")} />;
   }
 
   return (

@@ -5,6 +5,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { cn } from "@/lib/utils";
 import type { SidePanelContentMode, SidePanelPresentation } from "./types";
 import { useScrollbarWhileScrolling } from "./use-scrollbar-while-scrolling";
+import { t } from "@/i18n";
 
 export interface SidePanelFrameProps {
   children: ReactNode;
@@ -33,7 +34,7 @@ export function SidePanelFrame({
   open = true,
   maximized = false,
   resizing = false,
-  label = "Side panel",
+  label = t("Side panel"),
   headerSize = "default",
   className,
   bodyClassName,
@@ -110,7 +111,7 @@ export function SidePanelToggleButton({
   className?: string;
   highlightWhenOpen?: boolean;
 }) {
-  const label = "Toggle side panel";
+  const label = t("Toggle side panel");
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -156,8 +157,8 @@ export function SidePanelWindowControls({
         size="icon-sm"
         className="h-(--side-panel-tab-height) w-(--side-panel-tab-height) text-muted-foreground hover:text-foreground focus-visible:text-foreground"
         onClick={() => onMaximizedChange(!maximized)}
-        aria-label={maximized ? "Restore side panel" : "Maximize side panel"}
-        title={maximized ? "Restore side panel" : "Maximize side panel"}
+        aria-label={maximized ? t("Restore side panel") : t("Maximize side panel")}
+        title={maximized ? t("Restore side panel") : t("Maximize side panel")}
       >
         {maximized ? <Minimize2 aria-hidden /> : <Maximize2 aria-hidden />}
       </Button>
@@ -168,8 +169,8 @@ export function SidePanelWindowControls({
           size="icon-sm"
           className="h-(--side-panel-tab-height) w-(--side-panel-tab-height) text-muted-foreground hover:text-foreground focus-visible:text-foreground"
           onClick={onToggle}
-          aria-label="Close side panel"
-          title="Close side panel"
+          aria-label={t("Close side panel")}
+          title={t("Close side panel")}
         >
           <X aria-hidden />
         </Button>

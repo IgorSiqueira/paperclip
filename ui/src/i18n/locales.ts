@@ -1,41 +1,71 @@
-import type { Resource } from "i18next";
+import ptBR from "./locales/pt-BR.json";
 
-import { assertValidLocaleMessages } from "./locale-validation";
+export const DEFAULT_LOCALE = "en";
+export const LOCALE_STORAGE_KEY = "paperclip.locale";
+export const AVAILABLE_LOCALES = ["en", "pt-BR"] as const;
 
-export const DEFAULT_LOCALE = "en" as const;
+export type AvailableLocale = (typeof AVAILABLE_LOCALES)[number];
+export type LocaleMessages = Record<string, string>;
 
-const localeModules = import.meta.glob("./locales/*.json", {
-  eager: true,
-  import: "default",
-}) as Record<string, unknown>;
+export const LOCALE_LABELS: Record<AvailableLocale, string> = {
+  en: "English",
+  "pt-BR": "Português (Brasil)",
+};
 
-export const localeMessages = Object.fromEntries(
-  Object.entries(localeModules).map(([path, messages]) => {
-    const locale = path.match(/\/([A-Za-z0-9_-]+)\.json$/)?.[1];
-    if (!locale) {
-      throw new Error(`Invalid locale file path: ${path}`);
-    }
-    return [locale, messages];
-  }),
-);
+export const localeMessages: Partial<Record<AvailableLocale, LocaleMessages>> = {
+  "pt-BR": ptBR as LocaleMessages,
+};
 
-if (!(DEFAULT_LOCALE in localeMessages)) {
-  throw new Error(`Missing default locale messages for ${DEFAULT_LOCALE}`);
+export function isAvailableLocale(value: unknown): value is AvailableLocale {
+  return typeof value === "string" && (AVAILABLE_LOCALES as readonly string[]).includes(value);
 }
 
-for (const [locale, messages] of Object.entries(localeMessages)) {
+export function matchLocale(languages: readonly string[]): AvailableLocale | null {
+  for (const language of languages) {
+    const normalized = language.trim().toLowerCase();
+    if (!normalized) continue;
+    const exact = AVAILABLE_LOCALES.find((locale) => locale.toLowerCase() === normalized);
+    if (exact) return exact;
+    const base = normalized.split("-")[0];
+    const related = AVAILABLE_LOCALES.find((locale) => locale.toLowerCase().split("-")[0] === base);
+    if (related) return related;
+  }
+  return null;
+}
+
+function isTestEnvironment(): boolean {
+  const env = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env;
+  return Boolean(env?.VITEST);
+}
+
+export function readStoredLocale(): AvailableLocale | null {
+  if (typeof window === "undefined") return null;
   try {
-    assertValidLocaleMessages(messages);
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    throw new Error(`Invalid ${locale} locale messages: ${message}`);
+    const stored = window.localStorage.getItem(LOCALE_STORAGE_KEY);
+    return isAvailableLocale(stored) ? stored : null;
+  } catch {
+    return null;
   }
 }
 
-export const supportedLocales = Object.keys(localeMessages);
+export function writeStoredLocale(locale: AvailableLocale): boolean {
+  try {
+    window.localStorage.setItem(LOCALE_STORAGE_KEY, locale);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
-export const i18nextResources: Resource = Object.fromEntries(
-  Object.entries(localeMessages).map(([locale, messages]) => [locale, { translation: messages }]),
-) as Resource;
+export function browserLanguages(): readonly string[] {
+  if (typeof navigator === "undefined") return [];
+  if (navigator.languages && navigator.languages.length > 0) return navigator.languages;
+  return navigator.language ? [navigator.language] : [];
+}
 
-export type SupportedLocale = keyof typeof localeMessages;
+export function resolveInitialLocale(): AvailableLocale {
+  if (isTestEnvironment()) return DEFAULT_LOCALE;
+  const stored = readStoredLocale();
+  if (stored) return stored;
+  return matchLocale(browserLanguages()) ?? DEFAULT_LOCALE;
+}

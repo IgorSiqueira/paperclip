@@ -1,5 +1,6 @@
 import type { AiConnectionBinding, AiManagedConnectionSummary, AiProvider, CompanySecret, EnvBinding } from "@paperclipai/shared";
 import type { MyUserSecretEntry } from "../api/secrets";
+import { t } from "@/i18n";
 
 export type SavedProviderKey = { id: string; label: string } & (
   | { binding: EnvBinding; aiConnection?: never }
@@ -13,10 +14,10 @@ export function savedManagedProviderAccounts(
   return connections.flatMap<SavedProviderKey>((account) => {
     if (account.companyId !== companyId || account.provider !== provider || account.status !== "connected") return [];
     if (account.ownership === "personal" && account.ownerUserId === currentUserId && account.isDefault) {
-      return [{ id: `ai:${account.grantId}`, label: `${account.name} (Your default)`, aiConnection: { provider, method: account.method, mode: "responsible_user" as const } }];
+      return [{ id: `ai:${account.grantId}`, label: t("{{name}} (Your default)", { name: account.name }), aiConnection: { provider, method: account.method, mode: "responsible_user" as const } }];
     }
     if (account.ownership === "shared") {
-      return [{ id: `ai:${account.grantId}`, label: `${account.name} (Company shared)`, aiConnection: { provider, method: account.method, mode: "shared" as const, connectionId: account.id, grantId: account.grantId } }];
+      return [{ id: `ai:${account.grantId}`, label: t("{{name}} (Company shared)", { name: account.name }), aiConnection: { provider, method: account.method, mode: "shared" as const, connectionId: account.id, grantId: account.grantId } }];
     }
     return [];
   });
@@ -42,7 +43,7 @@ export function savedProviderKeys(
         ? [
             {
               id: `user:${definition.id}`,
-              label: `${definition.name} (Your key)`,
+              label: t("{{name}} (Your key)", { name: definition.name }),
               binding: {
                 type: "user_secret_ref" as const,
                 key: definition.key,
@@ -60,7 +61,7 @@ export function savedProviderKeys(
         ? [
             {
               id: `company:${secret.id}`,
-              label: `${secret.name} (Organization key)`,
+              label: t("{{name}} (Organization key)", { name: secret.name }),
               binding: {
                 type: "secret_ref" as const,
                 secretId: secret.id,

@@ -53,6 +53,7 @@ import { useCoordinatorWorkspaceEnabled } from "@/hooks/useCoordinatorWorkspaceE
 import { CoordinatorTaskCommitment } from "./coordinator/CoordinatorTaskCommitment";
 
 import { DecisionCardFooter } from "./DecisionCardFooter";
+import { t } from "@/i18n";
 
 const OTHER_ANSWER_ID = "__paperclip_other__";
 
@@ -151,9 +152,9 @@ function resolveActorLabel(args: {
     return agentMap?.get(agentId)?.name ?? agentId.slice(0, 8);
   }
   if (userId) {
-    return formatAssigneeUserLabel(userId, currentUserId, userLabelMap) ?? "Board";
+    return formatAssigneeUserLabel(userId, currentUserId, userLabelMap) ?? t("Board");
   }
-  return "Unknown";
+  return t("Unknown");
 }
 
 /**
@@ -185,19 +186,19 @@ function getAdministrativeReason(interaction: IssueThreadInteraction): string | 
 function statusLabel(status: IssueThreadInteraction["status"]) {
   switch (status) {
     case "pending":
-      return "Pending";
+      return t("Pending");
     case "accepted":
-      return "Accepted";
+      return t("Accepted");
     case "rejected":
-      return "Rejected";
+      return t("Rejected");
     case "answered":
-      return "Answered";
+      return t("Answered");
     case "cancelled":
-      return "Cancelled";
+      return t("Cancelled");
     case "expired":
-      return "Expired";
+      return t("Expired");
     case "failed":
-      return "Failed";
+      return t("Failed");
     default:
       return status;
   }
@@ -206,17 +207,17 @@ function statusLabel(status: IssueThreadInteraction["status"]) {
 function interactionKindLabel(kind: IssueThreadInteraction["kind"]) {
   switch (kind) {
     case "suggest_tasks":
-      return "Suggested tasks";
+      return t("Suggested tasks");
     case "ask_user_questions":
-      return "Ask user questions";
+      return t("Ask user questions");
     case "request_confirmation":
-      return "Confirmation";
+      return t("Confirmation");
     case "request_checkbox_confirmation":
-      return "Checkbox confirmation";
+      return t("Checkbox confirmation");
     case "request_item_verdicts":
-      return "Item verdicts";
+      return t("Item verdicts");
     case "connection_intent":
-      return "Connection request";
+      return t("Connection request");
     default:
       return kind;
   }
@@ -295,14 +296,14 @@ function planStatusClasses(
         return {
           shell: "border-2 border-amber-500/70 bg-transparent",
           badge: "border-amber-500/60 bg-amber-500/10 text-amber-900 dark:bg-amber-500/15 dark:text-amber-100",
-          label: "Approved — agent resume failed",
+          label: t("Approved — agent resume failed"),
           Icon: AlertTriangle,
         };
       }
       return {
         shell: "border-2 border-green-500/80 bg-transparent",
         badge: "border-green-500/60 bg-green-500/10 text-green-900 dark:bg-green-500/15 dark:text-green-100",
-        label: "Approved",
+        label: t("Approved"),
         Icon: CheckCircle2,
       };
     case "rejected":
@@ -310,7 +311,7 @@ function planStatusClasses(
       return {
         shell: "border-2 border-red-500/80 bg-transparent",
         badge: "border-red-500/60 bg-red-500/10 text-red-900 dark:bg-red-500/15 dark:text-red-100",
-        label: outcome === "withdrawn" ? "Withdrawn" : "Changes requested",
+        label: outcome === "withdrawn" ? t("Withdrawn") : t("Changes requested"),
         Icon: XCircle,
       };
     case "failed":
@@ -318,14 +319,14 @@ function planStatusClasses(
       return {
         shell: "border-2 border-amber-500/70 bg-transparent",
         badge: "border-amber-500/60 bg-amber-500/10 text-amber-900 dark:bg-amber-500/15 dark:text-amber-100",
-        label: "Expired",
+        label: t("Expired"),
         Icon: AlertTriangle,
       };
     default:
       return {
         shell: "border-2 border-violet-500/80 bg-transparent",
         badge: "border-violet-500/60 bg-violet-500/10 text-violet-900 dark:bg-violet-500/15 dark:text-violet-100",
-        label: "In review",
+        label: t("In review"),
         Icon: FileText,
       };
   }
@@ -486,7 +487,7 @@ function toolActionStatusClasses(state: ToolActionCardState): {
       return {
         shell: "border-2 border-amber-500/70 bg-transparent",
         badge: "border-amber-500/60 bg-amber-500/10 text-amber-900 dark:bg-amber-500/15 dark:text-amber-100",
-        label: "Running…",
+        label: t("Running…"),
         Icon: Loader2,
         spin: true,
       };
@@ -494,31 +495,31 @@ function toolActionStatusClasses(state: ToolActionCardState): {
       return {
         shell: "border-2 border-green-500/80 bg-transparent",
         badge: "border-green-500/60 bg-green-500/10 text-green-900 dark:bg-green-500/15 dark:text-green-100",
-        label: "Executed",
+        label: t("Executed"),
         Icon: CheckCircle2,
       };
     case "failed":
       return {
         shell: "border-2 border-amber-500/70 bg-transparent",
         badge: "border-amber-500/60 bg-amber-500/10 text-amber-900 dark:bg-amber-500/15 dark:text-amber-100",
-        label: "Failed",
+        label: t("Failed"),
         Icon: XCircle,
       };
     case "declined":
       return {
         shell: "border-2 border-red-500/80 bg-transparent",
         badge: "border-red-500/60 bg-red-500/10 text-red-900 dark:bg-red-500/15 dark:text-red-100",
-        label: "Declined",
+        label: t("Declined"),
         Icon: XCircle,
         dimmed: true,
       };
     case "cancelled":
-      return { shell: "border-2 border-border bg-transparent", badge: "border-border bg-muted text-muted-foreground", label: "Cancelled", Icon: XCircle, dimmed: true };
+      return { shell: "border-2 border-border bg-transparent", badge: "border-border bg-muted text-muted-foreground", label: t("Cancelled"), Icon: XCircle, dimmed: true };
     case "expired":
       return {
         shell: "border-2 border-border bg-transparent",
         badge: "border-border bg-muted/60 text-muted-foreground",
-        label: "Expired",
+        label: t("Expired"),
         Icon: Clock,
         dimmed: true,
       };
@@ -526,7 +527,7 @@ function toolActionStatusClasses(state: ToolActionCardState): {
       return {
         shell: "border-2 border-violet-500/80 bg-transparent",
         badge: "border-violet-500/60 bg-violet-500/10 text-violet-900 dark:bg-violet-500/15 dark:text-violet-100",
-        label: "Awaiting approval",
+        label: t("Awaiting approval"),
         Icon: ShieldAlert,
       };
   }
@@ -625,7 +626,7 @@ function TaskTreeNode({
                 <Checkbox
                   checked={isSelected}
                   onCheckedChange={(checked) => onToggleSelection?.(node, checked === true)}
-                  aria-label={`Include ${node.task.title}`}
+                  aria-label={t("Include {{title}}", { title: node.task.title })}
                   className="mt-0.5"
                 />
               ) : null}
@@ -644,7 +645,7 @@ function TaskTreeNode({
                 </div>
                 {depth > 0 ? (
                   <div className="mt-0.5 text-(length:--text-nano) font-medium uppercase tracking-(--tracking-eyebrow) text-muted-foreground">
-                    Child task
+                    {t("Child task")}
                   </div>
                 ) : null}
                 {node.task.description ? (
@@ -666,7 +667,7 @@ function TaskTreeNode({
             </Link>
           ) : isSkipped ? (
             <span className="inline-flex shrink-0 items-center rounded-sm border border-amber-500/60 bg-amber-500/10 px-2.5 py-1 text-(length:--text-micro) font-medium text-amber-900 dark:text-amber-100">
-              Skipped
+              {t("Skipped")}
             </span>
           ) : null}
         </div>
@@ -674,16 +675,16 @@ function TaskTreeNode({
         {hasMetadata ? (
           <div className="mt-2 flex flex-wrap gap-1.5">
             {hasExplicitAssignee ? (
-              <TaskField label="Responsible" value={assigneeLabel} />
+              <TaskField label={t("Responsible")} value={assigneeLabel} />
             ) : null}
             {node.task.billingCode ? (
-              <TaskField label="Billing" value={node.task.billingCode} />
+              <TaskField label={t("Billing")} value={node.task.billingCode} />
             ) : null}
             {node.task.projectId ? (
-              <TaskField label="Project" value={node.task.projectId} tone="subtle" />
+              <TaskField label={t("Project")} value={node.task.projectId} tone="subtle" />
             ) : null}
             {labels.map((label) => (
-              <TaskField key={label} label="Label" value={label} tone="subtle" />
+              <TaskField key={label} label={t("Label")} value={label} tone="subtle" />
             ))}
           </div>
         ) : null}
@@ -693,8 +694,8 @@ function TaskTreeNode({
             <GitBranch className="h-3.5 w-3.5 shrink-0" />
             <span>
               {hiddenChildCount === 1
-                ? "1 follow-on task hidden in preview"
-                : `${hiddenChildCount} follow-on tasks hidden in preview`}
+                ? t("1 follow-on task hidden in preview")
+                : t("{{hiddenChildCount}} follow-on tasks hidden in preview", { hiddenChildCount })}
             </span>
           </div>
         ) : null}
@@ -852,9 +853,9 @@ function SuggestTasksCard({
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-        <span>{totalTasks === 1 ? "1 draft issue" : `${totalTasks} draft issues`}</span>
+        <span>{totalTasks === 1 ? t("1 draft issue") : t("{{totalTasks}} draft issues", { totalTasks })}</span>
         {interaction.payload.defaultParentId ? (
-          <TaskField label="Default parent" value={interaction.payload.defaultParentId} tone="subtle" />
+          <TaskField label={t("Default parent")} value={interaction.payload.defaultParentId} tone="subtle" />
         ) : null}
       </div>
 
@@ -878,12 +879,12 @@ function SuggestTasksCard({
       {interaction.status === "accepted" ? (
         <div className="rounded-sm border border-emerald-500/60 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-900 dark:text-emerald-100">
           <div className="text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-eyebrow) text-emerald-700">
-            Resolution summary
+            {t("Resolution summary")}
           </div>
           <p className="mt-1 leading-6">
             {skippedCount > 0
-              ? `Created ${createdCount} draft ${createdCount === 1 ? "issue" : "issues"} and skipped ${skippedCount} during review.`
-              : `Created all ${createdCount} draft ${createdCount === 1 ? "issue" : "issues"}.`}
+              ? (createdCount === 1 ? t("Created {{createdCount}} draft issue and skipped {{skippedCount}} during review.", { createdCount, skippedCount }) : t("Created {{createdCount}} draft issues and skipped {{skippedCount}} during review.", { createdCount, skippedCount }))
+              : (createdCount === 1 ? t("Created all {{createdCount}} draft issue.", { createdCount }) : t("Created all {{createdCount}} draft issues.", { createdCount }))}
           </p>
         </div>
       ) : null}
@@ -891,13 +892,13 @@ function SuggestTasksCard({
       {interaction.status === "rejected" ? (
         <div className="rounded-sm border border-rose-500/60 bg-rose-500/10 px-4 py-3 text-sm text-rose-900 dark:text-rose-100">
           <div className="text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-eyebrow) text-rose-700">
-            Rejection reason
+            {t("Rejection reason")}
           </div>
           <p className={cn(
             "mt-1 leading-6",
             !interaction.result?.rejectionReason && "text-rose-900/75",
           )}>
-            {interaction.result?.rejectionReason || "No reason provided."}
+            {interaction.result?.rejectionReason || t("No reason provided.")}
           </p>
         </div>
       ) : null}
@@ -908,12 +909,12 @@ function SuggestTasksCard({
             <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
               <span>
                 {selectedCount === totalTasks
-                  ? `All ${totalTasks} draft ${totalTasks === 1 ? "issue" : "issues"} selected`
-                  : `${selectedCount} of ${totalTasks} draft ${totalTasks === 1 ? "issue" : "issues"} selected`}
+                  ? (totalTasks === 1 ? t("All {{totalTasks}} draft issue selected", { totalTasks }) : t("All {{totalTasks}} draft issues selected", { totalTasks }))
+                  : (totalTasks === 1 ? t("{{selectedCount}} of {{totalTasks}} draft issue selected", { selectedCount, totalTasks }) : t("{{selectedCount}} of {{totalTasks}} draft issues selected", { selectedCount, totalTasks }))}
               </span>
               {selectedCount < totalTasks ? (
                 <span>
-                  {totalTasks - selectedCount} will be skipped if you accept this interaction.
+                  {totalTasks - selectedCount} {t("will be skipped if you accept this interaction.")}
                 </span>
               ) : null}
             </div>
@@ -928,10 +929,10 @@ function SuggestTasksCard({
                   {working === "accept" ? (
                     <>
                       <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
-                      Accepting...
+                      {t("Accepting...")}
                     </>
                   ) : (
-                    selectedCount === totalTasks ? "Accept drafts" : "Accept selected drafts"
+                    selectedCount === totalTasks ? t("Accept drafts") : t("Accept selected drafts")
                   )}
                 </Button>
                 <Button
@@ -940,7 +941,7 @@ function SuggestTasksCard({
                   disabled={!onRejectInteraction || working !== null}
                   onClick={() => setRejecting((current) => !current)}
                 >
-                  Reject
+                  {t("Reject")}
                 </Button>
                 {selectedCount < totalTasks ? (
                   <Button
@@ -949,7 +950,7 @@ function SuggestTasksCard({
                     disabled={working !== null}
                     onClick={() => setSelectedClientKeys(new Set(interaction.payload.tasks.map((task) => task.clientKey)))}
                   >
-                    Reset selection
+                    {t("Reset selection")}
                   </Button>
                 ) : null}
               </div>
@@ -961,7 +962,7 @@ function SuggestTasksCard({
               <Textarea
                 value={rejectReason}
                 onChange={(event) => setRejectReason(event.target.value)}
-                placeholder="Add a short reason for rejecting this suggestion"
+                placeholder={t("Add a short reason for rejecting this suggestion")}
                 className="min-h-24 bg-background text-sm"
               />
               <div className="flex justify-end">
@@ -974,10 +975,10 @@ function SuggestTasksCard({
                   {working === "reject" ? (
                     <>
                       <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
-                      Saving...
+                      {t("Saving...")}
                     </>
                   ) : (
-                    "Save rejection"
+                    t("Save rejection")
                   )}
                 </Button>
               </div>
@@ -1212,12 +1213,12 @@ function AskUserQuestionsCard({
       {!compact ? <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
         <Badge variant="outline" className="border-border/70 bg-background/70 px-2.5 py-1 uppercase tracking-(--tracking-eyebrow) text-foreground/70">
           <MessageSquareQuote className="h-3 w-3" />
-          Ask user questions
+          {t("Ask user questions")}
         </Badge>
         <span>
           {questions.length === 1
-            ? "1 question"
-            : `${questions.length} questions`}
+            ? t("1 question")
+            : t("{{length}} questions", { length: questions.length })}
         </span>
       </div> : null}
 
@@ -1276,7 +1277,7 @@ function AskUserQuestionsCard({
               <div className="flex items-start justify-between gap-3">
                 <div>
                   {!compact ? <div className="text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-eyebrow) text-muted-foreground">
-                    Question {index + 1}
+                    {t("Question")} {index + 1}
                   </div> : null}
                   <div
                     id={`${interaction.id}-${question.id}-prompt`}
@@ -1292,9 +1293,9 @@ function AskUserQuestionsCard({
                   ) : null}
                 </div>
                 {compact ? <span className="sr-only" id={`${interaction.id}-${question.id}-requirements`}>
-                  {question.selectionMode === "single" ? "Choose one answer." : "Choose one or more answers."} {question.required ? "Required." : "Optional."}
+                  {question.selectionMode === "single" ? t("Choose one answer.") : t("Choose one or more answers.")} {question.required ? t("Required.") : t("Optional.")}
                 </span> : <TaskField
-                  label={question.selectionMode === "single" ? "Pick" : "Pick many"}
+                  label={question.selectionMode === "single" ? t("Pick") : t("Pick many")}
                   value={question.required ? "Required" : "Optional"}
                   tone="subtle"
                 />}
@@ -1327,14 +1328,14 @@ function AskUserQuestionsCard({
                         />
                         {isFreeText && optionSelected ? (
                           <Textarea
-                            aria-label={`Describe your answer for ${question.prompt}`}
+                            aria-label={t("Describe your answer for {{prompt}}", { prompt: question.prompt })}
                             value={draftOtherAnswers[question.id] ?? ""}
                             onChange={(event) =>
                               setDraftOtherAnswers((current) => ({
                                 ...current,
                                 [question.id]: event.target.value,
                               }))}
-                            placeholder="Type your answer"
+                            placeholder={t("Type your answer")}
                             className="min-h-24 bg-background text-sm"
                             autoFocus
                           />
@@ -1364,18 +1365,18 @@ function AskUserQuestionsCard({
                       onClick={() =>
                         toggleOption(question.id, OTHER_ANSWER_ID, question.selectionMode)}
                     >
-                      Other
+                      {t("Other")}
                     </button>
                     {otherActiveQuestions[question.id] ? (
                       <Textarea
-                        aria-label={`Other answer for ${question.prompt}`}
+                        aria-label={t("Other answer for {{prompt}}", { prompt: question.prompt })}
                         value={draftOtherAnswers[question.id] ?? ""}
                         onChange={(event) =>
                           setDraftOtherAnswers((current) => ({
                             ...current,
                             [question.id]: event.target.value,
                           }))}
-                        placeholder="Type your answer"
+                        placeholder={t("Type your answer")}
                         className="min-h-24 bg-background text-sm"
                       />
                     ) : null}
@@ -1389,7 +1390,7 @@ function AskUserQuestionsCard({
           <DecisionCardFooter leading={footerSlot}>
             <div className={compact ? "flex flex-wrap items-center justify-end gap-3" : "flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/70 bg-background/75 p-4"}>
               {!compact ? <div className="text-sm text-muted-foreground">
-                Submit once after you finish the full form.
+                {t("Submit once after you finish the full form.")}
               </div> : null}
               <div className="flex flex-wrap items-center gap-2">
                 {onCancelInteraction ? (
@@ -1402,10 +1403,10 @@ function AskUserQuestionsCard({
                     {cancelling ? (
                       <>
                         <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
-                        Cancelling...
+                        {t("Cancelling...")}
                       </>
                     ) : (
-                      "Cancel question"
+                      t("Cancel question")
                     )}
                     </Button>
                   ) : null}
@@ -1417,10 +1418,10 @@ function AskUserQuestionsCard({
                   {working ? (
                     <>
                       <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
-                      Submitting...
+                      {t("Submitting...")}
                     </>
                   ) : (
-                    interaction.payload.submitLabel ?? "Submit answers"
+                    interaction.payload.submitLabel ?? t("Submit answers")
                   )}
                 </Button>
               </div>
@@ -1433,15 +1434,15 @@ function AskUserQuestionsCard({
         <div className="rounded-2xl border border-rose-300/60 bg-rose-50/85 p-4 text-sm leading-6 text-rose-950 dark:border-rose-500/40 dark:bg-rose-500/10 dark:text-rose-100">
           <div className="font-semibold">
             {interaction.result?.outcome === "withdrawn"
-              ? questions.length === 1 ? "Question withdrawn" : "Questions withdrawn"
-              : "Question cancelled"}
+              ? questions.length === 1 ? t("Question withdrawn") : t("Questions withdrawn")
+              : t("Question cancelled")}
           </div>
           {interaction.result?.cancellationReason ? (
             <p className="mt-1">{interaction.result.cancellationReason}</p>
           ) : interaction.result?.reason ? (
             <p className="mt-1">{interaction.result.reason}</p>
           ) : (
-            <p className="mt-1">No answer was recorded.</p>
+            <p className="mt-1">{t("No answer was recorded.")}</p>
           )}
         </div>
       ) : interaction.status === "expired" ? (
@@ -1450,23 +1451,23 @@ function AskUserQuestionsCard({
             <AlertTriangle className="h-4 w-4" />
             {interaction.result?.outcome === "issue_closed"
               ? questions.length === 1
-                ? "Question expired when the issue closed"
-                : "Questions expired when the issue closed"
+                ? t("Question expired when the issue closed")
+                : t("Questions expired when the issue closed")
               : questions.length === 1
-                ? "Question expired by comment"
-                : "Questions expired by comment"}
+                ? t("Question expired by comment")
+                : t("Questions expired by comment")}
           </div>
           <p className="mt-1">
             {interaction.result?.outcome === "issue_closed"
-              ? "This question request expired automatically when the issue reached a terminal state."
-              : "A later board/user comment superseded this question request. Create a fresh request if answers are still needed."}
+              ? t("This question request expired automatically when the issue reached a terminal state.")
+              : t("A later board/user comment superseded this question request. Create a fresh request if answers are still needed.")}
           </p>
           {interaction.result?.commentId ? (
             <a
               href={`#comment-${interaction.result.commentId}`}
               className="mt-3 inline-flex text-sm font-medium underline underline-offset-4"
             >
-              Jump to comment
+              {t("Jump to comment")}
             </a>
           ) : null}
         </div>
@@ -1488,10 +1489,10 @@ function AskUserQuestionsCard({
                 <div className="mt-2 flex flex-wrap gap-2">
                   {labels.length > 0 ? (
                     labels.map((label) => (
-                      <TaskField key={label} label="Answer" value={label} />
+                      <TaskField key={label} label={t("Answer")} value={label} />
                     ))
                   ) : (
-                    <span className="text-sm text-muted-foreground">No answer recorded.</span>
+                    <span className="text-sm text-muted-foreground">{t("No answer recorded.")}</span>
                   )}
                 </div>
               </div>
@@ -1501,7 +1502,7 @@ function AskUserQuestionsCard({
           {interaction.result?.summaryMarkdown ? (
             <div className="rounded-2xl border border-emerald-300/60 bg-emerald-50/85 p-4">
               <div className="mb-2 text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-eyebrow) text-emerald-700">
-                Submitted summary
+                {t("Submitted summary")}
               </div>
               <MarkdownBody externalReferences={externalReferences}>{interaction.result.summaryMarkdown}</MarkdownBody>
             </div>
@@ -1523,7 +1524,7 @@ function isDisplayableRequestConfirmationTarget(
 
 function requestConfirmationTargetLabel(target: RequestConfirmationTarget) {
   if (target.label) return target.label;
-  if (target.type === "issue_attachment") return "Attachment";
+  if (target.type === "issue_attachment") return t("Attachment");
   const revision = target.revisionNumber ? ` v${target.revisionNumber}` : "";
   if (target.type === "issue_document" && target.key === "plan") {
     return `Plan${revision}`;
@@ -1608,21 +1609,21 @@ function RequestConfirmationResolution({
       return (
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2 text-sm leading-6 text-foreground">
-            <span className="font-medium">Confirmed</span>
+            <span className="font-medium">{t("Confirmed")}</span>
             <RequestConfirmationTargetChip interaction={interaction} target={target} />
           </div>
           <div className="rounded-sm border border-amber-500/60 bg-amber-500/10 px-4 py-3 text-sm text-amber-900 dark:text-amber-100">
             <div className="text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-eyebrow) text-amber-700">
-              Agent resume failed
+              {t("Agent resume failed")}
             </div>
             <p className="mt-1 leading-6">
               {resumeFailure.status === "retrying"
-                ? `Paperclip is retrying the agent resume after approval (attempt ${resumeFailure.attempt}/${resumeFailure.maxAttempts}).`
-                : "Paperclip needs attention before the agent can resume this approved work."}
+                ? t("Paperclip is retrying the agent resume after approval (attempt {{attempt}}/{{maxAttempts}}).", { attempt: resumeFailure.attempt, maxAttempts: resumeFailure.maxAttempts })
+                : t("Paperclip needs attention before the agent can resume this approved work.")}
             </p>
             {resumeFailure.errorCode ? (
               <p className="mt-1 leading-6">
-                Latest cause: <code className="font-mono text-(length:--text-micro)">{resumeFailure.errorCode}</code>
+                {t("Latest cause:")} <code className="font-mono text-(length:--text-micro)">{resumeFailure.errorCode}</code>
               </p>
             ) : null}
           </div>
@@ -1631,7 +1632,7 @@ function RequestConfirmationResolution({
     }
     return (
       <div className="flex flex-wrap items-center gap-2 text-sm leading-6 text-foreground">
-        <span className="font-medium">Confirmed</span>
+        <span className="font-medium">{t("Confirmed")}</span>
         <RequestConfirmationTargetChip interaction={interaction} target={target} />
       </div>
     );
@@ -1641,7 +1642,7 @@ function RequestConfirmationResolution({
     return (
       <div className="space-y-2">
         <div className="flex flex-wrap items-center gap-2 text-sm leading-6 text-foreground">
-          <span className="font-medium">Declined</span>
+          <span className="font-medium">{t("Declined")}</span>
           <RequestConfirmationTargetChip interaction={interaction} target={target} />
         </div>
         {interaction.result?.reason ? (
@@ -1660,7 +1661,7 @@ function RequestConfirmationResolution({
     // and no duplicated reason text.
     return (
       <div className="flex flex-wrap items-center gap-2 text-sm leading-6 text-foreground">
-        <span className="font-medium">Withdrawn</span>
+        <span className="font-medium">{t("Withdrawn")}</span>
         <RequestConfirmationTargetChip interaction={interaction} target={target} />
       </div>
     );
@@ -1680,19 +1681,19 @@ function RequestConfirmationResolution({
          */}
         {expiredByIssueClosed ? null : (
           <div className="text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-eyebrow) text-amber-700">
-            {expiredByComment ? "Expired by comment" : "Expired by target change"}
+            {expiredByComment ? t("Expired by comment") : t("Expired by target change")}
           </div>
         )}
         <p className="leading-6">
           {expiredByComment
-            ? "A board comment superseded this confirmation before it was resolved."
+            ? t("A board comment superseded this confirmation before it was resolved.")
             : expiredByIssueClosed
-              ? "This confirmation expired automatically when the issue reached a terminal state."
-              : "The requested target changed before this confirmation was resolved."}
+              ? t("This confirmation expired automatically when the issue reached a terminal state.")
+              : t("The requested target changed before this confirmation was resolved.")}
         </p>
         {expiredByComment && interaction.result?.commentId ? (
           <Button asChild size="sm" variant="ghost" className="h-7 px-2 text-amber-950 hover:bg-amber-500/15 dark:text-amber-50">
-            <a href={`#comment-${interaction.result.commentId}`}>Jump to comment</a>
+            <a href={`#comment-${interaction.result.commentId}`}>{t("Jump to comment")}</a>
           </Button>
         ) : null}
         {expiredByTargetChange ? (
@@ -1716,7 +1717,7 @@ function RequestConfirmationResolution({
   if (interaction.status === "failed") {
     return (
       <p className="text-sm leading-6 text-muted-foreground">
-        This request could not be resolved. Try again or create a new request.
+        {t("This request could not be resolved. Try again or create a new request.")}
       </p>
     );
   }
@@ -1739,29 +1740,29 @@ function ToolActionResolution({
     try { formattedOutput = JSON.stringify(JSON.parse(output), null, 2); } catch { /* Plain-text results remain readable. */ }
   }
   const labels = {
-    pending: "Waiting for approval",
-    running: "Approved · Running…",
-    executed: "Succeeded",
-    failed: "Execution failed",
-    declined: "Declined",
-    expired: "Expired",
-    cancelled: "Cancelled",
+    pending: t("Waiting for approval"),
+    running: t("Approved · Running…"),
+    executed: t("Succeeded"),
+    failed: t("Execution failed"),
+    declined: t("Declined"),
+    expired: t("Expired"),
+    cancelled: t("Cancelled"),
   };
   const Icon = state === "running" ? Loader2 : state === "executed" ? CheckCircle2 : state === "failed" ? AlertTriangle : state === "expired" ? Clock : MinusCircle;
-  const detail = state === "failed" ? result?.errorMessage?.trim() || "The action could not complete."
+  const detail = state === "failed" ? result?.errorMessage?.trim() || t("The action could not complete.")
     : state === "declined" ? interaction.result?.reason?.trim()
     : null;
   const status = <>
     <Icon className={cn("h-3.5 w-3.5 shrink-0", state === "running" && "animate-spin", state === "failed" && "text-destructive")} />
     {labels[state]}
-    {result?.rememberedAction ? " · Always allowed" : ""}
+    {result?.rememberedAction ? t(" · Always allowed") : ""}
   </>;
   return (
     <div className="space-y-1 text-sm text-muted-foreground" aria-live="polite">
       {output ? (
         <Collapsible open={resultOpen} onOpenChange={setResultOpen}>
           <CollapsibleTrigger asChild>
-            <button type="button" className="flex items-center gap-1.5 rounded-sm hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={resultOpen ? "Hide result details" : "Show result details"}>
+            <button type="button" className="flex items-center gap-1.5 rounded-sm hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={resultOpen ? t("Hide result details") : t("Show result details")}>
               {status}<ChevronDown className={cn("h-3 w-3", resultOpen && "rotate-180")} />
             </button>
           </CollapsibleTrigger>
@@ -1772,7 +1773,7 @@ function ToolActionResolution({
       ) : <p className="flex items-center gap-1.5">{status}</p>}
       {detail ? <p className={cn("break-words", state === "failed" && "text-destructive")}>{detail}</p> : null}
       {state === "executed" && result?.resultHref?.trim() ? (
-        <a className="inline-flex items-center gap-1 underline underline-offset-4 hover:text-foreground" href={result.resultHref} target="_blank" rel="noreferrer">View result<ExternalLink className="h-3 w-3" /></a>
+        <a className="inline-flex items-center gap-1 underline underline-offset-4 hover:text-foreground" href={result.resultHref} target="_blank" rel="noreferrer">{t("View result")}<ExternalLink className="h-3 w-3" /></a>
       ) : null}
     </div>
   );
@@ -1837,34 +1838,34 @@ function RequestToolActionCard({
       {isPending ? inspectableArguments ? (
         <details className="mt-3">
           <summary className="cursor-pointer text-xs font-medium text-muted-foreground">
-            Arguments and audit hash
+            {t("Arguments and audit hash")}
           </summary>
           <pre className="mt-2 max-h-40 overflow-auto whitespace-pre-wrap break-words font-mono text-xs text-foreground">
             {payload.argumentsSummaryJson}
           </pre>
           <p className="mt-1 break-all font-mono text-xs text-muted-foreground">{payload.argumentsHash}</p>
         </details>
-      ) : <p className="mt-3 text-xs text-muted-foreground">Request arguments are unavailable.</p> : null}
+      ) : <p className="mt-3 text-xs text-muted-foreground">{t("Request arguments are unavailable.")}</p> : null}
       {isPending ? (
         <DecisionCardFooter leading={footerSlot} className="mt-3">
           <div className={cn(!footerSlot && "mt-3", "flex flex-wrap items-center justify-end gap-2")}>
           <Button size="sm" variant="ghost" disabled={!onRejectInteraction || working !== null} onClick={() => void decide("reject")}>
-            {working === "reject" ? "Declining…" : "Decline"}
+            {working === "reject" ? t("Declining…") : t("Decline")}
           </Button>
-          <div className="inline-flex" role="group" aria-label="Approve request">
+          <div className="inline-flex" role="group" aria-label={t("Approve request")}>
             <Button size="sm" variant={variant} className={payload.rememberActionScope ? "rounded-r-none" : undefined} disabled={!onAcceptInteraction || working !== null} onClick={() => void decide("accept")}>
-              {working === "accept" || working === "always" ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />{working === "always" ? "Saving…" : "Approving…"}</> : "Approve & run"}
+              {working === "accept" || working === "always" ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />{working === "always" ? t("Saving…") : t("Approving…")}</> : t("Approve & run")}
             </Button>
             {payload.rememberActionScope ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button size="icon-sm" variant={variant} className="rounded-l-none border-l border-background/30" aria-label="Approval options" disabled={!onAcceptInteraction || working !== null}>
+                  <Button size="icon-sm" variant={variant} className="rounded-l-none border-l border-background/30" aria-label={t("Approval options")} disabled={!onAcceptInteraction || working !== null}>
                     <ChevronDown className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem onSelect={() => void decide("always")} title={payload.rememberActionScope} aria-description={payload.rememberActionScope}>
-                    Always allow
+                    {t("Always allow")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -1904,7 +1905,7 @@ function secretProposalStatusClasses(state: SecretProposalCardState) {
     return {
       shell: "border-2 border-red-500/80 bg-transparent",
       badge: "border-red-500/60 bg-red-500/10 text-red-900 dark:bg-red-500/15 dark:text-red-100",
-      label: "FAILED",
+      label: t("FAILED"),
       Icon: XCircle,
     };
   }
@@ -1927,7 +1928,7 @@ function SecretProposalIdentityHeader({
       </div>
       <div className="min-w-0 flex-1">
         <div className="text-base font-bold leading-tight text-foreground">
-          Bind an existing secret
+          {t("Bind an existing secret")}
         </div>
       </div>
     </div>
@@ -1943,19 +1944,19 @@ function SecretProposalDetails({
     <dl className="grid gap-3 rounded-sm border border-border/70 bg-muted/30 p-3 sm:grid-cols-2">
       <div className="min-w-0 space-y-1">
         <dt className="text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-eyebrow) text-muted-foreground">
-          Source secret
+          {t("Source secret")}
         </dt>
         <dd className="truncate text-sm font-medium text-foreground">{payload.sourceSecretLabel}</dd>
       </div>
       <div className="min-w-0 space-y-1">
         <dt className="text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-eyebrow) text-muted-foreground">
-          Target agent
+          {t("Target agent")}
         </dt>
         <dd className="truncate text-sm font-medium text-foreground">{payload.targetAgentName}</dd>
       </div>
       <div className="min-w-0 space-y-1 sm:col-span-2">
         <dt className="text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-eyebrow) text-muted-foreground">
-          New config path
+          {t("New config path")}
         </dt>
         <dd className="break-all font-mono text-sm text-foreground">{payload.configPath}</dd>
       </div>
@@ -1973,7 +1974,7 @@ function SecretProposalResolution({
   resolvedByLabel: string | null;
 }) {
   const result = interaction.result?.secretProposal ?? null;
-  const who = resolvedByLabel ?? "the board";
+  const who = resolvedByLabel ?? t("the board");
   const when = interaction.resolvedAt
     ? formatDateTime(interaction.resolvedAt)
     : result?.updatedAt
@@ -1985,9 +1986,9 @@ function SecretProposalResolution({
       <div aria-live="polite" className="flex items-start gap-2 rounded-sm border border-amber-500/50 bg-amber-500/10 px-4 py-3 text-sm text-amber-900 dark:text-amber-100">
         <Loader2 className="mt-0.5 h-4 w-4 shrink-0 animate-spin" />
         <div>
-          <div className="font-medium">Approved by {who} — creating the binding</div>
+          <div className="font-medium">{t("Approved by")} {who} {t("— creating the binding")}</div>
           <p className="mt-1 text-amber-900/80 dark:text-amber-100/80">
-            Paperclip is re-checking authority and the proposal snapshot before writing.
+            {t("Paperclip is re-checking authority and the proposal snapshot before writing.")}
           </p>
         </div>
       </div>
@@ -1999,9 +2000,9 @@ function SecretProposalResolution({
       <div aria-live="polite" className="flex items-start gap-2 rounded-sm border border-green-500/50 bg-green-500/10 px-4 py-3 text-sm text-green-900 dark:text-green-100">
         <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
         <div>
-          <div className="font-medium">Binding created · approved by {who}</div>
+          <div className="font-medium">{t("Binding created · approved by")} {who}</div>
           <p className="mt-1 text-green-900/80 dark:text-green-100/80">
-            The target agent can now use the proposed config path{when ? ` · ${when}` : ""}.
+            {t("The target agent can now use the proposed config path")}{when ? ` · ${when}` : ""}.
           </p>
         </div>
       </div>
@@ -2016,17 +2017,17 @@ function SecretProposalResolution({
           <XCircle className="mt-0.5 h-4 w-4 shrink-0" />
           <div>
             <div className="font-semibold uppercase tracking-(--tracking-eyebrow)">
-              FAILED · binding was not created
+              {t("FAILED · binding was not created")}
             </div>
             <p className="mt-1 text-red-900/80 dark:text-red-100/80">
-              The request was accepted, but execution failed closed. No secret value was exposed.
+              {t("The request was accepted, but execution failed closed. No secret value was exposed.")}
             </p>
           </div>
         </div>
         {errorCode ? (
           <div className="rounded-sm border border-red-500/50 bg-background/60 px-3 py-2">
             <span className="text-(length:--text-nano) font-semibold uppercase tracking-(--tracking-eyebrow)">
-              Error code
+              {t("Error code")}
             </span>{" "}
             <code className="font-mono text-foreground">{errorCode}</code>
           </div>
@@ -2042,8 +2043,8 @@ function SecretProposalResolution({
         <div className="flex items-start gap-2">
           <XCircle className="mt-0.5 h-4 w-4 shrink-0" />
           <div>
-            <div className="font-medium">Rejected by {who}</div>
-            <p className="mt-1 text-red-900/80 dark:text-red-100/80">The binding was not created.</p>
+            <div className="font-medium">{t("Rejected by")} {who}</div>
+            <p className="mt-1 text-red-900/80 dark:text-red-100/80">{t("The binding was not created.")}</p>
           </div>
         </div>
         {reason ? (
@@ -2059,8 +2060,8 @@ function SecretProposalResolution({
     <div className="flex items-start gap-2 rounded-sm border border-border bg-muted/50 px-4 py-3 text-sm text-muted-foreground">
       <Clock className="mt-0.5 h-4 w-4 shrink-0" />
       <div>
-        <div className="font-medium text-foreground">Proposal expired{when ? ` · ${when}` : ""}</div>
-        <p className="mt-1">The binding was not created. A fresh proposal is required.</p>
+        <div className="font-medium text-foreground">{t("Proposal expired")}{when ? ` · ${when}` : ""}</div>
+        <p className="mt-1">{t("The binding was not created. A fresh proposal is required.")}</p>
       </div>
     </div>
   );
@@ -2128,7 +2129,7 @@ function RequestSecretProposalCard({
       <ProposalJustification justification={payload.justification} />
       <div className="flex items-center gap-2 text-(length:--text-micro) text-muted-foreground">
         <Clock className="h-3.5 w-3.5" />
-        Expires {formatDateTime(payload.expiresAt)}
+        {t("Expires")} {formatDateTime(payload.expiresAt)}
       </div>
 
       {isPending ? (
@@ -2284,7 +2285,7 @@ function ConfirmationActionRow({
             {working === "accept" ? (
               <>
                 <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
-                Approving…
+                {t("Approving…")}
               </>
             ) : (
               approveLabel
@@ -2315,7 +2316,7 @@ function ConfirmationActionRow({
               {working === "reject" && !revising ? (
                 <>
                   <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
-                  Rejecting…
+                  {t("Rejecting…")}
                 </>
               ) : (
                 rejectLabel
@@ -2338,7 +2339,7 @@ function ConfirmationActionRow({
             )}
           />
           {attempted && reasonMissing ? (
-            <p className="text-xs text-destructive">Add a note describing the changes you want.</p>
+            <p className="text-xs text-destructive">{t("Add a note describing the changes you want.")}</p>
           ) : null}
           {revisePanelChildren}
           <DecisionCardFooter leading={footerSlot}>
@@ -2352,7 +2353,7 @@ function ConfirmationActionRow({
                   setAttempted(false);
                 }}
               >
-                Cancel
+                {t("Cancel")}
               </Button>
               <Button
                 size="sm"
@@ -2363,10 +2364,10 @@ function ConfirmationActionRow({
                 {working === "reject" ? (
                   <>
                     <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
-                    Sending…
+                    {t("Sending…")}
                   </>
                 ) : (
-                  "Send revision"
+                  t("Send revision")
                 )}
               </Button>
             </div>
@@ -2393,7 +2394,7 @@ function connectionAuthorizationStatusClasses(
       return {
         shell: "border-2 border-sky-500/70 bg-transparent",
         badge: "border-sky-500/60 bg-sky-500/10 text-sky-900 dark:bg-sky-500/15 dark:text-sky-100",
-        label: "Action required",
+        label: t("Action required"),
         Icon: KeyRound,
       };
     case "waiting":
@@ -2402,21 +2403,21 @@ function connectionAuthorizationStatusClasses(
       return {
         shell: "border-border bg-transparent",
         badge: "border-border bg-muted/60 text-muted-foreground",
-        label: `Waiting for ${copy.addresseeLabel}`,
+        label: t("Waiting for {{addresseeLabel}}", { addresseeLabel: copy.addresseeLabel }),
         Icon: Clock,
       };
     case "connected":
       return {
         shell: "border-2 border-green-500/80 bg-transparent",
         badge: "border-green-500/60 bg-green-500/10 text-green-900 dark:bg-green-500/15 dark:text-green-100",
-        label: `${copy.providerName} connected`,
+        label: t("{{providerName}} connected", { providerName: copy.providerName }),
         Icon: CheckCircle2,
       };
     case "declined":
       return {
         shell: "border-border bg-transparent",
         badge: "border-border bg-muted/60 text-muted-foreground",
-        label: "Not connected",
+        label: t("Not connected"),
         Icon: MinusCircle,
       };
     case "expired":
@@ -2424,7 +2425,7 @@ function connectionAuthorizationStatusClasses(
       return {
         shell: "border-border bg-transparent",
         badge: "border-border bg-muted/60 text-muted-foreground",
-        label: "Authorization expired",
+        label: t("Authorization expired"),
         Icon: CircleDashed,
       };
   }
@@ -2513,8 +2514,8 @@ function RequestConnectionAuthorizationCard({
   const agentLabel = requestingAgentLabel ?? "An agent";
   const lead = isAddressee
     ? interaction.summary?.trim()
-      || `${agentLabel} needs your ${providerName} identity for work running as you.`
-    : `${agentLabel} ${state === "connected" ? "needed" : "needs"} ${addresseeLabel}'s ${providerName} identity for work running as them.`;
+      || t("{{agentLabel}} needs your {{providerName}} identity for work running as you.", { agentLabel, providerName })
+    : (state === "connected" ? t("{{agentLabel}} needed {{addresseeLabel}}'s {{providerName}} identity for work running as them.", { agentLabel, addresseeLabel, providerName }) : t("{{agentLabel}} needs {{addresseeLabel}}'s {{providerName}} identity for work running as them.", { agentLabel, addresseeLabel, providerName }));
   // Only the actionable state needs the consent boundary spelled out; the other
   // states carry it in their own status line.
   const consentSentence = state === "actionable" ? "No one else can complete this step." : null;
@@ -2538,7 +2539,7 @@ function RequestConnectionAuthorizationCard({
               >
                 <Button asChild size="sm" variant="cta" className="w-full sm:w-auto">
                   <a href={href} target="_blank" rel="noreferrer">
-                    Connect {providerName}
+                    {t("Connect")} {providerName}
                     <ArrowUpRight className="ml-1.5 h-3.5 w-3.5" />
                   </a>
                 </Button>
@@ -2552,10 +2553,10 @@ function RequestConnectionAuthorizationCard({
                   {working ? (
                     <>
                       <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
-                      Saving…
+                      {t("Saving…")}
                     </>
                   ) : (
-                    "Not now"
+                    t("Not now")
                   )}
                 </Button>
               </div>
@@ -2567,7 +2568,7 @@ function RequestConnectionAuthorizationCard({
               Icon={TriangleAlert}
               testId="connection-authorization-no-target"
               headline="This authorization link is unavailable"
-              detail={`Ask ${requestingAgentLabel ?? "the agent"} to send a fresh ${providerName} authorization link.`}
+              detail={t("Ask {{requestingAgentLabel}} to send a fresh {{providerName}} authorization link.", { requestingAgentLabel: requestingAgentLabel ?? "the agent", providerName })}
             />
           )}
           <InteractionActionError message={actionError} />
@@ -2577,7 +2578,7 @@ function RequestConnectionAuthorizationCard({
           Icon={Clock}
           testId="connection-authorization-waiting"
           headline={`Waiting for ${addresseeLabel}`}
-          detail={`Only ${addresseeLabel} can connect their own ${providerName} account.`}
+          detail={t("Only {{addresseeLabel}} can connect their own {{providerName}} account.", { addresseeLabel, providerName })}
         />
       ) : state === "connected" ? (
         <ConnectionAuthorizationStatusLine
@@ -2586,13 +2587,13 @@ function RequestConnectionAuthorizationCard({
           headline={`${providerName} connected`}
           detail={
             <>
-              Connected by{" "}
+              {t("Connected by")}{" "}
               <span className="font-medium text-foreground">
                 {/* "You" is display-cased for a badge; this is mid-sentence. */}
-                {(resolvedByLabel ?? addresseeLabel) === "You" ? "you" : resolvedByLabel ?? addresseeLabel}
+                {(resolvedByLabel ?? addresseeLabel) === "You" ? t("you") : resolvedByLabel ?? addresseeLabel}
               </span>
               {resolvedByAgent ? <ResolvedByAgentChip /> : null}
-              {interaction.resolvedAt ? ` on ${formatDateTime(interaction.resolvedAt)}` : ""}
+              {interaction.resolvedAt ? t(" on {{formatDateTime}}", { formatDateTime: formatDateTime(interaction.resolvedAt) }) : ""}
             </>
           }
         />
@@ -2606,7 +2607,7 @@ function RequestConnectionAuthorizationCard({
           headline={state === "declined" ? `${providerName} was not connected` : "This authorization request expired"}
           detail={
             declineReason
-              ?? `${requestingAgentLabel ?? "The agent"} can ask again with a new ${providerName} authorization link.`
+              ?? t("{{requestingAgentLabel}} can ask again with a new {{providerName}} authorization link.", { requestingAgentLabel: requestingAgentLabel ?? "The agent", providerName })
           }
         />
       )}
@@ -2680,8 +2681,8 @@ function RequestConfirmationCard({
   const reasonPlaceholder =
     interaction.payload.declineReasonPlaceholder
     ?? (interaction.payload.acceptLabel === "Approve plan"
-      ? "Optional: what would you like revised?"
-      : "Optional: tell the agent what you'd change.");
+      ? t("Optional: what would you like revised?")
+      : t("Optional: tell the agent what you'd change."));
 
   useEffect(() => {
     setActionError(null);
@@ -2755,7 +2756,7 @@ function RequestConfirmationCard({
             compact ? <details className="group/confirmation-details">
               <summary className="flex cursor-pointer list-none items-center gap-1 rounded-sm text-xs font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                 <ChevronRight aria-hidden className="h-3.5 w-3.5 transition-transform group-open/confirmation-details:rotate-90 motion-reduce:transition-none" />
-                Details
+                {t("Details")}
               </summary>
               <div className="mt-2 rounded-sm bg-muted/40 px-2.5 py-2 text-sm text-muted-foreground">
                 <MarkdownBody externalReferences={externalReferences}>{interaction.payload.detailsMarkdown}</MarkdownBody>
@@ -2808,7 +2809,7 @@ function RequestConfirmationCard({
                         />
                         <button
                           type="button"
-                          aria-label={`Remove ${shot.name}`}
+                          aria-label={t("Remove {{name}}", { name: shot.name })}
                           className="absolute right-0.5 top-0.5 rounded-full bg-background/90 p-0.5 text-foreground opacity-0 transition-opacity group-hover:opacity-100"
                           onClick={() =>
                             setShots((current) => current.filter((_, i) => i !== index))
@@ -2841,12 +2842,12 @@ function RequestConfirmationCard({
                   {uploading ? (
                     <>
                       <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
-                      Uploading...
+                      {t("Uploading...")}
                     </>
                   ) : (
                     <>
                       <ImagePlus className="mr-2 h-3.5 w-3.5" />
-                      Attach screenshots
+                      {t("Attach screenshots")}
                     </>
                   )}
                 </Button>
@@ -2894,15 +2895,15 @@ function RequestCheckboxConfirmationResolution({
         <div className="flex flex-wrap items-center gap-2 text-sm leading-6 text-foreground">
           <span className="font-medium">
             {selectedCount === 0
-              ? "Confirmed with no options selected"
-              : `Confirmed ${selectedCount} of ${totalOptions} ${totalOptions === 1 ? "option" : "options"}`}
+              ? t("Confirmed with no options selected")
+              : (totalOptions === 1 ? t("Confirmed {{selectedCount}} of {{totalOptions}} option", { selectedCount, totalOptions }) : t("Confirmed {{selectedCount}} of {{totalOptions}} options", { selectedCount, totalOptions }))}
           </span>
           <RequestConfirmationTargetChip interaction={interaction} target={target} />
         </div>
         {visibleLabels.length > 0 ? (
           <div className="flex flex-wrap gap-1.5">
             {visibleLabels.map((label, index) => (
-              <TaskField key={`${label}-${index}`} label="Selected" value={label} />
+              <TaskField key={`${label}-${index}`} label={t("Selected")} value={label} />
             ))}
             {hasHiddenLabels ? (
               <button
@@ -2914,7 +2915,7 @@ function RequestCheckboxConfirmationResolution({
                 )}
                 aria-expanded={expanded}
               >
-                {expanded ? "Show less" : `+${hiddenCount} more`}
+                {expanded ? t("Show less") : t("+{{hiddenCount}} more", { hiddenCount })}
               </button>
             ) : null}
           </div>
@@ -2934,7 +2935,7 @@ function RequestCheckboxConfirmationResolution({
   if (interaction.status === "failed") {
     return (
       <p className="text-sm leading-6 text-muted-foreground">
-        This request could not be resolved. Try again or create a new request.
+        {t("This request could not be resolved. Try again or create a new request.")}
       </p>
     );
   }
@@ -3040,7 +3041,7 @@ function RequestCheckboxConfirmationCard({
   const rejectRequiresReason = interaction.payload.rejectRequiresReason === true;
   const allowRevise = interaction.payload.allowDeclineReason !== false;
   const reasonPlaceholder =
-    interaction.payload.declineReasonPlaceholder ?? "Optional: tell the agent what you'd change.";
+    interaction.payload.declineReasonPlaceholder ?? t("Optional: tell the agent what you'd change.");
 
   const selectedCount = selectedOptionIds.size;
   const totalOptions = options.length;
@@ -3051,12 +3052,12 @@ function RequestCheckboxConfirmationCard({
 
   const validationMessage = belowMin
     ? minSelected === 1
-      ? "Select at least 1 option."
-      : `Select at least ${minSelected} options.`
+      ? t("Select at least 1 option.")
+      : t("Select at least {{minSelected}} options.", { minSelected })
     : aboveMax && maxSelected != null
       ? maxSelected === 1
-        ? "Select at most 1 option."
-        : `Select at most ${maxSelected} options.`
+        ? t("Select at most 1 option.")
+        : t("Select at most {{maxSelected}} options.", { maxSelected })
       : null;
 
   function toggleOption(optionId: string, checked: boolean) {
@@ -3116,12 +3117,12 @@ function RequestCheckboxConfirmationCard({
   }
 
   const selectionSummary = totalOptions > 0 && selectedCount === totalOptions
-    ? `All ${totalOptions} options selected`
-    : `${selectedCount} of ${totalOptions} ${totalOptions === 1 ? "option" : "options"} selected`;
+    ? t("All {{totalOptions}} options selected", { totalOptions })
+    : (totalOptions === 1 ? t("{{selectedCount}} of {{totalOptions}} option selected", { selectedCount, totalOptions }) : t("{{selectedCount}} of {{totalOptions}} options selected", { selectedCount, totalOptions }));
   const boundsHint = maxSelected != null
-    ? `Pick ${minSelected === maxSelected ? `exactly ${maxSelected}` : `${minSelected}-${maxSelected}`}.`
+    ? t("Pick {{value}}.", { value: minSelected === maxSelected ? `exactly ${maxSelected}` : `${minSelected}-${maxSelected}` })
     : minSelected > 0
-      ? `Pick at least ${minSelected}.`
+      ? t("Pick at least {{minSelected}}.", { minSelected })
       : null;
 
   return (
@@ -3156,7 +3157,7 @@ function RequestCheckboxConfirmationCard({
               disabled={working !== null || selectedCount === totalOptions || (maxSelected != null && selectedCount >= maxSelected)}
               onClick={handleSelectAll}
             >
-              Select all
+              {t("Select all")}
             </Button>
             <Button
               size="sm"
@@ -3164,14 +3165,14 @@ function RequestCheckboxConfirmationCard({
               disabled={working !== null || selectedCount === 0}
               onClick={handleClearSelection}
             >
-              Clear selection
+              {t("Clear selection")}
             </Button>
           </div>
         </div>
 
         <div
           role="group"
-          aria-label="Selectable options"
+          aria-label={t("Selectable options")}
           className="max-h-80 overflow-y-auto rounded-sm border border-border/70"
         >
           {options.map((option) => {
@@ -3219,16 +3220,16 @@ function RequestCheckboxConfirmationCard({
 // --- Per-item verdicts (C3) ---------------------------------------------
 
 const VERDICT_LABEL: Record<RequestItemVerdictValue, string> = {
-  approve: "Approve",
-  reject: "Reject",
-  defer: "Defer",
+  approve: t("Approve"),
+  reject: t("Reject"),
+  defer: t("Defer"),
 };
 
 /** Present-tense past-participle label for a resolved verdict chip. */
 const VERDICT_RESOLVED_LABEL: Record<RequestItemVerdictValue, string> = {
-  approve: "Approved",
-  reject: "Rejected",
-  defer: "Deferred",
+  approve: t("Approved"),
+  reject: t("Rejected"),
+  defer: t("Deferred"),
 };
 
 function verdictChipClasses(verdict: RequestItemVerdictValue) {
@@ -3265,7 +3266,7 @@ function ItemVerdictDeepLink({ item, interaction }: { item: RequestItemVerdictsI
     "inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1";
   const label = (
     <>
-      Open
+      {t("Open")}
       {isInternal ? <ArrowUpRight className="h-3 w-3" aria-hidden /> : <ExternalLink className="h-3 w-3" aria-hidden />}
     </>
   );
@@ -3299,7 +3300,7 @@ function ItemVerdictSegmentedControl({
   return (
     <div
       role="group"
-      aria-label="Choose a verdict"
+      aria-label={t("Choose a verdict")}
       className="flex shrink-0 flex-wrap items-center gap-2"
     >
       {verdicts.map((verdict) => {
@@ -3318,7 +3319,7 @@ function ItemVerdictSegmentedControl({
             variant={variant}
             disabled={disabled}
             aria-pressed={active}
-            aria-label={`${VERDICT_LABEL[verdict]} this item`}
+            aria-label={t("{{VERDICT_LABEL}} this item", { VERDICT_LABEL: VERDICT_LABEL[verdict] })}
             className="min-h-11 min-w-24"
             onClick={() => onSelect(verdict)}
             data-verdict={verdict}
@@ -3364,7 +3365,7 @@ function RequestItemVerdictsCard({
     [payload.requireReasonOn],
   );
   const allowBulkApprove = payload.allowBulkApprove !== false && enabledVerdicts.includes("approve");
-  const reasonLabel = payload.reasonLabel ?? "Reason";
+  const reasonLabel = payload.reasonLabel ?? t("Reason");
 
   const resolvedById = useMemo(
     () => new Map<string, RequestItemVerdictsResultItem>((interaction.result?.items ?? []).map((item) => [item.id, item])),
@@ -3473,8 +3474,8 @@ function RequestItemVerdictsCard({
   }
 
   const applyLabel = draftCount === 0
-    ? "Apply 0 decisions"
-    : `Apply ${draftCount} decision${draftCount === 1 ? "" : "s"}`;
+    ? t("Apply 0 decisions")
+    : (draftCount === 1 ? t("Apply {{draftCount}} decision", { draftCount }) : t("Apply {{draftCount}} decisions", { draftCount }));
 
   return (
     <div className="space-y-4">
@@ -3500,22 +3501,21 @@ function RequestItemVerdictsCard({
           <div className="flex items-center gap-2 font-medium">
             <AlertTriangle className="h-4 w-4" aria-hidden />
             {interaction.result?.outcome === "superseded_by_comment"
-              ? "This review expired after a later comment."
+              ? t("This review expired after a later comment.")
               : interaction.result?.outcome === "stale_target"
-                ? "This review expired after the target changed."
-                : "This review expired."}
+                ? t("This review expired after the target changed.")
+                : t("This review expired.")}
           </div>
           {progress.decided > 0 ? (
             <p className="mt-1 text-xs leading-5">
-              {progress.decided === 1 ? "1 item was" : `${progress.decided} items were`} already applied and cannot be
-              reverted. Remaining items were cancelled.
+              {progress.decided === 1 ? t("1 item was") : t("{{decided}} items were", { decided: progress.decided })} {t("already applied and cannot be reverted. Remaining items were cancelled.")}
             </p>
           ) : null}
         </div>
       ) : null}
 
       {/* Item list (S1/S2/S3/S4) */}
-      <ul className="space-y-2" aria-label="Items to review">
+      <ul className="space-y-2" aria-label={t("Items to review")}>
         {items.map((item) => {
           const resolved = resolvedById.get(item.id);
           const applying = applyingItemIds.has(item.id);
@@ -3558,12 +3558,12 @@ function RequestItemVerdictsCard({
                   ) : applying ? (
                     <span className="inline-flex items-center gap-1.5 rounded-sm border border-border/70 bg-muted/40 px-2 py-0.5 text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-eyebrow) text-muted-foreground">
                       <Loader2 className="h-3.5 w-3.5 motion-safe:animate-spin" aria-hidden />
-                      Applying…
+                      {t("Applying…")}
                     </span>
                   ) : isTerminal ? (
                     <span className="inline-flex items-center gap-1 rounded-sm border border-border/70 bg-muted/30 px-2 py-0.5 text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-eyebrow) text-muted-foreground">
                       <CircleDashed className="h-3.5 w-3.5" aria-hidden />
-                      Not decided
+                      {t("Not decided")}
                     </span>
                   ) : (
                     <ItemVerdictSegmentedControl
@@ -3590,7 +3590,7 @@ function RequestItemVerdictsCard({
                     id={`${interaction.id}-${item.id}-reason`}
                     value={draft.reason}
                     onChange={(event) => setDraftReason(item.id, event.target.value)}
-                    placeholder="Give the agent a reason so it can act on this item."
+                    placeholder={t("Give the agent a reason so it can act on this item.")}
                     aria-invalid={attempted && invalidDraftIds.has(item.id)}
                     className={cn(
                       "min-h-16 bg-background text-sm",
@@ -3598,7 +3598,7 @@ function RequestItemVerdictsCard({
                     )}
                   />
                   {attempted && invalidDraftIds.has(item.id) ? (
-                    <p className="text-xs text-destructive">A reason is required to {VERDICT_LABEL[draft.verdict].toLowerCase()} this item.</p>
+                    <p className="text-xs text-destructive">{t("A reason is required to")} {VERDICT_LABEL[draft.verdict].toLowerCase()} {t("this item.")}</p>
                   ) : null}
                 </div>
               ) : null}
@@ -3612,8 +3612,8 @@ function RequestItemVerdictsCard({
         <div className="flex flex-wrap items-center gap-2 rounded-sm border border-emerald-500/50 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-900 dark:text-emerald-100">
           <CheckCircle2 className="h-4 w-4" aria-hidden />
           <span className="font-medium">
-            {progress.decided} decided · {progress.approved} approved · {progress.rejected} rejected
-            {progress.deferred > 0 ? ` · ${progress.deferred} deferred` : ""}
+            {progress.decided} {t("decided ·")} {progress.approved} {t("approved ·")} {progress.rejected} {t("rejected")}
+            {progress.deferred > 0 ? t(" · {{deferred}} deferred", { deferred: progress.deferred }) : ""}
           </span>
         </div>
       ) : null}
@@ -3624,8 +3624,8 @@ function RequestItemVerdictsCard({
           <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/60 pt-3">
             <div className="text-xs text-muted-foreground">
               {draftCount > 0
-                ? `${draftCount} draft verdict${draftCount === 1 ? "" : "s"} ready to apply`
-                : "Mark verdicts, then apply them in one pass."}
+                ? (draftCount === 1 ? t("{{draftCount}} draft verdict ready to apply", { draftCount }) : t("{{draftCount}} draft verdicts ready to apply", { draftCount }))
+                : t("Mark verdicts, then apply them in one pass.")}
             </div>
             <div className="flex flex-wrap items-center gap-2">
               {allowBulkApprove ? (
@@ -3637,7 +3637,7 @@ function RequestItemVerdictsCard({
                   onClick={handleApproveAll}
                 >
                   <ThumbsUp className="h-4 w-4" aria-hidden />
-                  Approve all
+                  {t("Approve all")}
                 </Button>
               ) : null}
               <Button
@@ -3651,7 +3651,7 @@ function RequestItemVerdictsCard({
                 {working ? (
                   <>
                     <Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden />
-                    Applying…
+                    {t("Applying…")}
                   </>
                 ) : (
                   applyLabel
@@ -3681,7 +3681,7 @@ function VerdictProgressBadge({
       {pendingReason ? (
         <span className="inline-flex items-center gap-1 rounded-sm border border-amber-500/60 bg-amber-500/10 px-1.5 py-0.5 text-(length:--text-nano) font-semibold uppercase tracking-(--tracking-eyebrow) text-amber-900 dark:text-amber-100">
           <AlertTriangle className="h-3 w-3" aria-hidden />
-          Reason needed
+          {t("Reason needed")}
         </span>
       ) : null}
       <div
@@ -3690,7 +3690,7 @@ function VerdictProgressBadge({
         aria-valuemin={0}
         aria-valuemax={progress.total}
         aria-valuenow={progress.decided}
-        aria-label={`${progress.decided} of ${progress.total} decided`}
+        aria-label={t("{{decided}} of {{total}} decided", { decided: progress.decided, total: progress.total })}
       >
         <div className="h-1.5 w-16 overflow-hidden rounded-full bg-muted">
           <div
@@ -3699,7 +3699,7 @@ function VerdictProgressBadge({
           />
         </div>
         <span className="whitespace-nowrap text-xs font-medium text-muted-foreground">
-          {progress.decided} of {progress.total} decided
+          {progress.decided} {t("of")} {progress.total} {t("decided")}
         </span>
       </div>
     </div>
@@ -3875,9 +3875,9 @@ export function IssueThreadInteractionCard({
   }
   const statusText =
     adminOutcome === "withdrawn"
-      ? "Withdrawn"
+      ? t("Withdrawn")
       : adminOutcome === "issue_closed"
-        ? "Expired · issue closed"
+        ? t("Expired · issue closed")
         : activeStyles
           ? activeStyles.label
           : statusLabel(interaction.status);
@@ -3915,7 +3915,7 @@ export function IssueThreadInteractionCard({
                 <StatusIcon className={cn("h-3.5 w-3.5", iconSpin && "animate-spin")} />
                 {isSecretProposal ? (
                   <span className="flex flex-col sm:flex-row sm:items-center sm:gap-1">
-                    <span>Secret binding</span>
+                    <span>{t("Secret binding")}</span>
                     <span className="hidden text-current/60 sm:inline">/</span>
                     <span>{statusText}</span>
                   </span>
@@ -3926,7 +3926,7 @@ export function IssueThreadInteractionCard({
                   <span>{statusText}</span>
                 ) : (
                   <>
-                    {isPlan ? "Plan" : interactionKindLabel(interaction.kind)}
+                    {isPlan ? t("Plan") : interactionKindLabel(interaction.kind)}
                     <span className="text-current/60">/</span>
                     {statusText}
                   </>
@@ -3941,11 +3941,11 @@ export function IssueThreadInteractionCard({
                       data-testid="interaction-addressee-badge"
                     >
                       <Bot className="h-3 w-3" />
-                      For {addresseeLabel}
+                      {t("For")} {addresseeLabel}
                     </Badge>
                   </TooltipTrigger>
                   <TooltipContent side="bottom" className="max-w-xs text-xs">
-                    Directed to {addresseeLabel}. Agent-addressed interactions are owned by that agent and are kept out of the open organization attention feed.
+                    {t("Directed to")} {addresseeLabel}{t(". Agent-addressed interactions are owned by that agent and are kept out of the open organization attention feed.")}
                   </TooltipContent>
                 </Tooltip>
               ) : null}
@@ -3954,27 +3954,27 @@ export function IssueThreadInteractionCard({
             <div className="mt-3 text-lg font-bold text-foreground">
               {interaction.title
                 ?? (interaction.kind === "suggest_tasks"
-                  ? "Suggested task tree"
+                  ? t("Suggested task tree")
                   : interaction.kind === "ask_user_questions"
                     // Only a human-only card is genuinely "for the operator";
                     // an open card is answerable by any teammate (PAP-17280).
                     ? interaction.payload.title
                       ?? (audience.policy === "human_only"
-                        ? "Questions for the operator"
-                        : "Questions to answer")
+                        ? t("Questions for the operator")
+                        : t("Questions to answer"))
                   : interaction.kind === "request_checkbox_confirmation"
-                    ? "Checkbox confirmation requested"
+                    ? t("Checkbox confirmation requested")
                     : isSecretProposal
-                      ? "Secret binding requested"
+                      ? t("Secret binding requested")
                     : connectionAuthorization
-                      ? `Connect your ${connectionAuthorization.providerName} to continue`
+                      ? t("Connect your {{providerName}} to continue", { providerName: connectionAuthorization.providerName })
                     : isToolAction
-                      ? "Tool approval requested"
+                      ? t("Tool approval requested")
                       : interaction.kind === "request_item_verdicts"
-                        ? "Review these items"
+                        ? t("Review these items")
                         : isPlan
-                          ? "Plan review"
-                          : "Confirmation requested")}
+                          ? t("Plan review")
+                          : t("Confirmation requested"))}
             </div>
             {/* A connection-authorization card composes its own single body
                 below, because the closing sentence depends on whether the
@@ -3994,11 +3994,11 @@ export function IssueThreadInteractionCard({
             <TooltipTrigger asChild>
               <div className="rounded-sm border border-border/70 bg-transparent px-3 py-2 text-right text-xs text-muted-foreground">
                 <div className="font-medium text-foreground">{formatShortDate(interaction.createdAt)}</div>
-                <div>proposed by {createdByLabel}</div>
+                <div>{t("proposed by")} {createdByLabel}</div>
               </div>
             </TooltipTrigger>
             <TooltipContent side="bottom" className="text-xs">
-              Created {formatDateTime(interaction.createdAt)}
+              {t("Created")} {formatDateTime(interaction.createdAt)}
             </TooltipContent>
           </Tooltip>
         </div>}
@@ -4094,10 +4094,10 @@ export function IssueThreadInteractionCard({
             data-testid="interaction-withdrawn-footer"
           >
             <div>
-              Withdrawn by{" "}
-              <span className="font-medium text-foreground">{resolvedByLabel ?? "an agent"}</span>
+              {t("Withdrawn by")}{" "}
+              <span className="font-medium text-foreground">{resolvedByLabel ?? t("an agent")}</span>
               {resolvedByAgent ? <ResolvedByAgentChip /> : null}
-              {interaction.resolvedAt ? ` on ${formatShortDate(interaction.resolvedAt)}` : ""}
+              {interaction.resolvedAt ? t(" on {{formatShortDate}}", { formatShortDate: formatShortDate(interaction.resolvedAt) }) : ""}
             </div>
             {adminReason ? (
               <div className="mt-1 italic text-muted-foreground/90">"{adminReason}"</div>
@@ -4120,9 +4120,9 @@ export function IssueThreadInteractionCard({
             className="mt-4 flex flex-wrap items-center gap-x-1 gap-y-0.5 border-t border-border/60 pt-3 text-xs text-muted-foreground"
             data-testid="interaction-resolved-footer"
           >
-            Resolved by <span className="font-medium text-foreground">{resolvedByLabel}</span>
+            {t("Resolved by")} <span className="font-medium text-foreground">{resolvedByLabel}</span>
             {resolvedByAgent ? <ResolvedByAgentChip /> : null}
-            {interaction.resolvedAt ? ` on ${formatShortDate(interaction.resolvedAt)}` : ""}
+            {interaction.resolvedAt ? t(" on {{formatShortDate}}", { formatShortDate: formatShortDate(interaction.resolvedAt) }) : ""}
           </div>
         ) : null}
       </div>
@@ -4144,11 +4144,11 @@ function ResolvedByAgentChip() {
           data-testid="interaction-resolved-by-agent-chip"
         >
           <Bot className="h-3 w-3" />
-          Agent
+          {t("Agent")}
         </Badge>
       </TooltipTrigger>
       <TooltipContent side="bottom" className="max-w-xs text-xs">
-        Resolved by an agent under the organization's interaction governance policy — audit-distinct from a human board resolution.
+        {t("Resolved by an agent under the organization's interaction governance policy — audit-distinct from a human board resolution.")}
       </TooltipContent>
     </Tooltip>
   );

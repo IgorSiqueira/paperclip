@@ -1,6 +1,7 @@
 import { ReviewQueueCard } from "../ReviewQueueCard";
 import { QuarantinedActionsReview } from "./SetupPanel";
 import type { AppDetailSectionProps } from "./types";
+import { t } from "@/i18n";
 
 export function ReviewPanel({
   connectionId,
@@ -15,7 +16,7 @@ export function ReviewPanel({
 
   return (
     <div className="space-y-6">
-      <h2 className="text-lg font-semibold text-foreground">Review</h2>
+      <h2 className="text-lg font-semibold text-foreground">{t("Review")}</h2>
       {showsQuarantinedActions ? (
         <QuarantinedActionsReview
           entries={quarantined}
@@ -25,7 +26,7 @@ export function ReviewPanel({
       ) : null}
       <ReviewQueueCard
         connectionId={connectionId}
-        heading="Waiting for your OK"
+        heading={t("Waiting for your OK")}
         emptyState={showsQuarantinedActions ? "hidden" : "reassure"}
         plain
       />

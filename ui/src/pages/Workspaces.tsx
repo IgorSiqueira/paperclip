@@ -14,6 +14,7 @@ import { useCompany } from "../context/CompanyContext";
 import type { ProjectWorkspaceSummary } from "../lib/project-workspaces-tab";
 import { queryKeys } from "../lib/queryKeys";
 import { projectRouteRef } from "../lib/utils";
+import { t } from "@/i18n";
 
 type ProjectWorkspaceGroup = {
   projectId: string | null;
@@ -99,7 +100,7 @@ export function Workspaces() {
   const overviewView = useQueryView(overviewQuery);
 
   useEffect(() => {
-    setBreadcrumbs([{ label: "Workspaces" }]);
+    setBreadcrumbs([{ label: t("Workspaces") }]);
   }, [setBreadcrumbs]);
 
   const overviewPages = overviewQuery.data?.pages ?? [];
@@ -123,7 +124,7 @@ export function Workspaces() {
       <QueryErrorState
         size="page"
         error={experimentalSettingsQuery.error}
-        action="load workspaces"
+        action={t("load workspaces")}
         onRetry={experimentalSettingsView.retry}
         retrying={experimentalSettingsView.isFetching}
       />
@@ -132,24 +133,24 @@ export function Workspaces() {
   if (!isolatedWorkspacesEnabled) return <Navigate to="/issues" replace />;
   if (dataLoading) return <PageSkeleton variant="list" />;
   if (overviewView.kind === "error") {
-    return <QueryErrorState size="page" error={error} action="load workspaces" onRetry={overviewView.retry} retrying={overviewView.isFetching} />;
+    return <QueryErrorState size="page" error={error} action={t("load workspaces")} onRetry={overviewView.retry} retrying={overviewView.isFetching} />;
   }
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold">Workspaces</h2>
+        <h2 className="text-xl font-bold">{t("Workspaces")}</h2>
       </div>
 
       <SummarySlotCard
         companyId={selectedCompanyId}
         scopeKind="workspaces_overview"
-        title="Workspace summary"
-        description="Summarizer tracks workspace activity, live services, and follow-up needs across projects."
+        title={t("Workspace summary")}
+        description={t("Summarizer tracks workspace activity, live services, and follow-up needs across projects.")}
       />
 
       {groups.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No workspace activity yet.</p>
+        <p className="text-sm text-muted-foreground">{t("No workspace activity yet.")}</p>
       ) : (
         <div className="space-y-8">
           {groups.map((group) => (
@@ -164,7 +165,7 @@ export function Workspaces() {
                   </Link> : <h3 className="text-base font-semibold">{group.projectName}</h3>}
                 </div>
                 <span className="text-xs text-muted-foreground">
-                  {group.summaries.length} workspace{group.summaries.length === 1 ? "" : "s"}
+                  {group.summaries.length} {t("workspace")}{group.summaries.length === 1 ? "" : "s"}
                 </span>
               </div>
               <ProjectWorkspacesContent
@@ -178,7 +179,7 @@ export function Workspaces() {
           {overviewQuery.hasNextPage ? (
             <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
               <p className="text-sm text-muted-foreground">
-                Showing {overviewItems.length} of {totalWorkspaceCount} workspaces.
+                {t("Showing")} {overviewItems.length} {t("of")} {totalWorkspaceCount} {t("workspaces.")}
               </p>
               <Button
                 type="button"
@@ -187,7 +188,7 @@ export function Workspaces() {
                 onClick={() => void overviewQuery.fetchNextPage()}
                 disabled={overviewQuery.isFetchingNextPage}
               >
-                {overviewQuery.isFetchingNextPage ? "Loading..." : "Load more"}
+                {overviewQuery.isFetchingNextPage ? t("Loading...") : t("Load more")}
               </Button>
             </div>
           ) : null}

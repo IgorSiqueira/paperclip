@@ -3,6 +3,7 @@ import {
   type AttachmentArtifactWorkProductMetadata,
   type IssueWorkProduct,
 } from "@paperclipai/shared";
+import { t as translate } from "@/i18n";
 
 /**
  * Helpers + selectors for the issue Output surface (PAP-10162 Phase 3).
@@ -186,26 +187,26 @@ export function getOutputFileGlyph(contentType: string | null | undefined): Outp
   const type = normalizeOutputContentType(contentType);
   if (type.startsWith("video/")) {
     const subtype = type.slice("video/".length);
-    if (subtype === "quicktime") return { label: "MOV", tone: "video" };
+    if (subtype === "quicktime") return { label: translate("MOV"), tone: "video" };
     return { label: (subtype || "vid").toUpperCase().slice(0, 4), tone: "video" };
   }
-  if (type === "application/pdf") return { label: "PDF", tone: "pdf" };
+  if (type === "application/pdf") return { label: translate("PDF"), tone: "pdf" };
   if (isZipContentType(type)) {
-    return { label: "ZIP", tone: "zip" };
+    return { label: translate("ZIP"), tone: "zip" };
   }
-  if (type.startsWith("image/")) return { label: "IMG", tone: "image" };
-  if (MARKDOWN_CONTENT_TYPES.has(type)) return { label: "MD", tone: "bin" };
-  if (type === "text/plain") return { label: "TXT", tone: "bin" };
-  if (type === "text/csv" || type === "application/csv") return { label: "CSV", tone: "bin" };
+  if (type.startsWith("image/")) return { label: translate("IMG"), tone: "image" };
+  if (MARKDOWN_CONTENT_TYPES.has(type)) return { label: translate("MD"), tone: "bin" };
+  if (type === "text/plain") return { label: translate("TXT"), tone: "bin" };
+  if (type === "text/csv" || type === "application/csv") return { label: translate("CSV"), tone: "bin" };
   if (type === "text/html" || type === "application/html" || type === "application/xhtml+xml") {
-    return { label: "HTML", tone: "bin" };
+    return { label: translate("HTML"), tone: "bin" };
   }
-  if (type === "application/json" || type.endsWith("+json")) return { label: "JSON", tone: "bin" };
+  if (type === "application/json" || type.endsWith("+json")) return { label: translate("JSON"), tone: "bin" };
   if (type === "application/xml" || type === "text/xml" || type.endsWith("+xml")) {
-    return { label: "XML", tone: "bin" };
+    return { label: translate("XML"), tone: "bin" };
   }
-  if (type === "application/wasm") return { label: "WASM", tone: "bin" };
-  return { label: "BIN", tone: "bin" };
+  if (type === "application/wasm") return { label: translate("WASM"), tone: "bin" };
+  return { label: translate("BIN"), tone: "bin" };
 }
 
 export function isVideoContentType(contentType: string | null | undefined): boolean {

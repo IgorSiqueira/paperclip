@@ -27,6 +27,7 @@ import {
   type DerivedMonitorState,
   type MonitorDisplayState,
 } from "@/lib/issue-monitor";
+import { t } from "@/i18n";
 
 /** Matches the `Date | string` inputs accepted by the issue-monitor helpers. */
 type MonitorDate = Date | string;
@@ -209,7 +210,7 @@ function CheckNowButton({
       onClick={onCheckNow}
       disabled={checkingNow}
     >
-      {checkingNow ? "Checking…" : reviewRequested ? "Check status" : "Check now"}
+      {checkingNow ? t("Checking…") : reviewRequested ? t("Check status") : t("Check now")}
     </Button>
   );
 }
@@ -233,19 +234,19 @@ function CancelMonitorButton({ onCancel }: { onCancel: () => Promise<unknown> })
   return (
     <AlertDialog open={open} onOpenChange={(next) => { if (!pending) { setOpen(next); setError(null); } }}>
       <AlertDialogTrigger asChild>
-        <Button type="button" variant="ghost" size="icon" className="absolute right-2 top-2" aria-label="Cancel monitor" title="Cancel monitor">
+        <Button type="button" variant="ghost" size="icon" className="absolute right-2 top-2" aria-label={t("Cancel monitor")} title={t("Cancel monitor")}>
           <X className="h-4 w-4" aria-hidden="true" />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Cancel monitor?</AlertDialogTitle>
-          <AlertDialogDescription>This removes the scheduled monitor check. The agent will no longer resume from this monitor. You can send a message to continue the task.</AlertDialogDescription>
+          <AlertDialogTitle>{t("Cancel monitor?")}</AlertDialogTitle>
+          <AlertDialogDescription>{t("This removes the scheduled monitor check. The agent will no longer resume from this monitor. You can send a message to continue the task.")}</AlertDialogDescription>
         </AlertDialogHeader>
         {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={pending}>Keep monitor</AlertDialogCancel>
-          <Button type="button" variant="destructive" disabled={pending} onClick={() => void cancel()}>{pending ? "Cancelling…" : "Cancel monitor"}</Button>
+          <AlertDialogCancel disabled={pending}>{t("Keep monitor")}</AlertDialogCancel>
+          <Button type="button" variant="destructive" disabled={pending} onClick={() => void cancel()}>{pending ? t("Cancelling…") : t("Cancel monitor")}</Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
@@ -335,10 +336,10 @@ export function IssueMonitorComposerStrip({
       {!copy.automaticChecksPaused ? (
         <p className="mt-1.5 text-xs text-muted-foreground">
           {copy.pullRequestReview
-            ? "Review on GitHub, then check status to have the agent verify the result."
+            ? t("Review on GitHub, then check status to have the agent verify the result.")
             : copy.workspaceWait
-            ? "You can keep sending instructions while the agent waits."
-            : "Sending a reply wakes the agent now — before the scheduled check."}
+            ? t("You can keep sending instructions while the agent waits.")
+            : t("Sending a reply wakes the agent now — before the scheduled check.")}
         </p>
       ) : null}
       {checkError ? <p role="alert" className="text-sm text-destructive">{checkError}</p> : null}

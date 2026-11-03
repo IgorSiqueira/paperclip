@@ -10,6 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./ui/dialog";
+import { t } from "@/i18n";
 
 /** Shared by the task header and its Storybook composition. */
 export function TaskTreeControlMenuItems({
@@ -42,13 +43,13 @@ export function TaskTreeControlMenuItems({
       {canPause ? (
         <button disabled={pending} className={itemClass} onClick={onPause}>
           <PauseCircle className="h-3 w-3" />
-          {scope === "leaf" ? "Pause work" : "Pause subtree"}
+          {scope === "leaf" ? t("Pause work") : t("Pause subtree")}
         </button>
       ) : null}
       {canResume ? (
         <button disabled={pending} className={itemClass} onClick={onResume}>
           <PlayCircle className="h-3 w-3" />
-          {scope === "leaf" ? "Resume work" : "Resume subtree"}
+          {scope === "leaf" ? t("Resume work") : t("Resume subtree")}
         </button>
       ) : null}
       {canCancel ? (
@@ -58,13 +59,13 @@ export function TaskTreeControlMenuItems({
           onClick={onCancel}
         >
           <XCircle className="h-3 w-3" />
-          Cancel subtree...
+          {t("Cancel subtree...")}
         </button>
       ) : null}
       {canRestore ? (
         <button disabled={pending} className={itemClass} onClick={onRestore}>
           <Repeat className="h-3 w-3" />
-          Restore subtree...
+          {t("Restore subtree...")}
         </button>
       ) : null}
     </>
@@ -107,12 +108,12 @@ export function TaskTreeControlDialog({
   const cancel = mode === "cancel";
   const tasks = `${affectedCount} task${affectedCount === 1 ? "" : "s"}`;
   const title = cancel
-    ? "Cancel subtree?"
+    ? t("Cancel subtree?")
     : mode === "restore"
-      ? "Restore subtree"
+      ? t("Restore subtree")
       : scope === "leaf"
-        ? "Resume work"
-        : "Resume subtree";
+        ? t("Resume work")
+        : t("Resume subtree");
   return (
     <Dialog
       open={open}
@@ -128,12 +129,12 @@ export function TaskTreeControlDialog({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
             {loading
-              ? "Loading…"
+              ? t("Loading…")
               : cancel
-                ? `${tasks} will be cancelled.`
+                ? t("{{tasks}} will be cancelled.", { tasks })
                 : mode === "restore"
-                  ? `${tasks} will be restored.`
-                  : `The pause will be removed from ${tasks}.`}
+                  ? t("{{tasks}} will be restored.", { tasks })
+                  : t("The pause will be removed from {{tasks}}.", { tasks })}
           </DialogDescription>
         </DialogHeader>
         {error ? (
@@ -147,7 +148,7 @@ export function TaskTreeControlDialog({
               disabled={pending}
               onClick={onRetry}
             >
-              Retry preview
+              {t("Retry preview")}
             </Button>
           </div>
         ) : null}
@@ -159,7 +160,7 @@ export function TaskTreeControlDialog({
               disabled={pending || loading || affectedAgentCount === 0}
               onChange={(event) => onWakeAgentsChange(event.target.checked)}
             />
-            Wake affected agents ({affectedAgentCount})
+            {t("Wake affected agents (")}{affectedAgentCount})
           </label>
         ) : null}
         {!loading ? warnings.map((warning) => (
@@ -171,7 +172,7 @@ export function TaskTreeControlDialog({
             disabled={pending}
             onClick={() => onOpenChange(false)}
           >
-            {cancel ? "Keep tasks" : "Close"}
+            {cancel ? t("Keep tasks") : t("Close")}
           </Button>
           <Button
             variant={cancel ? "destructive" : "default"}
@@ -179,11 +180,11 @@ export function TaskTreeControlDialog({
             onClick={onApply}
           >
             {pending
-              ? "Applying…"
+              ? t("Applying…")
               : cancel
-                ? `Cancel ${tasks}`
+                ? t("Cancel {{tasks}}", { tasks })
                 : mode === "restore"
-                  ? `Restore ${tasks}`
+                  ? t("Restore {{tasks}}", { tasks })
                   : title}
           </Button>
         </DialogFooter>
@@ -215,7 +216,7 @@ export function TaskPauseNotice({
       )}
     >
       <span>
-        {scope === "subtree" ? "Subtree is paused." : "Task is paused."}
+        {scope === "subtree" ? t("Subtree is paused.") : t("Task is paused.")}
       </span>
       {resumeLink ??
         (onResume ? (
@@ -225,7 +226,7 @@ export function TaskPauseNotice({
             disabled={pending}
             onClick={onResume}
           >
-            {scope === "subtree" ? "Resume subtree" : "Resume work"}
+            {scope === "subtree" ? t("Resume subtree") : t("Resume work")}
           </Button>
         ) : null)}
     </div>

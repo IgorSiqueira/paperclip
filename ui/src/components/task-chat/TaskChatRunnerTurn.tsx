@@ -22,6 +22,7 @@ import {
   paperclipRunnerFinalResponse,
   paperclipRunnerTimelineItems,
 } from "./transcript-adapter";
+import { t } from "@/i18n";
 
 function currentActivityStatusItems(
   items: readonly TaskChatItem[],
@@ -87,7 +88,7 @@ function RunnerTurnStatus({
   const elapsed = formatCompactDuration(elapsedMs);
 
   const failed = terminalStatusFailed(status);
-  const label = terminal ? (failed ? "Stopped" : "Worked") : waitingLabel ?? "Working";
+  const label = terminal ? (failed ? t("Stopped") : t("Worked")) : waitingLabel ?? t("Working");
   const suffix = terminal
     ? elapsed ? ` ${failed ? "after" : "for"} ${elapsed}` : ""
     : waitingLabel ? elapsed ? ` · ${elapsed}` : "" : ` for ${elapsed ?? "0s"}`;
@@ -100,7 +101,7 @@ function RunnerTurnStatus({
       aria-live="polite"
       aria-atomic="true"
     >
-      {continuedAfterSteering ? <span data-conversation-meta="">Continued after steering · </span> : null}
+      {continuedAfterSteering ? <span data-conversation-meta="">{t("Continued after steering ·")} </span> : null}
       {label}<span data-conversation-meta="">{suffix}</span>
     </span>
   );
@@ -110,7 +111,7 @@ function RunnerCurrentActivityTail({ status, waitingLabel }: { status: string; w
   const shimmer = useTaskChatShimmer("working");
   if (isTerminalRunStatus(status)) return null;
   return <div className="mt-2 flex min-h-8 min-w-0 items-center gap-2 px-1 py-1 text-xs text-muted-foreground" data-testid="task-chat-current-activity" data-turn-position="tail">
-    <span className={cn(!waitingLabel && shimmer && "shimmer-text shimmer-text-muted")} aria-live="polite" data-testid="task-chat-current-activity-label">{waitingLabel ?? "Thinking"}</span>
+    <span className={cn(!waitingLabel && shimmer && "shimmer-text shimmer-text-muted")} aria-live="polite" data-testid="task-chat-current-activity-label">{waitingLabel ?? t("Thinking")}</span>
   </div>;
 }
 
@@ -131,7 +132,7 @@ function runnerWaitingLabel({ runId, status, execution, preparationLabel }: Runn
   if (isTerminalRunStatus(status)) return null;
   if (execution?.phase === "waiting_for_provider") return execution.label;
   if (!runId && preparationLabel) return preparationLabel;
-  return status === "queued" ? execution?.label ?? "Queued" : null;
+  return status === "queued" ? execution?.label ?? t("Queued") : null;
 }
 
 /** One identity stays mounted while admission discovers the run's renderer. */
@@ -255,7 +256,7 @@ export function TaskChatRunnerTurn({
           role="status"
           data-testid="task-chat-activity-unavailable"
         >
-          Live runner activity is temporarily unavailable. Retrying…
+          {t("Live runner activity is temporarily unavailable. Retrying…")}
         </div>
       ) : null}
       {timelineRows.length > 0 ? (

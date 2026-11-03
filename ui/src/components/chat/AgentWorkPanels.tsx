@@ -21,6 +21,7 @@ import {
 import { queryKeys } from "@/lib/queryKeys";
 import { Link } from "@/lib/router";
 import { cn, formatDate, relativeTime } from "@/lib/utils";
+import { t } from "@/i18n";
 
 /**
  * The agent-scoped side panels shown beside an agent chat: every task the
@@ -152,15 +153,15 @@ export function AgentTasksPanel({
   const capped = (tasksQuery.data?.length ?? 0) >= AGENT_TASK_LIMIT;
 
   return (
-    <section className="flex flex-col gap-3" aria-label="Agent tasks">
+    <section className="flex flex-col gap-3" aria-label={t("Agent tasks")}>
       <div className="flex items-center gap-1">
         <div className="relative min-w-0 flex-1">
           <Search className="pointer-events-none absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search tasks"
-            aria-label="Search tasks"
+            placeholder={t("Search tasks")}
+            aria-label={t("Search tasks")}
             className="h-8 pl-7 text-sm"
           />
         </div>
@@ -176,7 +177,7 @@ export function AgentTasksPanel({
         />
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" size="icon" className="h-8 w-8 shrink-0" title="Sort" aria-label="Sort tasks">
+            <Button variant="outline" size="icon" className="h-8 w-8 shrink-0" title={t("Sort")} aria-label={t("Sort tasks")}>
               <ArrowUpDown className="h-3.5 w-3.5" />
             </Button>
           </PopoverTrigger>
@@ -210,30 +211,30 @@ export function AgentTasksPanel({
       </div>
 
       {tasksView.kind === "loading" || tasksView.kind === "reconnecting" ? (
-        <PanelMessage>Loading tasks…</PanelMessage>
+        <PanelMessage>{t("Loading tasks…")}</PanelMessage>
       ) : tasksView.kind === "error" ? (
         <div className="py-4">
           <QueryErrorState
             error={tasksQuery.error}
-            action="load this agent's tasks"
+            action={t("load this agent's tasks")}
             onRetry={tasksView.retry}
             retrying={tasksView.isFetching}
           />
         </div>
       ) : total === 0 ? (
-        <PanelMessage>This agent hasn't worked on any tasks yet.</PanelMessage>
+        <PanelMessage>{t("This agent hasn't worked on any tasks yet.")}</PanelMessage>
       ) : visible.length === 0 ? (
         <PanelMessage>
           {capped
-            ? `No tasks match these filters among the ${AGENT_TASK_LIMIT} most recently updated.`
-            : "No tasks match these filters."}
+            ? t("No tasks match these filters among the {{AGENT_TASK_LIMIT}} most recently updated.", { AGENT_TASK_LIMIT })
+            : t("No tasks match these filters.")}
         </PanelMessage>
       ) : (
         <div className="flex flex-col gap-2">
           {visible.map((task) => <AgentTaskCard key={task.id} task={task} />)}
           {capped ? (
             <p className="px-1 text-xs text-muted-foreground">
-              Showing the {AGENT_TASK_LIMIT} most recently updated tasks.
+              {t("Showing the")} {AGENT_TASK_LIMIT} {t("most recently updated tasks.")}
             </p>
           ) : null}
         </div>
@@ -271,7 +272,7 @@ export function AgentArtifactCard({ artifact }: { artifact: CompanyArtifact }) {
         </span>
       </div>
       <div className="flex items-center gap-1.5 pl-6 text-xs text-muted-foreground">
-        <span>Updated {formatDate(artifact.updatedAt)}</span>
+        <span>{t("Updated")} {formatDate(artifact.updatedAt)}</span>
         <span aria-hidden>·</span>
         <span className="font-mono">{artifact.issue.identifier}</span>
       </div>
@@ -304,13 +305,13 @@ export function AgentArtifactsPanel({ companyId, agentId }: { companyId: string;
 
   const artifactsView = useQueryView(artifactsQuery);
 
-  if (artifactsView.kind === "loading" || artifactsView.kind === "reconnecting") return <PanelMessage>Loading artifacts…</PanelMessage>;
+  if (artifactsView.kind === "loading" || artifactsView.kind === "reconnecting") return <PanelMessage>{t("Loading artifacts…")}</PanelMessage>;
   if (artifactsView.kind === "error") {
     return (
       <div className="py-4">
         <QueryErrorState
           error={artifactsQuery.error}
-          action="load this agent's artifacts"
+          action={t("load this agent's artifacts")}
           onRetry={artifactsView.retry}
           retrying={artifactsView.isFetching}
         />
@@ -320,12 +321,12 @@ export function AgentArtifactsPanel({ companyId, agentId }: { companyId: string;
   const loaded = artifactsQuery.data;
   if (!loaded) return null;
   const { artifacts, truncated } = loaded;
-  if (artifacts.length === 0) return <PanelMessage>This agent hasn't produced any artifacts yet.</PanelMessage>;
+  if (artifacts.length === 0) return <PanelMessage>{t("This agent hasn't produced any artifacts yet.")}</PanelMessage>;
   return (
-    <section className="flex flex-col gap-2" aria-label="Agent artifacts">
+    <section className="flex flex-col gap-2" aria-label={t("Agent artifacts")}>
       {artifacts.map((artifact) => <AgentArtifactCard key={artifact.id} artifact={artifact} />)}
       {truncated ? (
-        <p className="px-1 text-xs text-muted-foreground">Showing this agent's {artifacts.length} most recent artifacts.</p>
+        <p className="px-1 text-xs text-muted-foreground">{t("Showing this agent's")} {artifacts.length} {t("most recent artifacts.")}</p>
       ) : null}
     </section>
   );

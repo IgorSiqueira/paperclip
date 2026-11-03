@@ -5,6 +5,7 @@ import {
   type RecoveryLivenessContext,
   type RecoveryRetryLineage,
 } from "./recovery-lineage";
+import { t } from "@/i18n";
 
 export type RecoveryDisplayState =
   | "needed"
@@ -23,23 +24,23 @@ export const RECOVERY_CHIP_DEFAULT_TONE: Record<
     className:
       "border-amber-500/60 bg-amber-500/15 text-amber-700 dark:text-amber-300",
     icon: TriangleAlert,
-    label: "Recovery needed",
+    label: t("Recovery needed"),
   },
   in_progress: {
     className:
       "border-sky-500/60 bg-sky-500/15 text-sky-700 dark:text-sky-300",
     icon: RefreshCw,
-    label: "Recovery in progress",
+    label: t("Recovery in progress"),
   },
   observe_only: {
     className: "border-border bg-muted text-muted-foreground",
     icon: Eye,
-    label: "Observing active run",
+    label: t("Observing active run"),
   },
   escalated: {
     className: "border-red-500/60 bg-red-500/15 text-red-700 dark:text-red-300",
     icon: OctagonAlert,
-    label: "Recovery escalated",
+    label: t("Recovery escalated"),
   },
 };
 
@@ -122,7 +123,7 @@ export function recoveryChipLabel(
   lineage?: RecoveryRetryLineage | null,
 ): string {
   if (kind === "workspace_validation" && state === "needed") {
-    return "Workspace recovery needed";
+    return t("Workspace recovery needed");
   }
   if (
     state === "in_progress" &&
@@ -130,7 +131,7 @@ export function recoveryChipLabel(
     lineage.maxAttempts !== null &&
     lineage.attempt > 0
   ) {
-    return `Recovery in progress · ${Math.min(lineage.attempt, lineage.maxAttempts)}/${lineage.maxAttempts}`;
+    return t("Recovery in progress · {{min}}/{{maxAttempts}}", { min: Math.min(lineage.attempt, lineage.maxAttempts), maxAttempts: lineage.maxAttempts });
   }
   return RECOVERY_CHIP_DEFAULT_TONE[state].label;
 }

@@ -5,6 +5,7 @@ import { ArtifactFront } from "./ArtifactFront";
 import { ArtifactStack } from "./ArtifactStack";
 import type { ArtifactSubject } from "./kinds";
 import { countLabel, updatedLabel } from "./when";
+import { t } from "@/i18n";
 
 /**
  * One cell of the Artifacts page grid: a 254px frame holding the artifact or
@@ -83,7 +84,7 @@ export interface StackTileProps {
 /** A task with several artifacts: its newest one on top of a stack, the task's title underneath. */
 export function ArtifactStackTile({ identifier, title, count, updatedAt, front, to, onClick, now }: StackTileProps) {
   return (
-    <ArtifactTile label={`Open ${identifier} ${title}, ${countLabel(count)}`} to={to} onClick={onClick} testId="artifact-v1-stack-tile" caption={<ArtifactCaption title={title} identifier={identifier} facts={[countLabel(count), `Updated ${updatedLabel(updatedAt, now)}`]} />}>
+    <ArtifactTile label={t("Open {{identifier}} {{title}}, {{countLabel}}", { identifier, title, countLabel: countLabel(count) })} to={to} onClick={onClick} testId="artifact-v1-stack-tile" caption={<ArtifactCaption title={title} identifier={identifier} facts={[countLabel(count), `Updated ${updatedLabel(updatedAt, now)}`]} />}>
       <ArtifactStack front={front} />
     </ArtifactTile>
   );
@@ -93,7 +94,7 @@ export function ArtifactStackTile({ identifier, title, count, updatedAt, front, 
 export function ArtifactSingleTile({ subject, to, onClick, now }: { subject: ArtifactSubject; to?: To; onClick?: () => void; now?: Date }) {
   const name = subject.filename ?? subject.title;
   return (
-    <ArtifactTile label={`Open ${name}`} to={to} onClick={onClick} testId="artifact-v1-single-tile" caption={<ArtifactCaption title={name} identifier={subject.taskIdentifier} facts={subject.updatedAt ? [`Updated ${updatedLabel(subject.updatedAt, now)}`] : []} />}>
+    <ArtifactTile label={t("Open {{name}}", { name })} to={to} onClick={onClick} testId="artifact-v1-single-tile" caption={<ArtifactCaption title={name} identifier={subject.taskIdentifier} facts={subject.updatedAt ? [`Updated ${updatedLabel(subject.updatedAt, now)}`] : []} />}>
       <ArtifactFront subject={subject} />
     </ArtifactTile>
   );

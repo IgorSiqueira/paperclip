@@ -10,6 +10,7 @@ import { cn } from "../lib/utils";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
+import { t } from "@/i18n";
 
 interface StalledReviewActionsProps {
   issueId: string;
@@ -51,7 +52,7 @@ export function StalledReviewActions({
   footerSlot,
   onResolved,
   reviewPolicy,
-  approveLabel = "Approve",
+  approveLabel = t("Approve"),
   className,
 }: StalledReviewActionsProps) {
   const queryClient = useQueryClient();
@@ -74,8 +75,8 @@ export function StalledReviewActions({
     },
     onError: (error) => {
       pushToast({
-        title: "Could not record the review decision",
-        body: error instanceof Error ? error.message : "Please try again.",
+        title: t("Could not record the review decision"),
+        body: error instanceof Error ? error.message : t("Please try again."),
         tone: "error",
       });
     },
@@ -107,7 +108,7 @@ export function StalledReviewActions({
       <Textarea
         value={note}
         onChange={(event) => setNote(event.target.value)}
-        placeholder="Add a note — required to request changes, optional otherwise…"
+        placeholder={t("Add a note — required to request changes, optional otherwise…")}
         className="min-h-16 text-sm"
         data-testid="stalled-review-note"
         disabled={pending}
@@ -129,7 +130,7 @@ export function StalledReviewActions({
             ) : (
               <Undo2 className="h-3.5 w-3.5" aria-hidden />
             )}
-            Send back to work
+            {t("Send back to work")}
           </Button>
           <Button
             type="button"
@@ -137,7 +138,7 @@ export function StalledReviewActions({
             size="sm"
             className="w-full border-amber-400/70 text-amber-900 hover:bg-amber-100 dark:border-amber-500/50 dark:text-amber-100 dark:hover:bg-amber-500/15 sm:w-auto sm:flex-1 @xl:flex-none"
             disabled={pending || noteEmpty}
-            title={noteEmpty ? "Add a note to request changes" : undefined}
+            title={noteEmpty ? t("Add a note to request changes") : undefined}
             onClick={() => decide.mutate("request_changes")}
             data-testid="stalled-review-request-changes"
           >
@@ -146,7 +147,7 @@ export function StalledReviewActions({
             ) : (
               <RotateCcw className="h-3.5 w-3.5" aria-hidden />
             )}
-            Request changes
+            {t("Request changes")}
           </Button>
           <Button
             type="button"

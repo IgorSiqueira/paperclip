@@ -38,6 +38,7 @@ import {
   CapabilityBadges,
   QuarantineBadge,
 } from "./shared";
+import { t as translate } from "@/i18n";
 
 export const TRANSPORT_LABEL: Record<string, string> = {
   mcp_remote: "remote http",
@@ -77,7 +78,7 @@ export function CatalogDialog({ connection, onClose }: { connection: ToolConnect
     <Dialog open onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Tool catalog — {connection.name}</DialogTitle>
+          <DialogTitle>{translate("Tool catalog —")} {connection.name}</DialogTitle>
         </DialogHeader>
         {catalog.isLoading ? (
           <LoadingState />
@@ -85,7 +86,7 @@ export function CatalogDialog({ connection, onClose }: { connection: ToolConnect
           <ErrorState error={catalog.error} onRetry={() => catalog.refetch()} />
         ) : (catalog.data?.catalog ?? []).length === 0 ? (
           <p className="py-6 text-sm text-muted-foreground">
-            No tools discovered yet. Use “Refresh catalog” to discover tools from this connection.
+            {translate("No tools discovered yet. Use “Refresh catalog” to discover tools from this connection.")}
           </p>
         ) : (
           <ul className="max-h-(--sz-60vh) divide-y divide-border overflow-y-auto">
@@ -226,7 +227,7 @@ export function AddConnectionDialog({
     },
     onError: (err) =>
       pushToast({
-        title: "Could not create connection",
+        title: translate("Could not create connection"),
         body: err instanceof ApiError ? err.message : String(err),
         tone: "error",
       }),
@@ -240,7 +241,7 @@ export function AddConnectionDialog({
     },
     onError: (err) =>
       pushToast({
-        title: "Probe failed",
+        title: translate("Probe failed"),
         body: err instanceof ApiError ? err.message : String(err),
         tone: "error",
       }),
@@ -251,12 +252,12 @@ export function AddConnectionDialog({
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: queryKeys.tools.connections(companyId) });
       qc.invalidateQueries({ queryKey: queryKeys.tools.applications(companyId) });
-      pushToast({ title: "Connection activated", tone: "success" });
+      pushToast({ title: translate("Connection activated"), tone: "success" });
       onClose();
     },
     onError: (err) =>
       pushToast({
-        title: "Activation failed",
+        title: translate("Activation failed"),
         body: err instanceof ApiError ? err.message : String(err),
         tone: "error",
       }),
@@ -273,47 +274,46 @@ export function AddConnectionDialog({
   const appChoiceValid = applicationMode === "existing" ? !!applicationId : applicationName.trim().length > 0;
   const canCreate = appChoiceValid && name.trim().length > 0 && transportConfigValid && !create.isPending;
   const locked = !!draft;
-  const inferredType = transport === "mcp_remote" ? "MCP HTTP" : "MCP stdio";
+  const inferredType = transport === "mcp_remote" ? translate("MCP HTTP") : translate("MCP stdio");
 
   return (
     <Dialog open onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="max-w-xl">
         <DialogHeader>
-          <DialogTitle>Add application</DialogTitle>
+          <DialogTitle>{translate("Add application")}</DialogTitle>
           <DialogDescription>
-            Choose an existing application or create one as part of the same connection flow. Credentials stay as
-            vault references and the connection is probed before activation.
+            {translate("Choose an existing application or create one as part of the same connection flow. Credentials stay as vault references and the connection is probed before activation.")}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-3">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <span className={step === 1 ? "font-medium text-foreground" : ""}>1 Application</span>
+            <span className={step === 1 ? "font-medium text-foreground" : ""}>{translate("1 Application")}</span>
             <span>/</span>
-            <span className={step === 2 ? "font-medium text-foreground" : ""}>2 Connection</span>
+            <span className={step === 2 ? "font-medium text-foreground" : ""}>{translate("2 Connection")}</span>
           </div>
 
           {step === 1 && !locked ? (
             <>
               <div className="space-y-1.5">
-                <Label>Application</Label>
+                <Label>{translate("Application")}</Label>
                 <Select value={applicationMode} onValueChange={(v) => setApplicationMode(v as "existing" | "new")}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="existing">Use existing application</SelectItem>
-                    <SelectItem value="new">Create new application</SelectItem>
+                    <SelectItem value="existing">{translate("Use existing application")}</SelectItem>
+                    <SelectItem value="new">{translate("Create new application")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               {applicationMode === "existing" ? (
                 <div className="space-y-1.5">
-                  <Label>Existing application</Label>
+                  <Label>{translate("Existing application")}</Label>
                   <Select value={applicationId} onValueChange={setApplicationId}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select an application" />
+                      <SelectValue placeholder={translate("Select an application")} />
                     </SelectTrigger>
                     <SelectContent>
                       {(apps.data?.applications ?? []).map((a) => (
@@ -326,15 +326,15 @@ export function AddConnectionDialog({
                 </div>
               ) : (
                 <div className="space-y-1.5">
-                  <Label htmlFor="app-name">New application name</Label>
+                  <Label htmlFor="app-name">{translate("New application name")}</Label>
                   <Input
                     id="app-name"
                     value={applicationName}
                     onChange={(e) => setApplicationName(e.target.value)}
-                    placeholder="e.g. GitHub Triage"
+                    placeholder={translate("e.g. GitHub Triage")}
                   />
                   <p className="text-xs text-muted-foreground">
-                    Application type is inferred from the transport you choose next.
+                    {translate("Application type is inferred from the transport you choose next.")}
                   </p>
                 </div>
               )}
@@ -345,24 +345,24 @@ export function AddConnectionDialog({
             <>
               {applicationMode === "new" ? (
                 <div className="rounded-md border border-border bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
-                  <span className="font-medium text-foreground">{applicationName.trim()}</span> will be created as{" "}
+                  <span className="font-medium text-foreground">{applicationName.trim()}</span> {translate("will be created as")}{" "}
                   {inferredType}.
                 </div>
               ) : null}
 
               <div className="space-y-1.5">
-                <Label htmlFor="conn-name">Connection name</Label>
+                <Label htmlFor="conn-name">{translate("Connection name")}</Label>
                 <Input
                   id="conn-name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Production GitHub"
+                  placeholder={translate("e.g. Production GitHub")}
                   disabled={locked}
                 />
               </div>
 
               <div className="space-y-1.5">
-                <Label>Transport</Label>
+                <Label>{translate("Transport")}</Label>
                 <Select
                   value={transport}
                   onValueChange={(v) => setTransport(v as "mcp_remote" | "local_stdio")}
@@ -372,15 +372,15 @@ export function AddConnectionDialog({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="mcp_remote">Remote HTTP (no local process)</SelectItem>
-                    <SelectItem value="local_stdio">Local stdio (approved template)</SelectItem>
+                    <SelectItem value="mcp_remote">{translate("Remote HTTP (no local process)")}</SelectItem>
+                    <SelectItem value="local_stdio">{translate("Local stdio (approved template)")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               {transport === "mcp_remote" ? (
                 <div className="space-y-1.5">
-                  <Label htmlFor="conn-url">Endpoint URL</Label>
+                  <Label htmlFor="conn-url">{translate("Endpoint URL")}</Label>
                   <Input
                     id="conn-url"
                     value={endpointUrl}
@@ -391,10 +391,10 @@ export function AddConnectionDialog({
                 </div>
               ) : (
                 <div className="space-y-1.5">
-                  <Label>Command template</Label>
+                  <Label>{translate("Command template")}</Label>
                   <Select value={templateId} onValueChange={setTemplateId} disabled={locked}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select an approved template" />
+                      <SelectValue placeholder={translate("Select an approved template")} />
                     </SelectTrigger>
                     <SelectContent>
                       {(templates.data?.templates ?? []).map((t) => (
@@ -405,14 +405,14 @@ export function AddConnectionDialog({
                     </SelectContent>
                   </Select>
                   <p className="text-xs text-muted-foreground">
-                    Only board-approved command templates can run. Arbitrary commands are never accepted.
+                    {translate("Only board-approved command templates can run. Arbitrary commands are never accepted.")}
                   </p>
                 </div>
               )}
 
               {/* Vault-reference credential picker — no free-text token field. */}
               <div className="space-y-1.5">
-                <Label>Credential references</Label>
+                <Label>{translate("Credential references")}</Label>
                 {creds.length > 0 ? (
                   <ul className="space-y-1">
                     {creds.map((c, i) => (
@@ -430,7 +430,7 @@ export function AddConnectionDialog({
                             type="button"
                             className="ml-auto text-muted-foreground hover:text-destructive"
                             onClick={() => setCreds((cs) => cs.filter((_, idx) => idx !== i))}
-                            aria-label={`Remove credential reference for ${secretName(c.secretId)}`}
+                            aria-label={translate("Remove credential reference for {{secretName}}", { secretName: secretName(c.secretId) })}
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                           </button>
@@ -445,7 +445,7 @@ export function AddConnectionDialog({
                       <div className="flex-1 space-y-1">
                         <Select value={pendingSecretId} onValueChange={setPendingSecretId}>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a vault secret" />
+                            <SelectValue placeholder={translate("Select a vault secret")} />
                           </SelectTrigger>
                           <SelectContent>
                             {(secrets.data ?? []).map((s) => (
@@ -459,12 +459,12 @@ export function AddConnectionDialog({
                       <Input
                         value={pendingHeader}
                         onChange={(e) => setPendingHeader(e.target.value)}
-                        placeholder="Header"
+                        placeholder={translate("Header")}
                         className="w-32"
-                        aria-label="Header name"
+                        aria-label={translate("Header name")}
                       />
                       <Button type="button" size="sm" variant="outline" onClick={addCred} disabled={!pendingSecretId}>
-                        Add
+                        {translate("Add")}
                       </Button>
                     </div>
                     {pendingSecretId ? (
@@ -474,8 +474,8 @@ export function AddConnectionDialog({
                       </p>
                     ) : null}
                     <p className="text-xs text-muted-foreground">
-                      Free-text secrets are not accepted — pick a vault entry; Paperclip stores only the
-                      <span className="font-mono"> vault://</span> reference and resolves it at gateway use time.
+                      {translate("Free-text secrets are not accepted — pick a vault entry; Paperclip stores only the")}
+                      <span className="font-mono"> {"vault://"}</span> {translate("reference and resolves it at gateway use time.")}
                     </p>
                   </>
                 ) : null}
@@ -487,14 +487,14 @@ export function AddConnectionDialog({
           {locked ? (
             probe.isPending ? (
               <div className="rounded-md border border-border bg-muted/40 p-3">
-                <LoadingState label="Probing connection…" />
+                <LoadingState label={translate("Probing connection…")} />
               </div>
             ) : probe.isError ? (
               <ErrorState error={probe.error} onRetry={() => draft && probe.mutate(draft.id)} />
             ) : probeResult ? (
               <div className="rounded-md border border-border bg-muted/40 p-3">
                 <div className="flex items-center gap-2 text-sm">
-                  <span className="font-medium text-foreground">Probe result</span>
+                  <span className="font-medium text-foreground">{translate("Probe result")}</span>
                   <HealthBadge status={probeResult.connection.healthStatus} />
                 </div>
                 <div className="mt-2 grid grid-cols-3 gap-2">
@@ -502,19 +502,19 @@ export function AddConnectionDialog({
                     <p className="text-lg font-semibold tabular-nums text-foreground">
                       {probeResult.toolCount ?? "—"}
                     </p>
-                    <p className="text-xs text-muted-foreground">tools discovered</p>
+                    <p className="text-xs text-muted-foreground">{translate("tools discovered")}</p>
                   </div>
                   <div>
                     <p className="text-lg font-semibold tabular-nums text-foreground">
-                      {probeResult.latencyMs != null ? `${probeResult.latencyMs}ms` : "—"}
+                      {probeResult.latencyMs != null ? translate("{{latencyMs}}ms", { latencyMs: probeResult.latencyMs }) : "—"}
                     </p>
-                    <p className="text-xs text-muted-foreground">probe latency</p>
+                    <p className="text-xs text-muted-foreground">{translate("probe latency")}</p>
                   </div>
                   <div>
                     <p className="text-lg font-semibold tabular-nums text-foreground">
                       {probeResult.quarantinedCount}
                     </p>
-                    <p className="text-xs text-muted-foreground">quarantined</p>
+                    <p className="text-xs text-muted-foreground">{translate("quarantined")}</p>
                   </div>
                 </div>
                 {probeResult.connection.healthMessage ? (
@@ -524,8 +524,7 @@ export function AddConnectionDialog({
                   <p className="mt-1 text-xs text-destructive">{probeResult.connection.lastError}</p>
                 ) : null}
                 <p className="mt-2 text-(length:--text-micro) text-muted-foreground">
-                  Probe latency is a single round-trip sample. Aggregate p95 latency across traffic is tracked on
-                  the Runtime tab once the connection is live.
+                  {translate("Probe latency is a single round-trip sample. Aggregate p95 latency across traffic is tracked on the Runtime tab once the connection is live.")}
                 </p>
               </div>
             ) : null
@@ -534,29 +533,29 @@ export function AddConnectionDialog({
 
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>
-            Cancel
+            {translate("Cancel")}
           </Button>
           {step === 1 && !locked ? (
             <Button disabled={!appChoiceValid} onClick={() => setStep(2)}>
-              Continue
+              {translate("Continue")}
             </Button>
           ) : !locked ? (
             <>
               <Button variant="outline" onClick={() => setStep(1)}>
-                Back
+                {translate("Back")}
               </Button>
               <Button disabled={!canCreate} onClick={() => create.mutate()}>
-                {create.isPending ? "Creating draft…" : "Create & probe"}
+                {create.isPending ? translate("Creating draft…") : translate("Create & probe")}
               </Button>
             </>
           ) : (
             <>
               <Button variant="outline" disabled={probe.isPending} onClick={() => draft && probe.mutate(draft.id)}>
                 <Stethoscope className="mr-1 h-3.5 w-3.5" />
-                {probe.isPending ? "Probing…" : "Re-probe"}
+                {probe.isPending ? translate("Probing…") : translate("Re-probe")}
               </Button>
               <Button disabled={activate.isPending || probe.isPending} onClick={() => draft && activate.mutate(draft.id)}>
-                {activate.isPending ? "Activating…" : "Activate"}
+                {activate.isPending ? translate("Activating…") : translate("Activate")}
               </Button>
             </>
           )}

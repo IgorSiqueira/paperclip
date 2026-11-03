@@ -1,9 +1,5 @@
 {
-  "app": {
-    "noCompanies": {
-      "title": "สร้างบริษัทแรกของคุณ",
-      "description": "เริ่มต้นด้วยการสร้างบริษัท",
-      "newCompany": "บริษัทใหม่"
-    }
-  }
+  "Create your first organization": "สร้างบริษัทแรกของคุณ",
+  "Get started by creating an organization.": "เริ่มต้นด้วยการสร้างบริษัท",
+  "New Organization": "บริษัทใหม่"
 }

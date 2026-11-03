@@ -9,6 +9,7 @@ import { attentionIdleDays } from "../lib/attention";
 import { AttentionQueueRow } from "./AttentionQueueRow";
 import { IssueGroupHeader } from "./IssueGroupHeader";
 import { Button } from "./ui/button";
+import { t } from "@/i18n";
 
 /**
  * A collapsible shelf header + body (snoozed / dismissed / aging / decided /
@@ -77,12 +78,12 @@ export function AgingItemRow({
     mutationFn: () => decisionQueuesApi.setKeep(companyId, item.sourceKind, item.subject.id, true),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.attention(companyId) });
-      pushToast({ title: "Kept on desk", body: item.subject.title ?? undefined, tone: "success" });
+      pushToast({ title: t("Kept on desk"), body: item.subject.title ?? undefined, tone: "success" });
     },
     onError: (error) =>
       pushToast({
-        title: "Could not keep this decision",
-        body: error instanceof Error ? error.message : "Please try again.",
+        title: t("Could not keep this decision"),
+        body: error instanceof Error ? error.message : t("Please try again."),
         tone: "error",
       }),
   });
@@ -91,7 +92,7 @@ export function AgingItemRow({
     <div className="space-y-1.5">
       <div className="flex items-center justify-between gap-2 px-1">
         <span className="text-(length:--text-nano) text-muted-foreground">
-          Idle {idleDays} {idleDays === 1 ? "day" : "days"}
+          {t("Idle")} {idleDays} {idleDays === 1 ? t("day") : t("days")}
         </span>
         <Button
           type="button"
@@ -103,7 +104,7 @@ export function AgingItemRow({
         >
           {keep.isPending && <Loader2 className="h-3 w-3 animate-spin" />}
           <Sun className="h-3.5 w-3.5" />
-          {item.keep ? "Kept" : "Keep on desk"}
+          {item.keep ? t("Kept") : t("Keep on desk")}
         </Button>
       </div>
       <AttentionQueueRow

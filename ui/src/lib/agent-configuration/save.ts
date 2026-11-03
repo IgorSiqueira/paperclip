@@ -7,6 +7,7 @@ import { planToolChanges } from "./tools";
 import { planChannelChanges } from "./channels";
 import { requireItem, unique, type ConfigurationStep, type AddConfigurationStep } from "./steps";
 import { resolveAgentConfiguration } from "./resolve";
+import { t } from "@/i18n";
 
 export interface ConfigurationReceipt { label: string; id: string; token?: string }
 export class ConfigurationSaveInterrupted extends Error {
@@ -86,7 +87,7 @@ function planSecrets(snapshot: AgentConfigurationSnapshot, document: AgentConfig
     add(`Create secret: ${operation.secret.name}`, async () => {
       if (operation.bind.env.length || operation.bind.api.length) assertBindingsCurrent((await agentsApi.getConfiguration(id, companyId)).adapterConfig);
       const created = await secretsApi.create(companyId, operation.secret);
-      receipt({ label: `Secret: ${created.name}`, id: created.id });
+      receipt({ label: t("Secret: {{name}}", { name: created.name }), id: created.id });
       if (!operation.bind.env.length && !operation.bind.api.length) return;
       const current = await agentsApi.getConfiguration(id, companyId);
       assertBindingsCurrent(current.adapterConfig);
@@ -150,7 +151,7 @@ function planResolvedConfiguration(snapshot: AgentConfigurationSnapshot, documen
     }
     for (const input of keys.create) add(`Create API key: ${input.name}`, async () => {
       const key = await agentsApi.createKey(snapshot.agent.id, input.name, snapshot.agent.companyId, input.scope);
-      receipt({ label: `API key: ${key.name}`, id: key.id, token: key.token });
+      receipt({ label: t("API key: {{name}}", { name: key.name }), id: key.id, token: key.token });
     });
   }
   if (document.spec.revisions?.restore) {

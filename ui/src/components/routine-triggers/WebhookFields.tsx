@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { copyTextToClipboard } from "@/lib/clipboard";
 import { AgentSetupPrompt } from "@/components/AgentSetupPrompt";
+import { t } from "@/i18n";
 
 export function CopyField({
   label,
@@ -26,7 +27,7 @@ export function CopyField({
         <Button
           variant="ghost"
           size="sm"
-          aria-label={`Copy ${label}`}
+          aria-label={t("Copy {{label}}", { label })}
           onClick={async () => {
             try {
               await copyTextToClipboard(value);
@@ -42,18 +43,18 @@ export function CopyField({
           ) : (
             <Copy className="h-3.5 w-3.5" />
           )}
-          {copied ? "Copied" : "Copy"}
+          {copied ? t("Copied") : t("Copy")}
         </Button>
       </div>
       {help && <p className="text-xs text-muted-foreground">{help}</p>}
       {error && (
         <div className="space-y-2">
           <p role="alert" className="text-xs text-destructive">
-            Copy failed. Select and copy the text below.
+            {t("Copy failed. Select and copy the text below.")}
           </p>
           <textarea
             readOnly
-            aria-label={`${label} text`}
+            aria-label={t("{{label}} text", { label })}
             value={value}
             rows={5}
             className="w-full rounded-md border border-input bg-background p-3 font-mono text-xs"
@@ -67,21 +68,20 @@ export function CopyField({
 export function AgentInstructions({ value }: { value: string }) {
   return (
     <section
-      aria-label="Agent instructions"
+      aria-label={t("Agent instructions")}
       className="space-y-3 rounded-md bg-muted/40 p-4"
     >
       <div className="space-y-1">
-        <h2 className="text-sm font-medium">Agent instructions</h2>
+        <h2 className="text-sm font-medium">{t("Agent instructions")}</h2>
         <p className="text-sm text-muted-foreground">
-          Give your agent everything it needs to connect this webhook: the URL,
-          authentication key, and step-by-step instructions.
+          {t("Give your agent everything it needs to connect this webhook: the URL, authentication key, and step-by-step instructions.")}
         </p>
       </div>
       <AgentSetupPrompt
         prompt={value}
-        label="Copy for your agent"
-        title="Webhook setup"
-        description="Paste this into your agent to connect this webhook to your routine."
+        label={t("Copy for your agent")}
+        title={t("Webhook setup")}
+        description={t("Paste this into your agent to connect this webhook to your routine.")}
       />
     </section>
   );

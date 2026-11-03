@@ -4,6 +4,7 @@ import { StatusBadge } from "./StatusBadge";
 import { ChevronRight } from "lucide-react";
 import { cn } from "../lib/utils";
 import { useState } from "react";
+import { t } from "@/i18n";
 
 interface GoalTreeProps {
   goals: Goal[];
@@ -35,7 +36,7 @@ function GoalNode({ goal, children, allGoals, depth, goalLink, onSelect }: GoalN
             e.stopPropagation();
             setExpanded(!expanded);
           }}
-          aria-label={`${goal.title} subtree`}
+          aria-label={t("{{title}} subtree", { title: goal.title })}
           aria-expanded={expanded}
         >
           <ChevronRight
@@ -98,7 +99,7 @@ export function GoalTree({ goals, goalLink, onSelect }: GoalTreeProps) {
   const roots = goals.filter((g) => !g.parentId || !goalIds.has(g.parentId));
 
   if (goals.length === 0) {
-    return <p className="text-sm text-muted-foreground">No goals.</p>;
+    return <p className="text-sm text-muted-foreground">{t("No goals.")}</p>;
   }
 
   return (

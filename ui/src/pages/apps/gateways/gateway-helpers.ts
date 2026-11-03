@@ -7,6 +7,7 @@ import type {
   ToolProfileWithDetails,
 } from "@paperclipai/shared";
 import { humanizeConnectionDisplayName, isToolConnectionAttentionHealth } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 /** Days before expiry at which we surface a token as "Expiring". */
 export const TOKEN_EXPIRING_WINDOW_DAYS = 14;
@@ -38,10 +39,10 @@ export function tokenStatus(
 }
 
 export const TOKEN_STATUS_LABEL: Record<TokenStatus, string> = {
-  active: "Active",
-  expiring: "Expiring",
-  expired: "Expired",
-  revoked: "Revoked",
+  active: t("Active"),
+  expiring: t("Expiring"),
+  expired: t("Expired"),
+  revoked: t("Revoked"),
 };
 
 /** Count of tokens that can currently authenticate (not revoked, not expired). */
@@ -91,9 +92,9 @@ export function formatScope(
 
 export function formatOwner(gateway: ToolMcpGatewayWithTokens, agentNames: Map<string, string>): string {
   if (gateway.createdByAgentId) {
-    return agentNames.get(gateway.createdByAgentId) ?? `Agent ${shortId(gateway.createdByAgentId)}`;
+    return agentNames.get(gateway.createdByAgentId) ?? t("Agent {{shortId}}", { shortId: shortId(gateway.createdByAgentId) });
   }
-  return "Board";
+  return t("Board");
 }
 
 /** Whether the gateway is exposing tools to clients right now. */
@@ -103,13 +104,13 @@ export function isGatewayOn(gateway: ToolMcpGatewayWithTokens): boolean {
 
 /** Human summary of how many tools a profile allows. */
 export function allowedToolsLabel(profile: ToolProfileWithDetails | undefined): string {
-  if (!profile) return "Profile unavailable";
+  if (!profile) return t("Profile unavailable");
   const { accessMode, allowedToolCount, totalToolCount, excludedToolCount } = profile.summary;
   const count =
     accessMode === "all_except"
       ? Math.max(totalToolCount - excludedToolCount, 0)
       : allowedToolCount;
-  if (count === 0) return "No tools allowed";
+  if (count === 0) return t("No tools allowed");
   return `${count} ${count === 1 ? "tool" : "tools"}`;
 }
 
@@ -175,7 +176,7 @@ export function deriveGatewayApps(
       toolCount: toolCountByApp.get(applicationId) ?? 0,
       needsAttention: Boolean(attentionConnection),
       attentionReason: attentionConnection
-        ? "Sign-in expired — reconnect to restore access."
+        ? t("Sign-in expired — reconnect to restore access.")
         : null,
     });
   }

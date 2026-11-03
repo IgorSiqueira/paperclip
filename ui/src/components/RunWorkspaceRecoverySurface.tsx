@@ -18,6 +18,7 @@ import {
   canBoardManageRuntime,
   readRecoveryReconcileWorkspaceId,
 } from "../lib/recovery-reconcile";
+import { t } from "@/i18n";
 
 /** The run errorCode Paperclip stamps when it declines a run over a git workspace it can't validate. */
 export const WORKSPACE_VALIDATION_RUN_ERROR_CODE = "workspace_validation_failed";
@@ -113,21 +114,21 @@ function WorkspaceValidationRecoverySurface({ run }: { run: HeartbeatRun }) {
       pushToast(
         variables.mode === "quarantine_restore"
           ? {
-              title: "Workspace repaired",
-              body: "Dirty changes were quarantined onto a rescue branch and the recorded branch restored; the task will resume.",
+              title: t("Workspace repaired"),
+              body: t("Dirty changes were quarantined onto a rescue branch and the recorded branch restored; the task will resume."),
               tone: "success",
             }
           : {
-              title: "Workspace branch reconciled",
-              body: "The recorded branch now matches the live branch; the task will resume.",
+              title: t("Workspace branch reconciled"),
+              body: t("The recorded branch now matches the live branch; the task will resume."),
               tone: "success",
             },
       );
     },
     onError: (err) => {
       pushToast({
-        title: "Reconcile failed",
-        body: err instanceof Error ? err.message : "Unable to reconcile the workspace branch.",
+        title: t("Reconcile failed"),
+        body: err instanceof Error ? err.message : t("Unable to reconcile the workspace branch."),
         tone: "error",
       });
     },
@@ -168,10 +169,10 @@ function WorkspaceValidationRecoverySurface({ run }: { run: HeartbeatRun }) {
     onSuccess: (created) => {
       invalidate();
       pushToast({
-        title: "Isolated re-issue created",
+        title: t("Isolated re-issue created"),
         body: created.identifier
-          ? `${created.identifier} will run on a fresh isolated workspace.`
-          : "A fresh isolated re-issue was created.",
+          ? t("{{identifier}} will run on a fresh isolated workspace.", { identifier: created.identifier })
+          : t("A fresh isolated re-issue was created."),
         tone: "success",
       });
       if (created.identifier) {
@@ -180,8 +181,8 @@ function WorkspaceValidationRecoverySurface({ run }: { run: HeartbeatRun }) {
     },
     onError: (err) => {
       pushToast({
-        title: "Re-issue failed",
-        body: err instanceof Error ? err.message : "Unable to create an isolated re-issue.",
+        title: t("Re-issue failed"),
+        body: err instanceof Error ? err.message : t("Unable to create an isolated re-issue."),
         tone: "error",
       });
     },
@@ -204,8 +205,8 @@ function WorkspaceValidationRecoverySurface({ run }: { run: HeartbeatRun }) {
     },
     onError: (err) => {
       pushToast({
-        title: "Recovery resolution failed",
-        body: err instanceof Error ? err.message : "Unable to resolve recovery action",
+        title: t("Recovery resolution failed"),
+        body: err instanceof Error ? err.message : t("Unable to resolve recovery action"),
         tone: "error",
       });
     },
@@ -265,7 +266,7 @@ function WorkspaceValidationRecoverySurface({ run }: { run: HeartbeatRun }) {
   return (
     <div className="space-y-2" data-testid="run-workspace-recovery-surface">
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-medium text-muted-foreground">Workspace recovery</span>
+        <span className="text-xs font-medium text-muted-foreground">{t("Workspace recovery")}</span>
         {issue?.identifier ? (
           <a
             href={`/issues/${issue.identifier}`}

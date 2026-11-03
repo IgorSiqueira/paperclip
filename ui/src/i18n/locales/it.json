@@ -1,9 +1,5 @@
 {
-  "app": {
-    "noCompanies": {
-      "title": "Crea la tua prima azienda",
-      "description": "Inizia creando un'azienda.",
-      "newCompany": "Nuova azienda"
-    }
-  }
+  "Create your first organization": "Crea la tua prima azienda",
+  "Get started by creating an organization.": "Inizia creando un'azienda.",
+  "New Organization": "Nuova azienda"
 }
