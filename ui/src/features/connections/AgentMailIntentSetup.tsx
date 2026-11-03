@@ -4,6 +4,7 @@ import { isUuidLike } from "@paperclipai/shared";
 import { emailApi } from "@/api/email";
 import { Button } from "@/components/ui/button";
 import { AgentMailCredentialField } from "./AgentMailCredentialField";
+import { t } from "@/i18n";
 
 interface InlineEmailDraft {
   setupRequestId: string;
@@ -95,20 +96,20 @@ export function AgentMailIntentSetup({ companyId, agentId, requestId, savedCrede
     }
   }}>
     {credentialId || inboxConnectionId
-      ? <p className="text-sm text-muted-foreground">{inboxConnectionId ? "Your inbox is ready. Continue to resume the chat." : "API key saved. Finish creating the inbox."}</p>
+      ? <p className="text-sm text-muted-foreground">{inboxConnectionId ? t("Your inbox is ready. Continue to resume the chat.") : t("API key saved. Finish creating the inbox.")}</p>
       : <AgentMailCredentialField companyId={companyId} connectionId={selectedCredentialId}
           onConnectionChange={id => { setSelectedCredentialId(id); setApiKey(""); }}
           value={apiKey} onChange={setApiKey} disabled={setup.isPending || changeKey.isPending || declining} />}
     {credentialId && !inboxConnectionId && <Button type="button" variant="link" size="sm" className="h-auto p-0"
       disabled={setup.isPending || changeKey.isPending || declining} onClick={() => changeKey.mutate(setupRequestId)}>
-      {changeKey.isPending ? "Checking setup…" : "Change API key"}
+      {changeKey.isPending ? t("Checking setup…") : t("Change API key")}
     </Button>}
     {changeKey.error && <p className="text-sm text-destructive" role="alert">{changeKey.error.message}</p>}
     {setup.error && <p className="text-sm text-destructive" role="alert">{setup.error.message}</p>}
     <div className="flex items-center justify-between gap-2">
-      <Button type="button" variant="ghost" disabled={setup.isPending || changeKey.isPending || declining} onClick={onDecline}>Not now</Button>
+      <Button type="button" variant="ghost" disabled={setup.isPending || changeKey.isPending || declining} onClick={onDecline}>{t("Not now")}</Button>
       <Button type="submit" disabled={setup.isPending || changeKey.isPending || declining || (!credentialId && !selectedCredentialId && !inboxConnectionId && !apiKey.trim())}>
-        {setup.isPending ? "Connecting…" : inboxConnectionId ? "Continue" : credentialId ? "Finish setup" : "Connect AgentMail"}
+        {setup.isPending ? t("Connecting…") : inboxConnectionId ? t("Continue") : credentialId ? t("Finish setup") : t("Connect AgentMail")}
       </Button>
     </div>
   </form>;

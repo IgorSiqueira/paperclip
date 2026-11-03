@@ -9,6 +9,7 @@ import type {
   AttentionSourceKind,
   AttentionWorkspaceRef,
 } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 export type AttentionListOptions = AttentionFeedQuery;
 
@@ -48,18 +49,18 @@ interface SourceMeta {
 }
 
 const SOURCE_META: Record<AttentionSourceKind, SourceMeta> = {
-  approval: { label: "Approval" },
-  decision: { label: "Decision" },
-  issue_thread_interaction: { label: "Decision requested" },
-  join_request: { label: "Join request" },
-  recovery_action: { label: "Recovery" },
+  approval: { label: t("Approval") },
+  decision: { label: t("Decision") },
+  issue_thread_interaction: { label: t("Decision requested") },
+  join_request: { label: t("Join request") },
+  recovery_action: { label: t("Recovery") },
   // Read compatibility for persisted decisions from the retired feature.
-  productivity_review: { label: "Task" },
-  blocker_attention: { label: "Blocked dependency" },
-  review: { label: "Review" },
-  failed_run: { label: "Failed run" },
-  budget_alert: { label: "Budget" },
-  agent_error_alert: { label: "Agent error" },
+  productivity_review: { label: t("Task") },
+  blocker_attention: { label: t("Blocked dependency") },
+  review: { label: t("Review") },
+  failed_run: { label: t("Failed run") },
+  budget_alert: { label: t("Budget") },
+  agent_error_alert: { label: t("Agent error") },
 };
 
 export function sourceMeta(kind: AttentionSourceKind): SourceMeta {
@@ -74,10 +75,10 @@ interface SeverityStyle {
 }
 
 const SEVERITY_STYLE: Record<AttentionSeverity, SeverityStyle> = {
-  critical: { accent: "bg-red-500", dot: "bg-red-500", label: "Critical" },
-  high: { accent: "bg-orange-500", dot: "bg-orange-500", label: "High" },
-  medium: { accent: "bg-yellow-500", dot: "bg-yellow-500", label: "Medium" },
-  low: { accent: "bg-blue-500", dot: "bg-blue-500", label: "Low" },
+  critical: { accent: "bg-red-500", dot: "bg-red-500", label: t("Critical") },
+  high: { accent: "bg-orange-500", dot: "bg-orange-500", label: t("High") },
+  medium: { accent: "bg-yellow-500", dot: "bg-yellow-500", label: t("Medium") },
+  low: { accent: "bg-blue-500", dot: "bg-blue-500", label: t("Low") },
 };
 
 export function severityStyle(severity: AttentionSeverity): SeverityStyle {
@@ -224,7 +225,7 @@ export function attentionDetailLine(item: AttentionItem): string | null {
     }
     case "item_verdicts": {
       const q = quote(detail.promptExcerpt);
-      const label = `${countNoun(detail.itemCount, "item")} to verdict`;
+      const label = t("{{countNoun}} to verdict", { countNoun: countNoun(detail.itemCount, "item") });
       return q ? `${label} — ${q}` : label;
     }
     case "failed_run":
@@ -237,10 +238,10 @@ export function attentionDetailLine(item: AttentionItem): string | null {
       const b = detail.blockingIssue;
       if (!b) return null;
       const id = b.identifier ? `${b.identifier} ` : "";
-      return b.title ? `Blocked by ${id}${b.title}` : b.identifier ? `Blocked by ${b.identifier}` : null;
+      return b.title ? t("Blocked by {{id}}{{title}}", { id, title: b.title }) : b.identifier ? t("Blocked by {{identifier}}", { identifier: b.identifier }) : null;
     }
     case "budget":
-      return `${Math.round(detail.observedPercent)}% of budget used ($${detail.amountObserved} / $${detail.amountLimit})`;
+      return t("{{round}}% of budget used (${{amountObserved}} / ${{amountLimit}})", { round: Math.round(detail.observedPercent), amountObserved: detail.amountObserved, amountLimit: detail.amountLimit });
     case "generic":
       return quote(detail.summaryExcerpt);
     default:
@@ -371,9 +372,9 @@ export function buildDeskShelves(items: AttentionItem[], now: number): DeskShelf
   const earlier = rest.filter((item) => !attentionIsNewToday(item, now));
 
   const shelves: DeskShelf[] = [];
-  if (decideNow.length > 0) shelves.push({ key: "desk:decide-now", label: "Decide now", items: decideNow });
-  if (newToday.length > 0) shelves.push({ key: "desk:new-today", label: "New today", items: newToday });
-  if (earlier.length > 0) shelves.push({ key: "desk:earlier", label: "Earlier", items: earlier });
+  if (decideNow.length > 0) shelves.push({ key: "desk:decide-now", label: t("Decide now"), items: decideNow });
+  if (newToday.length > 0) shelves.push({ key: "desk:new-today", label: t("New today"), items: newToday });
+  if (earlier.length > 0) shelves.push({ key: "desk:earlier", label: t("Earlier"), items: earlier });
   return shelves;
 }
 
@@ -420,10 +421,10 @@ export const DECIDE_BY_OPTIONS: ReadonlyArray<[DecideByPreset, string]> = [
 
 /** Human label for any stored `decideBy` value (preset or `YYYY-MM-DD`). */
 export function decideByLabel(decideBy: string | null): string {
-  if (!decideBy) return "Not set";
-  if (decideBy === "today") return "Today";
-  if (decideBy === "this_week") return "This week";
-  if (decideBy === "whenever") return "Whenever";
+  if (!decideBy) return t("Not set");
+  if (decideBy === "today") return t("Today");
+  if (decideBy === "this_week") return t("This week");
+  if (decideBy === "whenever") return t("Whenever");
   if (/^\d{4}-\d{2}-\d{2}$/.test(decideBy)) {
     const parsed = new Date(`${decideBy}T00:00:00.000Z`);
     return Number.isFinite(parsed.getTime())
@@ -819,10 +820,10 @@ const DATE_BUCKET_ORDER = ["today", "yesterday", "this_week", "earlier"] as cons
 type DateBucket = (typeof DATE_BUCKET_ORDER)[number];
 
 const DATE_BUCKET_LABELS: Record<DateBucket, string> = {
-  today: "Today",
-  yesterday: "Yesterday",
-  this_week: "This week",
-  earlier: "Earlier",
+  today: t("Today"),
+  yesterday: t("Yesterday"),
+  this_week: t("This week"),
+  earlier: t("Earlier"),
 };
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
@@ -842,10 +843,10 @@ export function attentionDateBucket(activityAt: string, now: number): DateBucket
 }
 
 const SEVERITY_LABEL: Record<AttentionSeverity, string> = {
-  critical: "Critical",
-  high: "High",
-  medium: "Medium",
-  low: "Low",
+  critical: t("Critical"),
+  high: t("High"),
+  medium: t("Medium"),
+  low: t("Low"),
 };
 
 /**
@@ -904,7 +905,7 @@ export function groupAttentionItems(
         ? { key: `type:${item.sourceKind}`, label: sourceMeta(item.sourceKind).label }
         : item.project
           ? { key: `project:${item.project.id}`, label: item.project.name }
-          : { key: `project:${NO_GROUP_SENTINEL}`, label: "No project" };
+          : { key: `project:${NO_GROUP_SENTINEL}`, label: t("No project") };
     const existing = groups.get(resolved.key);
     const ts = attentionActivityTimestamp(item);
     if (existing) {

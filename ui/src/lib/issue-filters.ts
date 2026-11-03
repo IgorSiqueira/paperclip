@@ -1,4 +1,5 @@
 import { isAgentCreatedIssue, type ExternalObjectSummary, type Issue } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 export type IssueFilterWorkspaceLookup = {
   mode?: string | null;
@@ -66,14 +67,14 @@ export const externalObjectFilterOrder = [
 ];
 
 const EXTERNAL_OBJECT_FILTER_LABELS: Record<string, string> = {
-  failed: "Any failed",
-  waiting: "Any waiting",
-  running: "Any running",
-  auth_required: "Auth required",
-  rate_limited: "Rate limited",
-  unreachable: "Unreachable",
-  stale: "Stale",
-  none: "No external objects",
+  failed: t("Any failed"),
+  waiting: t("Any waiting"),
+  running: t("Any running"),
+  auth_required: t("Auth required"),
+  rate_limited: t("Rate limited"),
+  unreachable: t("Unreachable"),
+  stale: t("Stale"),
+  none: t("No external objects"),
 };
 
 export function externalObjectFilterLabel(value: string): string {
@@ -84,10 +85,10 @@ export const issueStatusOrder = ["in_progress", "monitoring", "todo", "backlog",
 export const issuePriorityOrder = ["critical", "high", "medium", "low"];
 
 export const issueQuickFilterPresets = [
-  { label: "All", statuses: [] as string[] },
-  { label: "Active", statuses: ["todo", "in_progress", "monitoring", "in_review", "blocked"] },
-  { label: "Backlog", statuses: ["backlog"] },
-  { label: "Done", statuses: ["done", "cancelled"] },
+  { label: t("All"), statuses: [] as string[] },
+  { label: t("Active"), statuses: ["todo", "in_progress", "monitoring", "in_review", "blocked"] },
+  { label: t("Backlog"), statuses: ["backlog"] },
+  { label: t("Done"), statuses: ["done", "cancelled"] },
 ];
 
 export function issueFilterLabel(value: string): string {

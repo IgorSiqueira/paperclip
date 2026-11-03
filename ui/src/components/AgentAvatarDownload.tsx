@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Download, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { t } from "@/i18n";
 
 export function agentAvatarFilename(name: string) {
   return `${name.replace(/[^a-zA-Z0-9_-]+/g, "-") || "agent"}-avatar.png`;
@@ -51,8 +52,8 @@ export function AgentAvatarDownload({
         asChild
       >
         <a
-          aria-label="Download avatar"
-          title="Download avatar"
+          aria-label={t("Download avatar")}
+          title={t("Download avatar")}
           href={avatarUrl}
           download={agentAvatarFilename(name)}
           aria-disabled={downloading}
@@ -66,12 +67,12 @@ export function AgentAvatarDownload({
           ) : (
             <Download className="size-4" />
           )}
-          {!iconOnly && "Download avatar"}
+          {!iconOnly && t("Download avatar")}
         </a>
       </Button>
       {failed && (
         <p role="alert" className="text-sm text-destructive">
-          Couldn’t download the avatar. Try downloading it again.
+          {t("Couldn’t download the avatar. Try downloading it again.")}
         </p>
       )}
     </div>

@@ -1,9 +1,5 @@
 {
-  "app": {
-    "noCompanies": {
-      "title": "Opret din første virksomhed",
-      "description": "Kom i gang ved at oprette en virksomhed.",
-      "newCompany": "Ny virksomhed"
-    }
-  }
+  "Create your first organization": "Opret din første virksomhed",
+  "Get started by creating an organization.": "Kom i gang ved at oprette en virksomhed.",
+  "New Organization": "Ny virksomhed"
 }

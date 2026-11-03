@@ -1,4 +1,5 @@
 import type { CompanyPortabilityFileEntry } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 // Inline imports post the whole parsed package as one JSON body, so oversized
 // packages must be blocked before the request is built. Packages past this
@@ -80,5 +81,5 @@ export function buildInlineImportPreflight(
 }
 
 export function formatMegabytes(bytes: number): string {
-  return `${Math.max(1, Math.round(bytes / (1024 * 1024)))} MB`;
+  return t("{{max}} MB", { max: Math.max(1, Math.round(bytes / (1024 * 1024))) });
 }

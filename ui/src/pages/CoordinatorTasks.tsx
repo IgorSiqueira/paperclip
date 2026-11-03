@@ -33,9 +33,10 @@ import { useLocation, useSearchParams } from "@/lib/router";
 import { taskListViewStorageKey } from "@/lib/task-list-views";
 import { normalizeTaskViewKey, taskView } from "@/lib/task-views";
 import type { Issue } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 const pageSize = 200;
-const views = [{ value: "all", label: "All tasks" }, { value: "blocked", label: "Needs attention" }] as const;
+const views = [{ value: "all", label: t("All tasks") }, { value: "blocked", label: t("Needs attention") }] as const;
 
 /** Coordinator's existing IA and attention feed, rendered with the production
  * components reviewed in Design proposals / Pages / Tasks. */
@@ -91,7 +92,7 @@ export function CoordinatorTasks() {
     next.set("view", attention ? "needs_attention" : "all");
     return next;
   });
-  useEffect(() => { setBreadcrumbs([{ label: "Tasks" }]); }, [setBreadcrumbs]);
+  useEffect(() => { setBreadcrumbs([{ label: t("Tasks") }]); }, [setBreadcrumbs]);
 
   const tasks = useInfiniteQuery({
     queryKey: [...queryKeys.issues.list(companyId!), "coordinator-table", "index", userId, deferredQuery, participantAgentId, workspaceIds, originKind, serverSortField, serverSortDir, includeBlockedBy],
@@ -211,8 +212,8 @@ export function CoordinatorTasks() {
   );
   const enrichItem = (item: TaskListItem): TaskListItem => ({ ...item, issue: enrichIssueRow(item.issue) });
   const empty = <EmptyState icon={query || collection.activeFilterCount ? SearchX : ListChecks}
-    message={query || collection.activeFilterCount ? "No tasks match this view" : needsAttention ? "No tasks need a decision." : "No tasks in this organization"}
-    action={query || collection.activeFilterCount ? "Clear filters" : needsAttention ? undefined : "New Task"}
+    message={query || collection.activeFilterCount ? t("No tasks match this view") : needsAttention ? t("No tasks need a decision.") : t("No tasks in this organization")}
+    action={query || collection.activeFilterCount ? t("Clear filters") : needsAttention ? undefined : t("New Task")}
     onAction={query || collection.activeFilterCount ? clearFilters : () => openNewIssue()} />;
   const issueLinkState = createIssueDetailLocationState("Tasks", `${location.pathname}${location.search}`, "issues");
   const retry = () => {
@@ -223,16 +224,16 @@ export function CoordinatorTasks() {
     if (collection.filters.liveOnly) void liveRuns.refetch();
   };
 
-  if (!companyId) return <EmptyState icon={ListChecks} message="Select an organization to view tasks." />;
-  return <FlyoutAppearanceProvider><TruncatedTextMarqueeProvider><section ref={listRef} className="coordinator-task-list task-row-design-preview flex min-w-0 flex-col gap-8" aria-label="Tasks">
+  if (!companyId) return <EmptyState icon={ListChecks} message={t("Select an organization to view tasks.")} />;
+  return <FlyoutAppearanceProvider><TruncatedTextMarqueeProvider><section ref={listRef} className="coordinator-task-list task-row-design-preview flex min-w-0 flex-col gap-8" aria-label={t("Tasks")}>
     <TaskListToolbar view={needsAttention ? "blocked" : "all"} viewOptions={views} onViewChange={view => setView(view === "blocked")}
       query={collection.query} onQueryChange={collection.setQuery} layout={collection.layout} onLayoutChange={collection.setLayout}
       allExpanded={collection.allExpanded} onToggleExpanded={collection.toggleExpanded} onNewTask={() => openNewIssue()}
       filters={{ enableRoutineTasksFilter: true, state: collection.filters, onChange: updateFilters, activeFilterCount: collection.activeFilterCount,
         agents: agents.data ?? [], projects: projects.data ?? [], labels: labels.data ?? [], currentUserId: userId, creators: collection.creators }} />
-    {error ? <div role="alert" className="flex items-center gap-2 text-sm text-destructive"><span>{error instanceof Error ? error.message : "Could not load tasks"}</span><Button variant="outline" size="sm" onClick={retry}>Retry</Button></div> : null}
-    {rowDetailsError ? <div role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><span>Task details couldn’t load.</span><Button variant="ghost" size="sm" onClick={() => void retryRowDetails()}>Retry</Button></div> : null}
-    {pending ? <p role="status" className="text-sm text-muted-foreground">Loading tasks…</p> : !error && <>
+    {error ? <div role="alert" className="flex items-center gap-2 text-sm text-destructive"><span>{error instanceof Error ? error.message : t("Could not load tasks")}</span><Button variant="outline" size="sm" onClick={retry}>{t("Retry")}</Button></div> : null}
+    {rowDetailsError ? <div role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><span>{t("Task details couldn’t load.")}</span><Button variant="ghost" size="sm" onClick={() => void retryRowDetails()}>{t("Retry")}</Button></div> : null}
+    {pending ? <p role="status" className="text-sm text-muted-foreground">{t("Loading tasks…")}</p> : !error && <>
       <div hidden={collection.layout !== "list"} className="design-task-list-panel">{collection.matchingItems.length ? <TaskList key={companyId}
         items={(needsAttention ? collection.matchingItems : collection.visibleItems).map(enrichItem)} allItems={collection.companyItems.map(enrichItem)}
         collectionKey={JSON.stringify([companyId, userId, needsAttention, deferredQuery, participantAgentId, workspaceIds, collection.view, collection.filters])}
@@ -240,7 +241,7 @@ export function CoordinatorTasks() {
         issueLinkState={issueLinkState} collapsedIds={collection.collapsedIds} onCollapsedIdsChange={collection.setCollapsedIds} /> : empty}</div>
       {collection.layout === "board" ? collection.matchingItems.length
         ? <KanbanBoard showOverflowFades issues={collection.matchingItems.map(item => enrichIssueRow(item.issue))} agents={agents.data} onUpdateIssue={(id, data) => update.mutate({ id, data })} /> : empty : null}
-      {!needsAttention && tasks.hasNextPage ? <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground"><span>{items.length} tasks loaded. Load more to include them in filters.</span><Button variant="outline" size="sm" disabled={tasks.isFetchingNextPage} onClick={() => void tasks.fetchNextPage()}>{tasks.isFetchingNextPage ? "Loading…" : "Load more tasks"}</Button></div> : null}
+      {!needsAttention && tasks.hasNextPage ? <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground"><span>{items.length} {t("tasks loaded. Load more to include them in filters.")}</span><Button variant="outline" size="sm" disabled={tasks.isFetchingNextPage} onClick={() => void tasks.fetchNextPage()}>{tasks.isFetchingNextPage ? t("Loading…") : t("Load more tasks")}</Button></div> : null}
     </>}
   </section></TruncatedTextMarqueeProvider></FlyoutAppearanceProvider>;
 }

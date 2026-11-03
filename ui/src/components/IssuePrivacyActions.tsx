@@ -18,12 +18,13 @@ import { useToastActions } from "@/context/ToastContext";
 import { queryKeys } from "@/lib/queryKeys";
 import { cn } from "@/lib/utils";
 import { IssueShareSheet, type ShareSheetImplicitPrincipal } from "./IssueShareSheet";
+import { t } from "@/i18n";
 
 const MENU_ITEM_CLASS =
   "flex items-center gap-2 w-full px-2 py-1.5 text-xs rounded hover:bg-accent/50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent";
 
 const NON_SETTER_TOOLTIP =
-  "Only the task owner or an admin can change who can see this task.";
+  t("Only the task owner or an admin can change who can see this task.");
 
 /**
  * Privacy actions for the task `⋯` menu. Renders the menu buttons plus the
@@ -84,12 +85,12 @@ export function IssuePrivacyActions({
       queryClient.invalidateQueries({ queryKey: queryKeys.issues.accessGrants(issue.id) });
       setMakePublicOpen(false);
       pushToast({
-        title: visibility === "private" ? "Task is now private" : "Task is now public",
+        title: visibility === "private" ? t("Task is now private") : t("Task is now public"),
         tone: "success",
       });
     },
     onError: (error) => {
-      pushToast({ title: "Couldn't change visibility", body: (error as Error).message, tone: "error" });
+      pushToast({ title: t("Couldn't change visibility"), body: (error as Error).message, tone: "error" });
     },
   });
 
@@ -119,7 +120,7 @@ export function IssuePrivacyActions({
                 setShareOpen(true);
               }}
             >
-              <Users className="h-4 w-4" aria-hidden="true" /> Share…
+              <Users className="h-4 w-4" aria-hidden="true" /> {t("Share…")}
             </button>,
           )}
           {withTooltip(
@@ -132,14 +133,14 @@ export function IssuePrivacyActions({
                 setMakePublicOpen(true);
               }}
             >
-              <Globe className="h-4 w-4" aria-hidden="true" /> Make public
+              <Globe className="h-4 w-4" aria-hidden="true" /> {t("Make public")}
             </button>,
             publicBlockedReason,
           )}
           {canManage && constraintsQuery.isError ? (
             <button type="button" className={MENU_ITEM_CLASS} onClick={() => {
               void constraintsQuery.refetch();
-            }}>Retry access check</button>
+            }}>{t("Retry access check")}</button>
           ) : null}
         </>
       ) : (
@@ -153,7 +154,7 @@ export function IssuePrivacyActions({
               visibilityMutation.mutate("private");
             }}
           >
-            <Lock className="h-4 w-4" aria-hidden="true" /> Make private
+            <Lock className="h-4 w-4" aria-hidden="true" /> {t("Make private")}
           </button>,
         )
       ))}
@@ -170,17 +171,16 @@ export function IssuePrivacyActions({
       <AlertDialog open={makePublicOpen} onOpenChange={setMakePublicOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Make this task public?</AlertDialogTitle>
+            <AlertDialogTitle>{t("Make this task public?")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Everyone in the company will be able to read this task, its comments, documents, and
-              run history. Existing private subtasks keep their privacy.{" "}
+              {t("Everyone in the company will be able to read this task, its comments, documents, and run history. Existing private subtasks keep their privacy.")}{" "}
               {constraintsQuery.data?.leavesPersonalProject
-                ? "This task will also leave its personal project. " : null}
-              <span className="font-semibold text-foreground">Content already seen by others cannot be taken back.</span>
+                ? t("This task will also leave its personal project. ") : null}
+              <span className="font-semibold text-foreground">{t("Content already seen by others cannot be taken back.")}</span>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Keep private</AlertDialogCancel>
+            <AlertDialogCancel>{t("Keep private")}</AlertDialogCancel>
             <AlertDialogAction
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               onClick={(event) => {
@@ -189,7 +189,7 @@ export function IssuePrivacyActions({
               }}
               disabled={visibilityMutation.isPending || Boolean(publicBlockedReason)}
             >
-              {visibilityMutation.isPending ? "Making public…" : "Make public"}
+              {visibilityMutation.isPending ? t("Making public…") : t("Make public")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

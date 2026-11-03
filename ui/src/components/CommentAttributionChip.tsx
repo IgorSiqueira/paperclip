@@ -2,6 +2,7 @@ import { UserCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "../lib/utils";
+import { t } from "@/i18n";
 
 /**
  * "for {user}" chip on an agent comment posted to a task the agent does not own
@@ -49,7 +50,7 @@ export function CommentAttributionChip({
         <Badge
           variant="outline"
           data-testid="comment-attribution-chip"
-          aria-label={`Posted on behalf of ${user}`}
+          aria-label={t("Posted on behalf of {{user}}", { user })}
           // `Badge` renders a span, which is not focusable — without this a
           // sighted keyboard user can never open the explanation. Radix opens
           // the tooltip on focus as well as hover.
@@ -61,7 +62,7 @@ export function CommentAttributionChip({
           )}
         >
           <UserCheck className="h-3 w-3 shrink-0" aria-hidden="true" />
-          <span className="truncate">for {user}</span>
+          <span className="truncate">{t("for")} {user}</span>
         </Badge>
       </TooltipTrigger>
       <TooltipContent className="max-w-xs text-xs">

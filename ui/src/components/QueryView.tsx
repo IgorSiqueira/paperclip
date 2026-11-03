@@ -32,6 +32,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useConnectivity, useConnectivityStore, type ConnectivityStatus } from "@/lib/connectivity";
 import { cn } from "@/lib/utils";
+import { t } from "@/i18n";
 
 export type QueryViewKind = "loading" | "ready" | "stale" | "reconnecting" | "error";
 
@@ -149,7 +150,7 @@ export function QueryErrorState({ error, size = "panel", action, onRetry, retryi
       disabled={retrying}
     >
       <RefreshCcw aria-hidden="true" className={cn(retrying && "animate-spin")} />
-      {retrying ? "Retrying…" : "Retry"}
+      {retrying ? t("Retrying…") : t("Retry")}
     </Button>
   ) : null;
 
@@ -201,7 +202,7 @@ export interface QueryPlaceholderProps {
 }
 
 /** A quiet placeholder for `loading` and `reconnecting`: it fills in by itself. */
-export function QueryPlaceholder({ size = "panel", label = "Loading", className }: QueryPlaceholderProps) {
+export function QueryPlaceholder({ size = "panel", label = t("Loading"), className }: QueryPlaceholderProps) {
   if (size === "page") {
     return (
       <div role="status" aria-busy="true" aria-label={label} data-query-view="placeholder" className={className}>
@@ -229,7 +230,7 @@ export function QueryPlaceholder({ size = "panel", label = "Loading", className 
 export function QueryStaleHint({ className }: { className?: string }) {
   return (
     <p role="status" data-query-view="stale" className={cn("text-xs text-muted-foreground", className)}>
-      Updating paused while reconnecting…
+      {t("Updating paused while reconnecting…")}
     </p>
   );
 }
@@ -271,7 +272,7 @@ export function QueryView<TData>({
     case "loading":
       return <>{loading ?? <QueryPlaceholder size={size} className={className} />}</>;
     case "reconnecting":
-      return <>{reconnecting ?? loading ?? <QueryPlaceholder size={size} label="Reconnecting" className={className} />}</>;
+      return <>{reconnecting ?? loading ?? <QueryPlaceholder size={size} label={t("Reconnecting")} className={className} />}</>;
     case "error":
       if (view.errorKind === "not_found" && notFound !== undefined) return <>{notFound}</>;
       return (

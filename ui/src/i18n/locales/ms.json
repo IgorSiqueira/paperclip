@@ -1,9 +1,5 @@
 {
-  "app": {
-    "noCompanies": {
-      "title": "Cipta syarikat pertama anda",
-      "description": "Mulakan dengan mencipta syarikat.",
-      "newCompany": "Syarikat Baharu"
-    }
-  }
+  "Create your first organization": "Cipta syarikat pertama anda",
+  "Get started by creating an organization.": "Mulakan dengan mencipta syarikat.",
+  "New Organization": "Syarikat Baharu"
 }

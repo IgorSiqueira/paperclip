@@ -6,6 +6,7 @@ import { routinesApi } from "../../api/routines";
 import { queryKeys } from "../../lib/queryKeys";
 import { cn } from "../../lib/utils";
 import { PropertyRow } from "./primitives";
+import { t } from "@/i18n";
 
 export function RoutineOriginRow({ routineId }: { routineId: string }) {
   const { data: routine } = useQuery({
@@ -17,7 +18,7 @@ export function RoutineOriginRow({ routineId }: { routineId: string }) {
   if (!title) return null;
 
   return (
-    <PropertyRow label="Routine">
+    <PropertyRow label={t("Routine")}>
       <Link
         to={`/routines/${routineId}`}
         className={cn(

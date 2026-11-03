@@ -4,6 +4,7 @@ import { AgentAvatar } from "@/components/AgentAvatar";
 import { Link } from "@/lib/router";
 import { agentRouteRef } from "@/lib/utils";
 import { agentDetailHref } from "../agent-detail-navigation";
+import { t } from "@/i18n";
 
 const MAX_LINES = 2;
 const itemClass = "inline-flex min-w-0 max-w-full items-center gap-1.5";
@@ -74,12 +75,12 @@ export function AgentDirectReports({ reports }: { reports: Agent[] }) {
         ))}
         {hidden > 0 ? (
           <button type="button" className={toggleClass} onClick={() => setExpanded(true)}>
-            +{hidden} more
+            +{hidden} {t("more")}
           </button>
         ) : null}
         {expanded && shown < reports.length ? (
           <button type="button" className={toggleClass} onClick={() => setExpanded(false)}>
-            Show less
+            {t("Show less")}
           </button>
         ) : null}
       </div>
@@ -91,7 +92,7 @@ export function AgentDirectReports({ reports }: { reports: Agent[] }) {
               <span>{report.name}</span>
             </span>
           ))}
-          <span>+{reports.length} more</span>
+          <span>+{reports.length} {t("more")}</span>
         </div>
       </div>
     </div>

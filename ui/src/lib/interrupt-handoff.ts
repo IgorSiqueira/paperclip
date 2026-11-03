@@ -1,4 +1,5 @@
 import { parseAgentMentionHref } from "@paperclipai/shared";
+import { t as translate } from "@/i18n";
 
 /**
  * Shared logic for the "interrupt handoff" UX clarity surfaces (PAP-10669).
@@ -77,7 +78,7 @@ export function resolveRunStatusPresentation(
     };
   }
   return {
-    label: status === "timed_out" ? "timed out" : status.replace(/_/g, " "),
+    label: status === "timed_out" ? translate("timed out") : status.replace(/_/g, " "),
     className: runStatusClassName(status),
     srHint: null,
   };
@@ -225,7 +226,7 @@ export function computeComposerHandoffPreview(
         ? {
             kind: "interrupt_handoff_agent",
             tone: "neutral",
-            text: "Interrupt current run, hand off to",
+            text: translate("Interrupt current run, hand off to"),
             chip: { kind: "agent", id: target.id },
           }
         : {
@@ -239,7 +240,7 @@ export function computeComposerHandoffPreview(
       return {
         kind: "user_handoff",
         tone: "neutral",
-        text: "Hand off to",
+        text: translate("Hand off to"),
         chip: { kind: "user", id: target.id },
         suffix: "— no agent will be notified",
       };
@@ -248,7 +249,7 @@ export function computeComposerHandoffPreview(
     return {
       kind: "clear_assignee",
       tone: "neutral",
-      text: "Clear responsible — no agent will be notified",
+      text: translate("Clear responsible — no agent will be notified"),
     };
   }
 
@@ -266,7 +267,7 @@ export function computeComposerHandoffPreview(
     return {
       kind: "plain_text_only",
       tone: "warn",
-      text: "No agent will be notified. Use @ to mention an agent.",
+      text: translate("No agent will be notified. Use @ to mention an agent."),
     };
   }
 
@@ -334,10 +335,10 @@ export interface ReassignInterruptCopy {
  * the interrupt consequence concrete instead of a bare "are you sure".
  */
 export function describeReassignInterrupt(opts: { runningAgentName?: string | null } = {}): ReassignInterruptCopy {
-  const who = opts.runningAgentName?.trim() || "An agent";
+  const who = opts.runningAgentName?.trim() || translate("An agent");
   return {
-    banner: `${who} is running — changing the responsible will interrupt this run.`,
-    confirmTitle: "Interrupt the current run?",
+    banner: translate("{{who}} is running — changing the responsible will interrupt this run.", { who }),
+    confirmTitle: translate("Interrupt the current run?"),
     confirmAction: "Interrupt & assign",
     cancelAction: "Cancel",
   };
@@ -376,11 +377,11 @@ export interface PauseAffectsSummary {
 }
 
 const PAUSE_BUCKET_LABEL: Record<PauseAffectsBucketKey, string> = {
-  live_runs: "Live agent runs",
-  queued_wakes: "Queued wakes",
-  agent_owned: "Agent-owned",
-  human_owned: "Human-owned",
-  static: "Static",
+  live_runs: translate("Live agent runs"),
+  queued_wakes: translate("Queued wakes"),
+  agent_owned: translate("Agent-owned"),
+  human_owned: translate("Human-owned"),
+  static: translate("Static"),
 };
 
 const PAUSE_BUCKET_DETAIL: Record<PauseAffectsBucketKey, string> = {

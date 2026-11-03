@@ -9,6 +9,7 @@ import {
   TAG_SWAP_EXIT,
   TAG_SWAP_TRAVEL,
 } from "./onboarding-motion";
+import { t } from "@/i18n";
 
 /**
  * The connect step's row of model sources, and the tag under each one saying
@@ -33,9 +34,9 @@ export type ModelSource = {
 };
 
 const CREDENTIAL_TAG_LABEL: Record<ModelConnectionMode, string> = {
-  subscription: "Subscription",
-  api: "API key",
-  advanced: "Custom Gateway",
+  subscription: t("Subscription"),
+  api: t("API key"),
+  advanced: t("Custom Gateway"),
 };
 
 /**

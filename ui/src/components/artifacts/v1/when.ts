@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 const DAY = 86_400_000;
 
 const startOfDay = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
@@ -7,7 +8,7 @@ export function updatedLabel(iso: string, now: Date = new Date()): string {
   const date = new Date(iso);
   const days = Math.round((startOfDay(now) - startOfDay(date)) / DAY);
   if (days <= 0) return date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
-  if (days === 1) return "Yesterday";
+  if (days === 1) return t("Yesterday");
   if (days < 7) return date.toLocaleDateString("en-US", { weekday: "long" });
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
@@ -16,9 +17,9 @@ export function updatedLabel(iso: string, now: Date = new Date()): string {
 export function panelDateLabel(iso: string, now: Date = new Date()): string {
   const date = new Date(iso);
   const days = Math.round((startOfDay(now) - startOfDay(date)) / DAY);
-  if (days <= 0) return "Today";
-  if (days === 1) return "Yesterday";
-  if (days < 7) return `${days}D ago`;
+  if (days <= 0) return t("Today");
+  if (days === 1) return t("Yesterday");
+  if (days < 7) return t("{{days}}D ago", { days });
   return date.toLocaleDateString("en-US", { month: "long", day: "numeric" });
 }
 
@@ -27,6 +28,6 @@ export const countLabel = (count: number) => `${count} ${count === 1 ? "Artifact
 export function sizeLabel(bytes: number | null | undefined): string | null {
   if (bytes == null) return null;
   if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  if (bytes < 1024 * 1024) return t("{{toFixed}} KB", { toFixed: (bytes / 1024).toFixed(1) });
+  return t("{{toFixed}} MB", { toFixed: (bytes / (1024 * 1024)).toFixed(1) });
 }

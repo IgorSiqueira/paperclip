@@ -35,7 +35,7 @@ describe("chat connector UI contract", () => {
     for (const file of ["Inbox.tsx", "LegacyInbox.tsx"]) {
       const page = source(`../../${file}`);
       expect(page).toMatch(
-        /const retryRunMutation = useMutation\(\{[\s\S]*?onError: \(error\) => \{\s*pushToast\(\{\s*title: "Run retry failed"/,
+        /const retryRunMutation = useMutation\(\{[\s\S]*?onError: \(error\) => \{\s*pushToast\(\{\s*title: (?:t\()?"Run retry failed"/,
       );
     }
   });
@@ -184,9 +184,7 @@ describe("chat connector UI contract", () => {
     expect(setup).not.toContain("/setprivacy");
     expect(setup).toContain("/task@bot_username");
     expect(setup).toContain("registers its command menu automatically");
-    expect(setup).toContain(
-      "ordinary\n          mentions are not delivered to bots",
-    );
+    expect(setup).toMatch(/ordinary\s+mentions are not delivered to bots/);
     expect(setup).toContain("Create Azure Bot");
     expect(setup).toContain("Microsoft 365 work or school organization");
     expect(setup).toContain("teams.live.com");

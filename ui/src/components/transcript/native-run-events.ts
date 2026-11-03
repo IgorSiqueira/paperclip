@@ -1,6 +1,7 @@
 import type { HeartbeatRunEvent } from "@paperclipai/shared";
 import type { TranscriptEntry } from "@/adapters";
 import { isRunLogOnlyProviderEvent } from "./run-log-only-events";
+import { t } from "@/i18n";
 
 function record(value: unknown): Record<string, unknown> | null {
   return value && typeof value === "object" && !Array.isArray(value)
@@ -201,7 +202,7 @@ function runtimeRequestEntry(input: {
     .map(record)
     .flatMap((field, index) => {
       const name = text(field?.name) ?? `answer_${index + 1}`;
-      const label = text(field?.label) ?? text(field?.name) ?? `Answer ${index + 1}`;
+      const label = text(field?.label) ?? text(field?.name) ?? t("Answer {{index}}", { index: index + 1 });
       return name && label
         ? [{ name: name.slice(0, 160), label: label.slice(0, 240), placeholder: text(field?.placeholder)?.slice(0, 500) ?? null }]
         : [];
@@ -250,7 +251,7 @@ function runResultEntry(
     kind: "run_result",
     ts,
     disposition,
-    summary: text(payload.summary) ?? "Run completed",
+    summary: text(payload.summary) ?? t("Run completed"),
     objectiveSatisfied: typeof completion.objectiveSatisfied === "boolean"
       ? completion.objectiveSatisfied
       : null,
@@ -1064,7 +1065,7 @@ export function nativeRunEventsToTranscript(events: readonly HeartbeatRunEvent[]
     entries.push({
       kind: "result",
       ...cumulativeUsageSummary,
-      text: "Provider-reported session-cumulative usage; a per-run delta was unavailable.",
+      text: t("Provider-reported session-cumulative usage; a per-run delta was unavailable."),
       subtype: "paperclip_runner_session_usage",
       isError: false,
       errors: [],

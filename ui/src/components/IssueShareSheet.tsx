@@ -46,6 +46,7 @@ import {
   grantIsRevocable,
   isSharedAgentVisibility,
 } from "@/lib/issuePrivacy";
+import { t } from "@/i18n";
 
 /**
  * A role-based principal that can read the task by virtue of *who they are*
@@ -72,21 +73,21 @@ interface SourceBadgeSpec {
 
 // Source labels and icons distinguish access reasons; colors use semantic tokens.
 const SOURCE_BADGES: Record<IssueAccessGrantSource, SourceBadgeSpec> = {
-  owner: { label: "task owner", icon: Lock, className: "border-border bg-muted text-muted-foreground" },
+  owner: { label: t("task owner"), icon: Lock, className: "border-border bg-muted text-muted-foreground" },
   explicit: {
-    label: "shared directly",
+    label: t("shared directly"),
     icon: UserPlus,
     className:
       "border-primary/30 bg-primary/10 text-primary",
   },
   assignment: {
-    label: "via assignment",
+    label: t("via assignment"),
     icon: Check,
     className:
       "border-border bg-secondary text-secondary-foreground",
   },
   project: {
-    label: "via project",
+    label: t("via project"),
     icon: Folder,
     className:
       "border-border bg-accent text-accent-foreground",
@@ -164,7 +165,7 @@ export function IssueShareSheet({
   canManage,
   open,
   onOpenChange,
-  aclDescription = "Sharing grants access to this task and its descendants, including comments, documents, and run history. Parents and siblings need separate access.",
+  aclDescription = t("Sharing grants access to this task and its descendants, including comments, documents, and run history. Parents and siblings need separate access."),
   implicitPrincipals = [],
   initialView = "list",
   initialAddSelection = "",
@@ -221,10 +222,10 @@ export function IssueShareSheet({
       queryClient.invalidateQueries({ queryKey: ["issues"] });
       setAddSelection("");
       setView("list");
-      pushToast({ title: "Access granted", tone: "success" });
+      pushToast({ title: t("Access granted"), tone: "success" });
     },
     onError: (error) => {
-      pushToast({ title: "Couldn't add access", body: (error as Error).message, tone: "error" });
+      pushToast({ title: t("Couldn't add access"), body: (error as Error).message, tone: "error" });
     },
   });
 
@@ -234,10 +235,10 @@ export function IssueShareSheet({
       // A task grant also changes descendant access and cached task discovery.
       queryClient.invalidateQueries({ queryKey: ["issues"] });
       setRevokeTarget(null);
-      pushToast({ title: "Access revoked", tone: "success" });
+      pushToast({ title: t("Access revoked"), tone: "success" });
     },
     onError: (error) => {
-      pushToast({ title: "Couldn't revoke access", body: (error as Error).message, tone: "error" });
+      pushToast({ title: t("Couldn't revoke access"), body: (error as Error).message, tone: "error" });
     },
   });
 
@@ -250,7 +251,7 @@ export function IssueShareSheet({
       .map((entry) => ({
         key: `user:${entry.user!.id}`,
         value: `user:${entry.user!.id}`,
-        label: entry.user!.name ?? entry.user!.email ?? "Unknown user",
+        label: entry.user!.name ?? entry.user!.email ?? t("Unknown user"),
         searchText: [entry.user!.name, entry.user!.email].filter(Boolean).join(" "),
         identity: <Identity name={entry.user!.name ?? entry.user!.email ?? "Unknown user"} avatarUrl={entry.user!.image} size="sm" />,
       }));
@@ -264,8 +265,8 @@ export function IssueShareSheet({
         identity: <><AgentAvatar agent={agent} size={24} /><span className="truncate">{agent.name}</span></>,
       }));
     const groups: SearchableSelectGroup<string, AccessSelectOption>[] = [];
-    if (users.length > 0) groups.push({ id: "people", label: "People", options: users });
-    if (agents.length > 0) groups.push({ id: "agents", label: "Agents", options: agents });
+    if (users.length > 0) groups.push({ id: "people", label: t("People"), options: users });
+    if (agents.length > 0) groups.push({ id: "agents", label: t("Agents"), options: agents });
     return groups;
   }, [directoryQuery.data, agentsQuery.data, grantedSubjectKeys]);
 
@@ -307,7 +308,7 @@ export function IssueShareSheet({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Lock className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-            Who can access this task
+            {t("Who can access this task")}
           </DialogTitle>
           <DialogDescription>{aclDescription}</DialogDescription>
         </DialogHeader>
@@ -330,14 +331,14 @@ export function IssueShareSheet({
               <div data-testid="share-sheet-error">
                 <QueryErrorState
                   error={grantsQuery.error}
-                  action="load access"
+                  action={t("load access")}
                   onRetry={grantsView.retry}
                   retrying={grantsView.isFetching}
                 />
               </div>
             ) : isEmpty ? (
               <p className="py-3 text-sm text-muted-foreground" data-testid="share-sheet-empty">
-                Only you can see this task.
+                {t("Only you can see this task.")}
               </p>
             ) : (
               <div className="divide-y divide-border/60">
@@ -361,7 +362,7 @@ export function IssueShareSheet({
                   />
                 ))}
                 {activeGrants.map((grant) => {
-                  const displayName = grant.subjectDisplayName ?? "Unknown";
+                  const displayName = grant.subjectDisplayName ?? t("Unknown");
                   const implicitPrincipal = implicitPrincipals.find(principal =>
                     principal.id === `${grant.subjectType}:${grant.subjectId}`);
                   const revocable = canManage && !grant.inherited && grantIsRevocable(grant.source);
@@ -377,7 +378,7 @@ export function IssueShareSheet({
                         />
                       }
                       title={displayName}
-                      subtitle={implicitPrincipal ? `${implicitPrincipal.roleLabel} — access remains while this role applies` : grant.inherited ? "Inherited access — managed at its source" : `${granter} ${timeAgo(grant.createdAt)}`}
+                      subtitle={implicitPrincipal ? t("{{roleLabel}} — access remains while this role applies", { roleLabel: implicitPrincipal.roleLabel }) : grant.inherited ? t("Inherited access — managed at its source") : `${granter} ${timeAgo(grant.createdAt)}`}
                       badge={<SourceBadge source={grant.source} />}
                       action={
                         revocable ? (
@@ -387,11 +388,11 @@ export function IssueShareSheet({
                             className="text-muted-foreground hover:text-destructive"
                             onClick={() => setRevokeTarget(grant)}
                           >
-                            {implicitPrincipal ? "Remove saved grant" : "Revoke"}
+                            {implicitPrincipal ? t("Remove saved grant") : t("Revoke")}
                           </Button>
                         ) : grant.source === "project" ? (
                           <span className="text-(length:--text-nano) text-muted-foreground">
-                            project-managed
+                            {t("project-managed")}
                           </span>
                         ) : null
                       }
@@ -410,7 +411,7 @@ export function IssueShareSheet({
                   onClick={() => setView("add")}
                   disabled={isLoading}
                 >
-                  <UserPlus className="h-3.5 w-3.5" aria-hidden="true" /> Add someone
+                  <UserPlus className="h-3.5 w-3.5" aria-hidden="true" /> {t("Add someone")}
                 </Button>
               </div>
             ) : null}
@@ -420,29 +421,27 @@ export function IssueShareSheet({
             <SearchableSelect
               value={addSelection}
               groups={addGroups}
-              renderValue={(option) => option ? renderAccessIdentity(option) : "Choose a person or agent…"}
+              renderValue={(option) => option ? renderAccessIdentity(option) : t("Choose a person or agent…")}
               renderOption={renderAccessIdentity}
               onValueChange={(value) => setAddSelection(value)}
-              placeholder="Choose a person or agent…"
-              searchPlaceholder="Search people and agents…"
+              placeholder={t("Choose a person or agent…")}
+              searchPlaceholder={t("Search people and agents…")}
               loading={directoryQuery.isLoading || agentsQuery.isLoading}
-              loadingMessage="Loading directory…"
-              emptyMessage="No one left to add."
+              loadingMessage={t("Loading directory…")}
+              emptyMessage={t("No one left to add.")}
               triggerClassName="w-full"
             />
 
             {selectedSharedAgentName ? (
               <div
                 role="note"
-                aria-label="Shared agent caution"
+                aria-label={t("Shared agent caution")}
                 data-testid="shared-agent-caution"
                 className="flex items-start gap-2 rounded-md border border-border bg-muted px-3 py-2 text-xs leading-relaxed text-foreground"
               >
                 <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                 <span>
-                  <span className="font-semibold">Shared agent.</span> {selectedSharedAgentName}'s
-                  memory &amp; workspace may carry residual private context from this task into its
-                  later runs for other people. Grant only if that's acceptable.
+                  <span className="font-semibold">{t("Shared agent.")}</span> {selectedSharedAgentName}{t("'s memory & workspace may carry residual private context from this task into its later runs for other people. Grant only if that's acceptable.")}
                 </span>
               </div>
             ) : null}
@@ -456,10 +455,10 @@ export function IssueShareSheet({
                   setAddSelection("");
                 }}
               >
-                Back
+                {t("Back")}
               </Button>
               <Button size="sm" onClick={submitAdd} disabled={!addSelection || addMutation.isPending}>
-                {addMutation.isPending ? "Adding…" : "Add"}
+                {addMutation.isPending ? t("Adding…") : t("Add")}
               </Button>
             </div>
           </div>
@@ -475,17 +474,14 @@ export function IssueShareSheet({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              Remove {revokeTarget?.subjectDisplayName ?? "this subject"}'s saved grant?
+              {t("Remove")} {revokeTarget?.subjectDisplayName ?? t("this subject")}{t("'s saved grant?")}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              This removes this grant and the access it supplies to this task's descendants.
-              Ownership, current assignment, project membership, inherited access, or another grant
-              can still provide access. Revoking access does <span className="font-semibold">not</span> erase
-              content already seen or retained in an agent's memory.
+              {t("This removes this grant and the access it supplies to this task's descendants. Ownership, current assignment, project membership, inherited access, or another grant can still provide access. Revoking access does")} <span className="font-semibold">{t("not")}</span> {t("erase content already seen or retained in an agent's memory.")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("Cancel")}</AlertDialogCancel>
             <AlertDialogAction
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               onClick={(event) => {
@@ -494,7 +490,7 @@ export function IssueShareSheet({
               }}
               disabled={revokeMutation.isPending}
             >
-              {revokeMutation.isPending ? "Removing…" : "Remove grant"}
+              {revokeMutation.isPending ? t("Removing…") : t("Remove grant")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

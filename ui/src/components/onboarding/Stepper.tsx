@@ -1,4 +1,5 @@
 import { cn } from "../../lib/utils";
+import { t } from "@/i18n";
 
 /**
  * The agent arc — create the agent, connect it, review — is the part of the
@@ -115,7 +116,7 @@ export function Stepper({
           <button
             key={segment}
             type="button"
-            aria-label={labels[segment - 1] ?? `Step ${segment}`}
+            aria-label={labels[segment - 1] ?? t("Step {{segment}}", { segment })}
             aria-current={segment === step ? "step" : undefined}
             disabled={!jumpable}
             onClick={() => jumpable && onJumpToStep?.(segment)}
@@ -134,7 +135,7 @@ export function Stepper({
       })}
       {/* Out of flow, so it neither takes a row nor picks up the gap. */}
       <span className="sr-only">
-        Step {step} of {total}
+        {t("Step")} {step} {t("of")} {total}
       </span>
     </div>
   );

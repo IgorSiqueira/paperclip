@@ -6,6 +6,7 @@ import { agentsApi } from "@/api/agents";
 import { InlineEntitySelector, type InlineEntityOption } from "@/components/InlineEntitySelector";
 import { isAgentTaskTarget } from "@/lib/company-members";
 import { queryKeys } from "@/lib/queryKeys";
+import { t } from "@/i18n";
 
 /**
  * Picker for the agent that runs a card's updates. `value` is the override
@@ -44,7 +45,7 @@ export function SummarizerAgentSelect({
   );
 
   const renderAgent = (option: InlineEntityOption | null) => {
-    if (!option || !option.id) return <span>Summarizer (default)</span>;
+    if (!option || !option.id) return <span>{t("Summarizer (default)")}</span>;
     const agent = option.id.startsWith("agent:") ? agentById.get(option.id.slice("agent:".length)) : null;
     return (
       <>
@@ -58,10 +59,10 @@ export function SummarizerAgentSelect({
     <InlineEntitySelector
       value={value ? `agent:${value}` : ""}
       options={agentOptions}
-      placeholder="Summarizer (default)"
-      noneLabel="Summarizer (default)"
-      searchPlaceholder="Search agents..."
-      emptyMessage="No agents found."
+      placeholder={t("Summarizer (default)")}
+      noneLabel={t("Summarizer (default)")}
+      searchPlaceholder={t("Search agents...")}
+      emptyMessage={t("No agents found.")}
       onChange={(next) => onChange(next.startsWith("agent:") ? next.slice("agent:".length) : "")}
       className="h-8 text-sm"
       renderTriggerValue={renderAgent}

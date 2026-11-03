@@ -18,6 +18,7 @@ import {
 } from "../lib/issue-thread-interactions";
 import { DecisionCardFooter } from "./DecisionCardFooter";
 import { IssueThreadInteractionCard } from "./IssueThreadInteractionCard";
+import { t } from "@/i18n";
 
 interface AttentionInteractionResolverProps {
   companyId: string;
@@ -138,7 +139,7 @@ export function AttentionInteractionResolver({
     return (
       <div className="space-y-3 py-3">
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <Loader2 className="h-3.5 w-3.5 animate-spin" /> Loading decision…
+          <Loader2 className="h-3.5 w-3.5 animate-spin" /> {t("Loading decision…")}
         </div>
         <DecisionCardFooter leading={footerSlot} />
       </div>
@@ -149,7 +150,7 @@ export function AttentionInteractionResolver({
     return (
       <div className="space-y-3 py-3">
         <p className="text-xs text-muted-foreground">
-          This decision is no longer available — it may have been resolved elsewhere.
+          {t("This decision is no longer available — it may have been resolved elsewhere.")}
         </p>
         <DecisionCardFooter leading={footerSlot} />
       </div>

@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { deriveInitials } from "./Identity";
+import { t } from "@/i18n";
 
 export type DocumentFrameHeaderRevisionActor = {
   kind: "agent" | "user" | "system";
@@ -88,7 +89,7 @@ export function DocumentFrameHeader({
             type="button"
             className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:bg-accent/60 hover:text-foreground"
             onClick={onToggleFolded}
-            aria-label={folded ? `Expand ${documentKey} document` : `Collapse ${documentKey} document`}
+            aria-label={folded ? t("Expand {{documentKey}} document", { documentKey }) : t("Collapse {{documentKey}} document", { documentKey })}
             aria-expanded={!folded}
           >
             {folded ? <ChevronRight className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
@@ -117,14 +118,14 @@ export function DocumentFrameHeader({
                     revisionMenu.historicalPreview && "text-amber-700 hover:text-amber-800 dark:text-amber-300 dark:hover:text-amber-200",
                   )}
                 >
-                  rev {revisionMenu.displayedRevisionNumber}
+                  {t("rev")} {revisionMenu.displayedRevisionNumber}
                   <ChevronDown className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-72">
-                <DropdownMenuLabel>Revision history</DropdownMenuLabel>
+                <DropdownMenuLabel>{t("Revision history")}</DropdownMenuLabel>
                 {revisionMenu.loading && revisionMenu.revisions.length === 0 ? (
-                  <DropdownMenuItem disabled>Loading revisions...</DropdownMenuItem>
+                  <DropdownMenuItem disabled>{t("Loading revisions...")}</DropdownMenuItem>
                 ) : revisionMenu.revisions.length > 0 ? (
                   <DropdownMenuRadioGroup value={revisionMenu.selectedRevisionId ?? revisionMenu.currentRevisionId ?? ""}>
                     {revisionMenu.revisions.map((revision) => {
@@ -138,10 +139,10 @@ export function DocumentFrameHeader({
                         >
                           <div className="flex min-w-0 flex-col">
                             <div className="flex items-center gap-2">
-                              <span className="font-medium">rev {revision.revisionNumber}</span>
+                              <span className="font-medium">{t("rev")} {revision.revisionNumber}</span>
                               {isCurrentRevision ? (
                                 <Badge variant="outline" className="border-border px-1.5 text-(length:--text-nano) uppercase tracking-(--tracking-eyebrow) text-muted-foreground">
-                                  Current
+                                  {t("Current")}
                                 </Badge>
                               ) : null}
                             </div>
@@ -157,7 +158,7 @@ export function DocumentFrameHeader({
                     })}
                   </DropdownMenuRadioGroup>
                 ) : (
-                  <DropdownMenuItem disabled>No revisions yet</DropdownMenuItem>
+                  <DropdownMenuItem disabled>{t("No revisions yet")}</DropdownMenuItem>
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
@@ -167,7 +168,7 @@ export function DocumentFrameHeader({
               href={updatedHref ?? `#document-${encodeURIComponent(documentKey)}`}
               className="truncate text-(length:--text-micro) text-muted-foreground transition-colors hover:text-foreground hover:underline"
             >
-              updated {relativeTime(updatedAt)}
+              {t("updated")} {relativeTime(updatedAt)}
             </a>
           ) : null}
           {annotationSlot}

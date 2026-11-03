@@ -34,6 +34,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { SidePanelTab } from "./SidePanelTab";
 import type { SidePanelTabItem } from "./types";
+import { t } from "@/i18n";
 
 interface SortableSidePanelTabProps {
   tab: SidePanelTabItem;
@@ -164,7 +165,7 @@ export function SidePanelTabs({
   onReorderTabs,
   onAddTab,
   addControl,
-  addLabel = "Open a new tab",
+  addLabel = t("Open a new tab"),
   appearance = "default",
   className,
 }: SidePanelTabsProps) {

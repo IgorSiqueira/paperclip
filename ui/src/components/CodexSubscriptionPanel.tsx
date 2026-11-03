@@ -1,6 +1,7 @@
 import { quotaUnavailableMessage } from "@/lib/quota-refresh";
 import type { QuotaWindow } from "@paperclipai/shared";
 import { cn, quotaSourceDisplayName } from "@/lib/utils";
+import { t } from "@/i18n";
 
 interface CodexSubscriptionPanelProps {
   windows: QuotaWindow[];
@@ -38,7 +39,7 @@ function detailText(window: QuotaWindow): string | null {
     minute: "2-digit",
     timeZoneName: "short",
   });
-  return `Resets ${formatted}`;
+  return t("Resets {{formatted}}", { formatted });
 }
 
 function fillClass(usedPercent: number | null): string {
@@ -67,10 +68,10 @@ export function CodexSubscriptionPanel({
       <div className="flex items-start justify-between gap-3 border-b border-border pb-3">
         <div className="min-w-0">
           <div className="text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-caps) text-muted-foreground">
-            Codex subscription
+            {t("Codex subscription")}
           </div>
           <div className="mt-1 text-sm text-muted-foreground">
-            Quota from the Codex subscription connected to this server.
+            {t("Quota from the Codex subscription connected to this server.")}
           </div>
         </div>
         {source ? (
@@ -89,7 +90,7 @@ export function CodexSubscriptionPanel({
       <div className="mt-4 space-y-5">
         <div className="space-y-3">
           <div className="text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-caps) text-muted-foreground">
-            Account windows
+            {t("Account windows")}
           </div>
           <div className="space-y-3">
             {accountWindows.map((window) => (
@@ -101,7 +102,7 @@ export function CodexSubscriptionPanel({
         {modelWindows.length > 0 ? (
           <div className="space-y-3">
             <div className="text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-caps) text-muted-foreground">
-              Model windows
+              {t("Model windows")}
             </div>
             <div className="space-y-3">
               {modelWindows.map((window) => (
@@ -143,7 +144,7 @@ function QuotaWindowRow({ window }: { window: QuotaWindow }) {
           ) : null}
         </div>
         <div className="shrink-0 text-sm font-semibold tabular-nums text-foreground">
-          {window.usedPercent}% used
+          {window.usedPercent}{t("% used")}
         </div>
       </div>
 

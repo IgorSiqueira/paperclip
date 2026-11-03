@@ -18,6 +18,7 @@ import {
   externalObjectTypeLabel,
 } from "../lib/external-objects";
 import { cn } from "../lib/utils";
+import { t } from "@/i18n";
 
 export interface ExternalObjectPillData {
   providerKey: string | null;
@@ -39,8 +40,8 @@ function githubObjectLabel(url: string | null | undefined): string | null {
     if (parsed.hostname !== "github.com") return null;
     const [, owner, repo, kind, number] = parsed.pathname.split("/");
     if (!owner || !repo || !number) return null;
-    if (kind === "pull") return `PR ${number}`;
-    if (kind === "issues") return `Issue ${number}`;
+    if (kind === "pull") return t("PR {{number}}", { number });
+    if (kind === "issues") return t("Issue {{number}}", { number });
     return null;
   } catch {
     return null;

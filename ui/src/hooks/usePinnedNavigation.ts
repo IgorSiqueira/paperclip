@@ -1,4 +1,5 @@
 import { useCallback, useState, useSyncExternalStore } from "react";
+import { t } from "@/i18n";
 
 const UPDATED = "paperclip:pinned-navigation-updated";
 const EMPTY = "[]";
@@ -37,7 +38,7 @@ export function usePinnedNavigation(userId: string | null | undefined) {
       setFailure(null);
       window.dispatchEvent(new CustomEvent(UPDATED, { detail: key }));
     } catch {
-      setFailure({ key, message: "Couldn’t save pinned pages. Allow browser storage and try again." });
+      setFailure({ key, message: t("Couldn’t save pinned pages. Allow browser storage and try again.") });
     }
   }
 

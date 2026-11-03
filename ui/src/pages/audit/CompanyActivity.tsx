@@ -8,6 +8,7 @@ import { EmptyState } from "../../components/EmptyState";
 import { AuditFeed, type AuditFeedMode } from "./AuditFeed";
 import { AuditHub } from "./AuditHub";
 import { auditScopeFromSearchParams } from "./audit-navigation";
+import { t } from "@/i18n";
 
 /**
  * Canonical `/:company/activity` entrypoint for the Audit hub. It retains the
@@ -37,7 +38,7 @@ export function CompanyActivity() {
   ].includes(actionParam ?? "") ? actionParam! : "__all";
 
   useEffect(() => {
-    if (!streamlinedUiEnabled) setBreadcrumbs([{ label: "Activity" }]);
+    if (!streamlinedUiEnabled) setBreadcrumbs([{ label: t("Activity") }]);
   }, [setBreadcrumbs, streamlinedUiEnabled]);
 
   const handleModeChange = useCallback(
@@ -99,7 +100,7 @@ export function CompanyActivity() {
   if (streamlinedUiEnabled) return <AuditHub section="activity" />;
 
   if (!selectedCompanyId) {
-    return <EmptyState icon={History} message="Select an organization to view activity." />;
+    return <EmptyState icon={History} message={t("Select an organization to view activity.")} />;
   }
 
   return (

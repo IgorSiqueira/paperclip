@@ -82,7 +82,7 @@ vi.mock("@/components/AgentConfigForm", () => ({
   ),
   AdapterLoginPanel: ({ onConnected }: { onConnected: (id: string) => void }) => (
     <button onClick={() => onConnected("login-session")}>
-      Complete subscription login
+      {"Complete subscription login"}
     </button>
   ),
 }));

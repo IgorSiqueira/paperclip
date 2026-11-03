@@ -7,11 +7,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { t } from "@/i18n";
 
 /** Sentinel value for the "no pin / live default" option (Radix forbids ""). */
 export const RELEASE_DEFAULT_VALUE = "default";
 
-const DEFAULT_LABEL = "Default — current (recommended)";
+const DEFAULT_LABEL = t("Default — current (recommended)");
 
 /**
  * Render a bundled release's calendar date. Plain `YYYY-MM-DD` strings (like the
@@ -39,7 +40,7 @@ export function releaseName(release: CompanySkillVersionSummary): string {
 export function releaseOptionLabel(release: CompanySkillVersionSummary): string {
   const name = releaseName(release);
   const date = formatReleaseDate(release.releasedAt);
-  return date ? `${name} · released ${date}` : name;
+  return date ? t("{{name}} · released {{date}}", { name, date }) : name;
 }
 
 /** Compact badge label for a pinned release, e.g. `V7`. */
@@ -82,7 +83,7 @@ export function AgentSkillReleasePicker({
       <SelectTrigger
         size="sm"
         className="w-full max-w-(--sz-16rem) sm:w-(--sz-16rem)"
-        aria-label="Skill release"
+        aria-label={t("Skill release")}
       >
         <SelectValue placeholder={DEFAULT_LABEL}>{triggerLabel}</SelectValue>
       </SelectTrigger>
@@ -93,7 +94,7 @@ export function AgentSkillReleasePicker({
             <span className="flex items-center gap-2">
               <span className="truncate">{releaseOptionLabel(release)}</span>
               <Badge variant="secondary" className="shrink-0 text-(length:--text-nano)">
-                Beta
+                {t("Beta")}
               </Badge>
             </span>
           </SelectItem>

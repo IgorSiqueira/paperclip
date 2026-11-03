@@ -1,6 +1,7 @@
 import type { ProviderTraceMetadata } from "@paperclipai/shared";
 import { Bug, CircleOff } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { t } from "@/i18n";
 
 export function runRequestedProviderTrace(
   contextSnapshot: Record<string, unknown> | null | undefined,
@@ -31,23 +32,23 @@ export function ProviderTraceStatusBadge({
     ? new Date(trace.expiresAt).getTime() <= Date.now()
     : false;
   const label = expired
-    ? "Trace expired"
+    ? t("Trace expired")
     : status === "capturing"
-      ? "Raw tracing enabled"
+      ? t("Raw tracing enabled")
       : status === "complete"
-        ? "Trace captured"
+        ? t("Trace captured")
         : status === "incomplete"
-          ? "Trace incomplete"
+          ? t("Trace incomplete")
           : status === "truncated"
-            ? "Trace truncated"
+            ? t("Trace truncated")
             : status === "expired"
-              ? "Trace expired"
+              ? t("Trace expired")
               : status === "deleted"
-                ? "Trace deleted"
+                ? t("Trace deleted")
                 : requested
-                  ? "Trace requested"
+                  ? t("Trace requested")
                   : showOff
-                    ? "Trace off"
+                    ? t("Trace off")
                     : null;
   if (!label) return null;
   const warning =
@@ -70,10 +71,10 @@ export function ProviderTraceStatusBadge({
       )}
       title={
         trace
-          ? `${trace.frameCount} frames · ${trace.byteCount} bytes · expires ${new Date(trace.expiresAt).toLocaleString()}`
+          ? t("{{frameCount}} frames · {{byteCount}} bytes · expires {{toLocaleString}}", { frameCount: trace.frameCount, byteCount: trace.byteCount, toLocaleString: new Date(trace.expiresAt).toLocaleString() })
           : requested
-            ? "This run requested sensitive provider-frame capture."
-            : "Raw provider-frame capture was disabled for this run."
+            ? t("This run requested sensitive provider-frame capture.")
+            : t("Raw provider-frame capture was disabled for this run.")
       }
     >
       <Icon className="h-3 w-3" />

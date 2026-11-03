@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 /**
  * Shared error classification and user-facing copy.
  *
@@ -60,54 +61,54 @@ const CONNECTIVITY_CODES = new Set(["tenant_app_unavailable", "tenant_app_starti
 // raw `body.error`/`body.code`) or an `ErrorKind` fallback. Never return a raw
 // code to the user: anything not in this table falls back to its kind's copy.
 
-const UNAVAILABLE_BODY = "Paperclip is temporarily unavailable. Please try again in a moment.";
+const UNAVAILABLE_BODY = t("Paperclip is temporarily unavailable. Please try again in a moment.");
 
 const CODE_COPY: Record<string, { title: string; body: string }> = {
   tenant_app_unavailable: {
-    title: "Reconnecting to Paperclip",
-    body: "Paperclip is restarting or updating. Please try again in a moment.",
+    title: t("Reconnecting to Paperclip"),
+    body: t("Paperclip is restarting or updating. Please try again in a moment."),
   },
   tenant_app_starting: {
-    title: "Paperclip is starting",
-    body: "Paperclip is starting up. Please try again in a few seconds.",
+    title: t("Paperclip is starting"),
+    body: t("Paperclip is starting up. Please try again in a few seconds."),
   },
   WORKER_UNAVAILABLE: {
-    title: "Plugin unavailable",
-    body: "This plugin is restarting. Please try again in a moment.",
+    title: t("Plugin unavailable"),
+    body: t("This plugin is restarting. Please try again in a moment."),
   },
   TIMEOUT: {
-    title: "Request timed out",
-    body: "This took too long to respond. Please try again in a moment.",
+    title: t("Request timed out"),
+    body: t("This took too long to respond. Please try again in a moment."),
   },
   // Issue-thread interaction resolution (moved from lib/interaction-resolution-error.ts).
   interaction_audience_denied: {
-    title: "You can’t respond to this card",
-    body: "You are not in this card's resolver audience.",
+    title: t("You can’t respond to this card"),
+    body: t("You are not in this card's resolver audience."),
   },
   interaction_forbidden: {
-    title: "You can’t respond to this card",
-    body: "You do not have permission to respond to this card.",
+    title: t("You can’t respond to this card"),
+    body: t("You do not have permission to respond to this card."),
   },
   interaction_settled: {
-    title: "Already handled",
-    body: "This request is no longer waiting for a decision.",
+    title: t("Already handled"),
+    body: t("This request is no longer waiting for a decision."),
   },
   interaction_submit_failed: {
-    title: "Couldn't submit",
-    body: "Couldn't submit. Try again.",
+    title: t("Couldn't submit"),
+    body: t("Couldn't submit. Try again."),
   },
 };
 
 const KIND_COPY: Record<ErrorKind, { title: string; body: string }> = {
   // Moved from `ApiUnavailableError` (api/response.ts).
-  transient: { title: "Connection interrupted", body: UNAVAILABLE_BODY },
-  auth: { title: "Signed out", body: "Your session has ended. Sign in again to continue." },
-  forbidden: { title: "Not allowed", body: "You don’t have permission to do that." },
-  not_found: { title: "Not found", body: "This item doesn’t exist or was moved." },
-  conflict: { title: "Out of date", body: "This changed since you loaded it. Refresh and try again." },
-  invalid: { title: "Check your input", body: "Some details aren’t valid. Review them and try again." },
-  aborted: { title: "Cancelled", body: "The request was cancelled." },
-  unknown: { title: "Something went wrong", body: "An unexpected error occurred. Please try again." },
+  transient: { title: t("Connection interrupted"), body: UNAVAILABLE_BODY },
+  auth: { title: t("Signed out"), body: t("Your session has ended. Sign in again to continue.") },
+  forbidden: { title: t("Not allowed"), body: t("You don’t have permission to do that.") },
+  not_found: { title: t("Not found"), body: t("This item doesn’t exist or was moved.") },
+  conflict: { title: t("Out of date"), body: t("This changed since you loaded it. Refresh and try again.") },
+  invalid: { title: t("Check your input"), body: t("Some details aren’t valid. Review them and try again.") },
+  aborted: { title: t("Cancelled"), body: t("The request was cancelled.") },
+  unknown: { title: t("Something went wrong"), body: t("An unexpected error occurred. Please try again.") },
 };
 
 /** Copy for a specific code or kind, for callers that build their own messages. */
@@ -277,7 +278,7 @@ export function describeError(err: unknown, options: DescribeErrorOptions = {}):
   else body = readableServerMessage(err) ?? fallback.body;
 
   const title = options.action && kind !== "transient"
-    ? `Couldn't ${options.action}`
+    ? t("Couldn't {{action}}", { action: options.action })
     : (coded?.title ?? fallback.title);
   return { title, body, retryable };
 }

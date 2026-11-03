@@ -76,6 +76,7 @@ import {
   type ProviderConnection,
 } from "./AgentProviderConnection";
 import { adapterCuratesModelOrder } from "../../lib/model-utils";
+import { t } from "@/i18n";
 
 const controlClass = nativeSelectClassName;
 const nativeSetupHarnesses: Record<string, string> = {
@@ -92,7 +93,7 @@ export function NewAgentSetup() {
   if (!selectedCompanyId)
     return (
       <p className="text-sm text-muted-foreground">
-        Select an organization to create an agent.
+        {t("Select an organization to create an agent.")}
       </p>
     );
   if (params.get("adapterType") === "muse" || params.get("runnerProvider") === "muse") return <ExternalAgentInviteDialog companyId={selectedCompanyId} initialPreset="muse" initialMuseName={params.get("name") ?? ""} onClose={() => navigate("/agents/all")} onBack={() => navigate("/agents/all")} />;
@@ -334,7 +335,7 @@ function Setup({
     environmentError =
       cause instanceof Error
         ? cause.message
-        : "Could not resolve the environment.";
+        : t("Could not resolve the environment.");
   }
   const accountBoundCatalog = brandType === "copilot_runtime" || brandType === "antigravity_runtime";
   const accountCatalogAvailable = brandType === "copilot_runtime" || (brandType === "antigravity_runtime" && aiBinding?.method === "subscription");
@@ -869,11 +870,11 @@ function Setup({
         className="text-sm text-muted-foreground"
       >
         {savedAgent.error
-          ? "Could not load the created agent. Return to Agents to view it."
-          : "Loading your agent…"}
+          ? t("Could not load the created agent. Return to Agents to view it.")
+          : t("Loading your agent…")}
       </p>
     );
-  if (resumeSavedChoice) return <p role="status" className="text-sm text-muted-foreground">Loading your agent setup…</p>;
+  if (resumeSavedChoice) return <p role="status" className="text-sm text-muted-foreground">{t("Loading your agent setup…")}</p>;
   if (choosingAdapter || !name || !adapterType || (created?.metadata?.setupAdapterPending === true && !unreleasedAntigravity))
     return (
       <AgentBasicsDialog
@@ -891,8 +892,8 @@ function Setup({
       />
     );
   if (!created && connectionSettingsReady && !pendingAntigravity) return <div className="space-y-4">
-    <p role={error ? "alert" : "status"}>{error ?? "Creating your agent…"}</p>
-    {error && <Button onClick={() => setCreationAttempt(value => value + 1)}>Retry</Button>}
+    <p role={error ? "alert" : "status"}>{error ?? t("Creating your agent…")}</p>
+    {error && <Button onClick={() => setCreationAttempt(value => value + 1)}>{t("Retry")}</Button>}
   </div>;
   const steps = [
     ...(connectionAdapter ? ["connect" as const] : []),
@@ -900,9 +901,9 @@ function Setup({
     "saved" as const,
   ];
   const labels = {
-    connect: "Connect",
+    connect: t("Connect"),
     runtime: "Configure",
-    saved: "Confirmation",
+    saved: t("Confirmation"),
   };
   const confirmationEnvironment = created?.defaultEnvironmentId
     ? envs.data?.find((env) => env.id === created.defaultEnvironmentId)
@@ -920,12 +921,12 @@ function Setup({
     "Default";
   const environmentLabel =
     adapterType === "cursor_cloud"
-      ? "Cursor Cloud"
+      ? t("Cursor Cloud")
       : adapterType === "hermes_gateway"
-        ? "Hermes Gateway"
+        ? t("Hermes Gateway")
         : confirmationEnvironment
           ? environmentDisplayLabel(confirmationEnvironment)
-          : "Local machine";
+          : t("Local machine");
   const setupError =
     adapters.error ??
     adapterInventory.error ??
@@ -951,8 +952,8 @@ function Setup({
                 <span>
                   ·{" "}
                   {runnerProvider === "codex"
-                    ? "Native app server runner"
-                    : "Paperclip Runner"}
+                    ? t("Native app server runner")
+                    : t("Paperclip Runner")}
                 </span>
               )}
             </div>
@@ -963,7 +964,7 @@ function Setup({
             {environmentError}
           </p>
         )}
-        {preparingComputer && <p role="status" className="text-sm text-muted-foreground">Preparing your agent computer…</p>}
+        {preparingComputer && <p role="status" className="text-sm text-muted-foreground">{t("Preparing your agent computer…")}</p>}
         {created?.lifecycleError && <div className="space-y-2">
           <p role="alert" className="text-sm text-destructive">{created.lifecycleError}</p>
           <Button disabled={busy} onClick={() => {
@@ -974,7 +975,7 @@ function Setup({
               cache.setQueryData(queryKeys.agents.detail(agent.id), agent);
             }).catch(cause => setError(cause instanceof Error ? cause.message : "Could not retry computer preparation."))
               .finally(() => setEnvironmentSaving(false));
-          }}>Retry preparation</Button>
+          }}>{t("Retry preparation")}</Button>
         </div>}
         {setupError && (
           <p role="alert" className="text-sm text-destructive">
@@ -984,27 +985,26 @@ function Setup({
         {pendingAntigravity && configurationAvailable && (
           <div className="space-y-2">
             <p role="status" className="text-sm text-muted-foreground">
-              Google Antigravity is not available yet. You can connect your Google account and review settings. This agent cannot finish setup or run tasks yet. Model and connection settings are not saved to this agent yet.
+              {t("Google Antigravity is not available yet. You can connect your Google account and review settings. This agent cannot finish setup or run tasks yet. Model and connection settings are not saved to this agent yet.")}
             </p>
-            {created && <Button variant="link" className="px-0" onClick={() => setChoosingAdapter(true)}>Change adapter</Button>}
+            {created && <Button variant="link" className="px-0" onClick={() => setChoosingAdapter(true)}>{t("Change adapter")}</Button>}
           </div>
         )}
-        {antigravityCandidate && <p role="status" className="text-sm text-muted-foreground">Google Antigravity candidate is enabled for testing on this instance.</p>}
+        {antigravityCandidate && <p role="status" className="text-sm text-muted-foreground">{t("Google Antigravity candidate is enabled for testing on this instance.")}</p>}
         {adapterInventory.data && !configurationAvailable && (
           <p role="alert" className="text-sm text-destructive">
-            This adapter is unavailable. Choose an enabled adapter.
+            {t("This adapter is unavailable. Choose an enabled adapter.")}
           </p>
         )}
         {(managedOnly || forced.forced) &&
           !envs.isPending &&
           !environmentId && (
             <p role="alert" className="text-sm text-destructive">
-              No managed environment is available. Configure an environment
-              before continuing.
+              {t("No managed environment is available. Configure an environment before continuing.")}
             </p>
           )}
         <div className="flex flex-col gap-8 md:flex-row">
-          <nav aria-label="Agent setup steps" className="shrink-0 md:w-44">
+          <nav aria-label={t("Agent setup steps")} className="shrink-0 md:w-44">
             <ol className="flex flex-wrap gap-2 md:flex-col">
               {steps.map((step, index) => (
                 <li key={step}>
@@ -1045,7 +1045,7 @@ function Setup({
                   <OnboardingCard className="mx-auto">
                     <div className="mb-8">
                       <OnboardingHeading
-                        title="Connect a model"
+                        title={t("Connect a model")}
                         center
                       />
                     </div>
@@ -1110,9 +1110,9 @@ function Setup({
                           setScreen("runtime");
                         }).catch(cause => setError(cause instanceof Error ? cause.message : "Could not save agent setup."));
                       }}
-                    /></fieldset> : <p role="status" className="text-sm text-muted-foreground">Loading connection settings…</p>}
+                    /></fieldset> : <p role="status" className="text-sm text-muted-foreground">{t("Loading connection settings…")}</p>}
                     {["codex_local", "claude_local", "opencode_local", "pi_local"].includes(adapterType) && <details className="mt-5 space-y-3">
-                      <summary className="cursor-pointer text-sm text-muted-foreground">Advanced</summary>
+                      <summary className="cursor-pointer text-sm text-muted-foreground">{t("Advanced")}</summary>
                       <AgentRunnerSelect value={runner} disabled={busy}
                         pending={adapters.isFetching} error={adapters.error?.message} onRetry={() => { void adapters.refetch(); }}
                         defaultRunner={adapters.data?.find(item => item.type === adapterType)?.defaultRunner}
@@ -1126,30 +1126,30 @@ function Setup({
                       <h2 className="flex items-center gap-3 text-lg font-semibold">
                         <Check className="size-5" />
                         {created.status === "pending_approval"
-                          ? "Agent submitted for approval"
-                          : isDot ? "Your Dot agent has been created"
-                            : finishingSetup ? "Finishing agent setup" : runtimeReady ? "Your agent is ready" : "Your agent is paused"}
+                          ? t("Agent submitted for approval")
+                          : isDot ? t("Your Dot agent has been created")
+                            : finishingSetup ? t("Finishing agent setup") : runtimeReady ? t("Your agent is ready") : t("Your agent is paused")}
                       </h2>
                       <dl className="grid grid-cols-2 gap-4 text-sm">
-                        <dt className="text-muted-foreground">Adapter</dt>
+                        <dt className="text-muted-foreground">{t("Adapter")}</dt>
                         <dd>{getAdapterDisplay(isDot ? "openai_dot" : adapterType).label}</dd>
                         {showModel && (
                           <>
-                            <dt className="text-muted-foreground">Model</dt>
+                            <dt className="text-muted-foreground">{t("Model")}</dt>
                             <dd className="break-all">
                               {String(confirmationModel)}
                             </dd>
                           </>
                         )}
-                        <dt className="text-muted-foreground">Environment</dt>
+                        <dt className="text-muted-foreground">{t("Environment")}</dt>
                         <dd>{environmentLabel}</dd>
                       </dl>
                       <p className="text-sm text-muted-foreground">
                         {created.status === "pending_approval"
-                          ? "An organization administrator must approve this agent before it can work."
-                          : isDot ? "Pair your Dot and test event delivery in configuration before assigning work."
-                            : finishingSetup ? "Paperclip is preparing and verifying your agent. You can assign a task when it is ready."
-                              : runtimeReady ? "Assign a task when you’re ready for this agent to work." : "Review the agent’s status in configuration before assigning work."}
+                          ? t("An organization administrator must approve this agent before it can work.")
+                          : isDot ? t("Pair your Dot and test event delivery in configuration before assigning work.")
+                            : finishingSetup ? t("Paperclip is preparing and verifying your agent. You can assign a task when it is ready.")
+                              : runtimeReady ? t("Assign a task when you’re ready for this agent to work.") : t("Review the agent’s status in configuration before assigning work.")}
                       </p>
                     </div>
                     <div className="flex flex-wrap justify-between gap-3">
@@ -1158,7 +1158,7 @@ function Setup({
                         onClick={() => navigate(isDot ? "/agents/all" : `${agentUrl(created)}/runtime`)}
                       >
                         <Settings2 className="size-4" />
-                        {isDot ? "Back to Agents" : "Edit configuration"}
+                        {isDot ? t("Back to Agents") : t("Edit configuration")}
                       </Button>
                       <Button
                         disabled={created.status === "pending_approval" || (!isDot && !runtimeReady)}
@@ -1167,7 +1167,7 @@ function Setup({
                           : void assignFirstTask()
                         }
                       >
-                        {isDot ? "Pair Dot" : `Assign ${created.name} a Task`}
+                        {isDot ? t("Pair Dot") : t("Assign {{name}} a Task", { name: created.name })}
                         <ArrowRight className="size-4" />
                       </Button>
                     </div>
@@ -1181,14 +1181,14 @@ function Setup({
                     }}
                   >
                     <h2 className="text-xl font-semibold">
-                      Configure your agent
+                      {t("Configure your agent")}
                     </h2>
                     <fieldset disabled={busy} className="space-y-8">
                       <section className="space-y-5">
                         {isDot && <>
-                          <p className="text-sm text-muted-foreground">Create this agent, then copy its pairing prompt to your Dot.</p>
-                          {experimental.data?.enablePublicMcp !== true && <p className="text-sm text-muted-foreground">Enable Assistant connections (MCP) in Experimental settings before pairing.</p>}
-                          <ToggleField label="Allow externally billed provider" hint="Dot does not report token usage or cost. Paperclip cannot enforce a provider spend ceiling; known company and agent budget limits still apply."
+                          <p className="text-sm text-muted-foreground">{t("Create this agent, then copy its pairing prompt to your Dot.")}</p>
+                          {experimental.data?.enablePublicMcp !== true && <p className="text-sm text-muted-foreground">{t("Enable Assistant connections (MCP) in Experimental settings before pairing.")}</p>}
+                          <ToggleField label={t("Allow externally billed provider")} hint={t("Dot does not report token usage or cost. Paperclip cannot enforce a provider spend ceiling; known company and agent budget limits still apply.")}
                             checked={allowUnmeteredProvider} onChange={value => { setAllowUnmeteredProvider(value); resetTest(); }} />
                         </>}
                         {!connectionAdapter && aiProviderForAdapter(brandType) && (
@@ -1197,7 +1197,7 @@ function Setup({
                               if (accountCatalogAvailable && hashKey([aiBinding ?? null]) === hashKey([binding ?? null])) void refreshAccountModels();
                             }} />
                         )}
-                        {(connectionModels ? connectionModels.error : models.error) && <p role="alert" className="text-sm text-destructive">Could not load models. Retry or enter a model ID manually.</p>}
+                        {(connectionModels ? connectionModels.error : models.error) && <p role="alert" className="text-sm text-destructive">{t("Could not load models. Retry or enter a model ID manually.")}</p>}
                         {((showModel && !usingKimiApi) ||
                           efforts.length > 0) && (
                           <div className="grid items-start gap-5 sm:grid-cols-2">
@@ -1240,18 +1240,18 @@ function Setup({
                               />
                             )}
                             {efforts.length > 0 && (
-                              <Field label="Thinking effort">
-                                {brandType === "codex_local" ? <SelectPopover aria-label="Thinking effort" value={effort}
+                              <Field label={t("Thinking effort")}>
+                                {brandType === "codex_local" ? <SelectPopover aria-label={t("Thinking effort")} value={effort}
                                   onValueChange={value => { setEffort(value); resetTest(); }}
-                                  options={[{ value: "", label: "Auto" }, ...efforts.map(value => ({ value, label: value }))]} /> : <NativeSelect
-                                  aria-label="Thinking effort"
+                                  options={[{ value: "", label: t("Auto") }, ...efforts.map(value => ({ value, label: value }))]} /> : <NativeSelect
+                                  aria-label={t("Thinking effort")}
                                   value={effort}
                                   onChange={(event) => {
                                     setEffort(event.target.value);
                                     resetTest();
                                   }}
                                 >
-                                  <option value="">Auto</option>
+                                  <option value="">{t("Auto")}</option>
                                   {efforts.map((value) => (
                                     <option key={value} value={value}>
                                       {value}
@@ -1270,9 +1270,9 @@ function Setup({
                         {hasCredentialField && !aiBinding && (
                           <div className="grid gap-5 sm:grid-cols-2">
                             {chooseProvider && (
-                              <Field label="API key provider">
+                              <Field label={t("API key provider")}>
                                 <select
-                                  aria-label="API key provider"
+                                  aria-label={t("API key provider")}
                                   className={controlClass}
                                   value={provider}
                                   onChange={(event) => {
@@ -1286,11 +1286,11 @@ function Setup({
                                   {Object.keys(providerKeys).map((key) => (
                                     <option key={key} value={key}>
                                       {key === "openrouter"
-                                        ? "OpenRouter"
+                                        ? t("OpenRouter")
                                         : key === "openai"
-                                          ? "OpenAI"
+                                          ? t("OpenAI")
                                           : key === "anthropic"
-                                            ? "Anthropic"
+                                            ? t("Anthropic")
                                             : ({
                                                 google: "Google",
                                                 xai: "xAI",
@@ -1323,13 +1323,13 @@ function Setup({
                                     }}
                                     placeholder={
                                       selectedBinding
-                                        ? "Using saved key"
+                                        ? t("Using saved key")
                                         : (isKimi || [
                                               "cursor_cloud",
                                               "hermes_gateway",
                                             ].includes(adapterType))
-                                          ? "Required"
-                                          : "Optional if already configured"
+                                          ? t("Required")
+                                          : t("Optional if already configured")
                                     }
                                   />
                                   {adapterType === "cursor_cloud" && (
@@ -1339,7 +1339,7 @@ function Setup({
                                       rel="noopener noreferrer"
                                       className="shrink-0 text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground"
                                     >
-                                      get api key
+                                      {t("get api key")}
                                     </a>
                                   )}
                                 </div>
@@ -1351,7 +1351,7 @@ function Setup({
                                   chooseProvider ? "sm:col-span-2" : undefined
                                 }
                               >
-                                <Field label="Or use an organization secret">
+                                <Field label={t("Or use an organization secret")}>
                                   <SecretPicker
                                     secretId={
                                       selectedBinding &&
@@ -1376,17 +1376,16 @@ function Setup({
                               </div>
                             )}
                             <p className="text-xs text-muted-foreground sm:col-span-2">
-                              New keys are saved as organization secrets when
-                              you finish setup.
-                              {isKimi && " Use a Kimi Code API key for this runner."}
-                              {multiProvider && ` Use a ${provider}/model ID.`}
+                              {t("New keys are saved as organization secrets when you finish setup.")}
+                              {isKimi && t(" Use a Kimi Code API key for this runner.")}
+                              {multiProvider && t(" Use a {{provider}}/model ID.", { provider })}
                             </p>
                           </div>
                         )}
                         {adapterType === "hermes_gateway" && (
-                          <Field label="Hermes API base URL">
+                          <Field label={t("Hermes API base URL")}>
                             <Input
-                              aria-label="Hermes API base URL"
+                              aria-label={t("Hermes API base URL")}
                               value={gatewayUrl}
                               onChange={(event) => {
                                 setGatewayUrl(event.target.value);
@@ -1398,9 +1397,9 @@ function Setup({
                         )}
                         {usingKimiApi && (
                           <div className="grid gap-5 sm:grid-cols-2">
-                            <Field label="Kimi API model name">
+                            <Field label={t("Kimi API model name")}>
                               <Input
-                                aria-label="Kimi API model name"
+                                aria-label={t("Kimi API model name")}
                                 value={kimiModel}
                                 onChange={(event) => {
                                   setKimiModel(event.target.value);
@@ -1409,9 +1408,9 @@ function Setup({
                                 placeholder="kimi-for-coding"
                               />
                             </Field>
-                            <Field label="Kimi API protocol">
+                            <Field label={t("Kimi API protocol")}>
                               <select
-                                aria-label="Kimi API protocol"
+                                aria-label={t("Kimi API protocol")}
                                 className={controlClass}
                                 value={kimiProtocol}
                                 onChange={(event) => {
@@ -1427,28 +1426,28 @@ function Setup({
                               </select>
                             </Field>
                             <Field
-                              label="Kimi API base URL"
-                              hint="Optional override for your provider endpoint."
+                              label={t("Kimi API base URL")}
+                              hint={t("Optional override for your provider endpoint.")}
                             >
                               <Input
-                                aria-label="Kimi API base URL"
+                                aria-label={t("Kimi API base URL")}
                                 value={kimiBaseUrl}
                                 onChange={(event) => {
                                   setKimiBaseUrl(event.target.value);
                                   resetTest();
                                 }}
-                                placeholder="Provider default"
+                                placeholder={t("Provider default")}
                               />
                             </Field>
                           </div>
                         )}
                         {adapterType === "cursor_cloud" && (
                           <>
-                          {nativeCursorCloud && <p className="text-sm text-muted-foreground">Experimental. Requires a local Paperclip computer. Cursor manages cloud command permissions; the effective model is not acknowledged.</p>}
+                          {nativeCursorCloud && <p className="text-sm text-muted-foreground">{t("Experimental. Requires a local Paperclip computer. Cursor manages cloud command permissions; the effective model is not acknowledged.")}</p>}
                           <div className="grid gap-5 sm:grid-cols-2">
-                            <Field label="GitHub repository">
+                            <Field label={t("GitHub repository")}>
                               <Input
-                                aria-label="GitHub repository"
+                                aria-label={t("GitHub repository")}
                                 value={repository}
                                 onChange={(event) => {
                                   setRepository(event.target.value);
@@ -1457,10 +1456,10 @@ function Setup({
                                 placeholder="https://github.com/your-org/repo"
                               />
                             </Field>
-                            <Field label="Branch">
+                            <Field label={t("Branch")}>
                               <Input
-                                aria-label="Branch"
-                                placeholder="Repository default"
+                                aria-label={t("Branch")}
+                                placeholder={t("Repository default")}
                                 value={branch}
                                 onChange={(event) => {
                                   setBranch(event.target.value);
@@ -1472,7 +1471,7 @@ function Setup({
                           </>
                         )}
                         {["codex_local", "claude_local", "opencode_local", "pi_local", "cursor_cloud"].includes(adapterType) && <details className="space-y-3">
-                          <summary className="cursor-pointer text-sm text-muted-foreground">Advanced</summary>
+                          <summary className="cursor-pointer text-sm text-muted-foreground">{t("Advanced")}</summary>
                           <AgentRunnerSelect value={runner} disabled={busy}
                             pending={adapters.isFetching} error={adapters.error?.message} onRetry={() => { void adapters.refetch(); }}
                             defaultRunner={adapters.data?.find(item => item.type === adapterType)?.defaultRunner}
@@ -1482,9 +1481,9 @@ function Setup({
                       </section>
                       {adapterType !== "hermes_gateway" && (adapterType !== "cursor_cloud" || nativeCursorCloud) && (
                         <section className="space-y-5">
-                          <h3 className="text-sm font-semibold">Environment</h3>
+                          <h3 className="text-sm font-semibold">{t("Environment")}</h3>
                           <select
-                            aria-label="Environment"
+                            aria-label={t("Environment")}
                             className={controlClass}
                             value={environmentOverride}
                             disabled={forced.forced}
@@ -1493,7 +1492,7 @@ function Setup({
                             }}
                           >
                             <option value="">
-                              Default: {nativeCursorCloud ? environment ? environmentDisplayLabel(environment) : "Local machine" : environmentLabel}
+                              {t("Default:")} {nativeCursorCloud ? environment ? environmentDisplayLabel(environment) : t("Local machine") : environmentLabel}
                             </option>
                             {(envs.data ?? [])
                               .filter((env) => env.status === "active" && (!managedOnly || env.driver !== "local") && (!nativeCursorCloud || env.driver === "local"))
@@ -1521,10 +1520,10 @@ function Setup({
                       </p>
                     )}
                     {environmentSaveError && <p role="alert" className="text-sm text-destructive">{environmentSaveError}</p>}
-                    {environmentSaveError && !environmentSelectionSaved && <Button disabled={busy} onClick={() => void changeEnvironment()}>Retry saving environment</Button>}
+                    {environmentSaveError && !environmentSelectionSaved && <Button disabled={busy} onClick={() => void changeEnvironment()}>{t("Retry saving environment")}</Button>}
                     <div className="flex justify-between border-t border-border py-5">
                       <div className="flex items-center gap-3">
-                        <Button type="button" variant="ghost" disabled={busy} onClick={() => void saveAndExit()}>{pendingAntigravity ? "Back to agents" : "Save & exit"}</Button>
+                        <Button type="button" variant="ghost" disabled={busy} onClick={() => void saveAndExit()}>{pendingAntigravity ? t("Back to agents") : t("Save & exit")}</Button>
                       {connectionAdapter ? (
                         <Button
                           type="button"
@@ -1533,7 +1532,7 @@ function Setup({
                           onClick={editConnection}
                         >
                           <ArrowLeft className="size-4" />
-                          Connection
+                          {t("Connection")}
                         </Button>
                       ) : (
                         null
@@ -1544,7 +1543,7 @@ function Setup({
                         disabled={!ready || busy}
                         onClick={() => setScreen("connect")}
                       >
-                        Connect model
+                        {t("Connect model")}
                         <ArrowRight className="size-4" />
                       </Button> : <Button
                         type="submit"
@@ -1556,7 +1555,7 @@ function Setup({
                           Boolean(connectionAdapter && !connection)
                         }
                       >
-                        {saving ? "Saving…" : "Finish setup"}
+                        {saving ? t("Saving…") : t("Finish setup")}
                         <Check className="size-4" />
                       </Button>}
                     </div>

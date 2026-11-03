@@ -5,6 +5,7 @@ import { ApiError } from "../api/client";
 import { issuesApi } from "../api/issues";
 import { useToastActions } from "../context/ToastContext";
 import { queryKeys } from "../lib/queryKeys";
+import { t } from "@/i18n";
 
 export type RetryNowError = {
   message: string;
@@ -15,18 +16,18 @@ export type RetryNowError = {
 function readErrorMessage(error: unknown): string {
   if (error instanceof ApiError) {
     if (typeof error.message === "string" && error.message.trim().length > 0) return error.message;
-    return `Request failed (${error.status})`;
+    return t("Request failed ({{status}})", { status: error.status });
   }
   if (error instanceof Error && error.message) return error.message;
-  return "The request failed. Try again in a moment.";
+  return t("The request failed. Try again in a moment.");
 }
 
 export const RETRY_NOW_OUTCOME_HEADLINE: Record<IssueRetryNowOutcome, string> = {
-  promoted: "Retry promoted",
-  already_promoted: "Retry already running",
-  waiting: "Retry waiting",
-  no_scheduled_retry: "No scheduled retry",
-  gate_suppressed: "Couldn't retry now",
+  promoted: t("Retry promoted"),
+  already_promoted: t("Retry already running"),
+  waiting: t("Retry waiting"),
+  no_scheduled_retry: t("No scheduled retry"),
+  gate_suppressed: t("Couldn't retry now"),
 };
 
 export function useRetryNowMutation(
@@ -66,7 +67,7 @@ export function useRetryNowMutation(
     },
     onError: (error) => {
       pushToast({
-        title: "Couldn't retry now",
+        title: t("Couldn't retry now"),
         body: readErrorMessage(error),
         tone: "error",
       });

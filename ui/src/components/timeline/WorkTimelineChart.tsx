@@ -27,6 +27,7 @@ import {
   type LayoutOptions,
   type PositionedBar,
 } from "@/lib/timeline/layout";
+import { t } from "@/i18n";
 
 export type ZoomLevel = "hour" | "day" | "week";
 
@@ -141,23 +142,23 @@ export function formatVisibleDurationMinutes(minutes: number): string {
   const rounded = Math.max(1, Math.round(minutes));
   if (rounded >= 7 * 24 * 60 && rounded % (7 * 24 * 60) === 0) {
     const weeks = rounded / (7 * 24 * 60);
-    return `${weeks} week${weeks === 1 ? "" : "s"} visible`;
+    return (weeks === 1 ? t("{{weeks}} week visible", { weeks }) : t("{{weeks}} weeks visible", { weeks }));
   }
   if (rounded >= 24 * 60 && rounded % (24 * 60) === 0) {
     const days = rounded / (24 * 60);
-    return `${days} day${days === 1 ? "" : "s"} visible`;
+    return (days === 1 ? t("{{days}} day visible", { days }) : t("{{days}} days visible", { days }));
   }
   if (rounded >= 24 * 60) {
     const days = Math.floor(rounded / (24 * 60));
     const hours = Math.round((rounded % (24 * 60)) / 60);
-    return `${days}d${hours > 0 ? ` ${hours}h` : ""} visible`;
+    return t("{{days}}d{{value}} visible", { days, value: hours > 0 ? ` ${hours}h` : "" });
   }
   if (rounded >= 60 && rounded % 60 === 0) {
     const hours = rounded / 60;
-    return `${hours} hour${hours === 1 ? "" : "s"} visible`;
+    return (hours === 1 ? t("{{hours}} hour visible", { hours }) : t("{{hours}} hours visible", { hours }));
   }
-  if (rounded >= 60) return `${Math.floor(rounded / 60)}h ${rounded % 60}m visible`;
-  return `${rounded} minutes visible`;
+  if (rounded >= 60) return t("{{floor}}h {{rounded}}m visible", { floor: Math.floor(rounded / 60), rounded: rounded % 60 });
+  return t("{{rounded}} minutes visible", { rounded });
 }
 
 function truncate(text: string, n = 42): string {
@@ -792,13 +793,13 @@ function Tooltip({ tooltip, now }: { tooltip: TooltipState; now: number }) {
     >
       <div className="text-(length:--text-compact) font-medium text-foreground">{truncate(title)}</div>
       <div className="mt-0.5 text-muted-foreground">
-        {fmtClock(startMs)}–{bar.span.end ? fmtClock(endMs) : "now"} · {formatDuration(startMs, endMs)} ·{" "}
+        {fmtClock(startMs)}–{bar.span.end ? fmtClock(endMs) : t("now")} · {formatDuration(startMs, endMs)} ·{" "}
         <span className="font-medium text-foreground">{bar.span.status}</span>
       </div>
       {bar.kickoff && (
         <div className="text-muted-foreground">
-          kicked off by: {(bar.kickoff as WorkTimelineActor).name}
-          {bar.span.retryOfRunId ? " · retry" : ""}
+          {t("kicked off by:")} {(bar.kickoff as WorkTimelineActor).name}
+          {bar.span.retryOfRunId ? t(" · retry") : ""}
         </div>
       )}
       {tooltip.connectorHint && (
@@ -946,7 +947,7 @@ function MiniMap({
           height={H - 2}
           width={handleW}
           testId="timeline-minimap-left-handle"
-          label="Drag left edge to resize visible range"
+          label={t("Drag left edge to resize visible range")}
           onMouseDown={(e) => startRangeDrag("left", e)}
         />
         <MiniMapHandle
@@ -955,7 +956,7 @@ function MiniMap({
           height={H - 2}
           width={handleW}
           testId="timeline-minimap-right-handle"
-          label="Drag right edge to resize visible range"
+          label={t("Drag right edge to resize visible range")}
           onMouseDown={(e) => startRangeDrag("right", e)}
         />
       </svg>

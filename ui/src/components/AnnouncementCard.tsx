@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useAnnouncementAnimation } from "@/hooks/useAnnouncementAnimation";
+import { t } from "@/i18n";
 
 export interface AnnouncementCardProps {
   announcement: Announcement;
@@ -49,7 +50,7 @@ export function AnnouncementCard({ announcement, onDismiss, imageSrc, animationS
           <iframe title={announcement.animation!.alt} aria-hidden="true" tabIndex={-1} sandbox="" referrerPolicy="no-referrer" srcDoc={animationDocument!} className="h-full w-full border-0" />
         </div>}
       </div>}
-      <Button variant="secondary" size="icon" aria-label="Dismiss announcement" onClick={onDismiss} className="absolute right-2 top-2 z-10 size-8 rounded-full shadow-sm">
+      <Button variant="secondary" size="icon" aria-label={t("Dismiss announcement")} onClick={onDismiss} className="absolute right-2 top-2 z-10 size-8 rounded-full shadow-sm">
         <X className="size-4" aria-hidden="true" />
       </Button>
       <div className={cn("flex flex-col gap-1 px-4 py-4", !showImage && !animationDocument && "pr-12")}>

@@ -57,6 +57,7 @@ import { useLocation } from "../lib/router";
 import { agentRouteRef } from "../lib/utils";
 import { buildSameOriginWebSocketUrl } from "../lib/websocket-url";
 import { tryCreateWebSocket } from "../lib/websocket";
+import { t as translate } from "@/i18n";
 
 const TOAST_COOLDOWN_WINDOW_MS = 10_000;
 const TOAST_COOLDOWN_MAX = 3;
@@ -266,15 +267,15 @@ function resolveActorLabel(
   if (actorType === "agent" && actorId) {
     return (
       resolveAgentName(queryClient, companyId, actorId) ??
-      `Agent ${shortId(actorId)}`
+      translate("Agent {{shortId}}", { shortId: shortId(actorId) })
     );
   }
-  if (actorType === "system") return "System";
+  if (actorType === "system") return translate("System");
   if (actorType === "user" && actorId) {
     return resolveUserName(queryClient, companyId, actorId) ??
-      (actorId === "board" || actorId === "local-board" ? "Board" : `User ${shortId(actorId)}`);
+      (actorId === "board" || actorId === "local-board" ? translate("Board") : translate("User {{shortId}}", { shortId: shortId(actorId) }));
   }
-  return actorType === "plugin" ? "Plugin" : "Unknown actor";
+  return actorType === "plugin" ? translate("Plugin") : translate("Unknown actor");
 }
 
 interface IssueToastContext {
@@ -1093,10 +1094,10 @@ function buildActivityToast(
   if (action === "issue.created") {
     return {
       actor: toastActor,
-      title: `${actor} created ${issue.ref}`,
+      title: translate("{{actor}} created {{ref}}", { actor, ref: issue.ref }),
       body: issue.title ? truncate(issue.title, 96) : undefined,
       tone: "success",
-      action: { label: `View ${issue.ref}`, href: issue.href },
+      action: { label: translate("View {{ref}}", { ref: issue.ref }), href: issue.href },
       dedupeKey: `activity:${action}:${entityId}`,
     };
   }
@@ -1116,10 +1117,10 @@ function buildActivityToast(
         : issue.label;
     return {
       actor: toastActor,
-      title: `${actor} updated ${issue.ref}`,
+      title: translate("{{actor}} updated {{ref}}", { actor, ref: issue.ref }),
       body: truncate(body, 100),
       tone: "info",
-      action: { label: `View ${issue.ref}`, href: issue.href },
+      action: { label: translate("View {{ref}}", { ref: issue.ref }), href: issue.href },
       dedupeKey: `activity:${action}:${entityId}`,
     };
   }
@@ -1153,7 +1154,7 @@ function buildActivityToast(
     title,
     body: body ? truncate(body, 96) : undefined,
     tone: "info",
-    action: { label: `View ${issue.ref}`, href: issue.href },
+    action: { label: translate("View {{ref}}", { ref: issue.ref }), href: issue.href },
     dedupeKey: `activity:${action}:${entityId}:${commentId ?? "na"}`,
   };
 }
@@ -1174,10 +1175,10 @@ function buildJoinRequestToast(
   const label = requestType === "agent" ? "Agent" : "Someone";
 
   return {
-    title: `${label} wants to join`,
-    body: "A new join request is waiting for approval.",
+    title: translate("{{label}} wants to join", { label }),
+    body: translate("A new join request is waiting for approval."),
     tone: "info",
-    action: { label: "View inbox", href: "/inbox/mine" },
+    action: { label: translate("View inbox"), href: "/inbox/mine" },
     dedupeKey: `join-request:${entityId}`,
   };
 }
@@ -1206,7 +1207,7 @@ function buildAgentStatusToast(
     title,
     body,
     tone,
-    action: { label: "View agent", href: `/agents/${agentId}` },
+    action: { label: translate("View agent"), href: `/agents/${agentId}` },
     dedupeKey: `agent-status:${agentId}:${status}`,
   };
 }
@@ -1237,11 +1238,11 @@ function buildRunStatusToast(
     contextSource?.startsWith("chat:")
   ) {
     return {
-      title: `${name} couldn't start this chat`,
-      body: "This external chat identity isn't linked, and isolated guest workspaces are disabled. Link the identity in Connectors or enable isolated workspaces, then start a new task.",
+      title: translate("{{name}} couldn't start this chat", { name }),
+      body: translate("This external chat identity isn't linked, and isolated guest workspaces are disabled. Link the identity in Connectors or enable isolated workspaces, then start a new task."),
       tone: "warn",
       ttlMs: 10_000,
-      action: { label: "Open chat connections", href: "/apps" },
+      action: { label: translate("Open chat connections"), href: "/apps" },
       dedupeKey: `run-status:${runId}:${status}`,
     };
   }
@@ -1273,7 +1274,7 @@ function buildRunStatusToast(
     body,
     tone,
     ttlMs: status === "succeeded" ? 5000 : 7000,
-    action: { label: "View run", href: `/agents/${agentId}/runs/${runId}` },
+    action: { label: translate("View run"), href: `/agents/${agentId}/runs/${runId}` },
     dedupeKey: `run-status:${runId}:${status}`,
   };
 }

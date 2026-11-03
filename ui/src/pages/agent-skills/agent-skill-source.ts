@@ -1,6 +1,7 @@
 import { Boxes, Folder, Link2, Paperclip, type LucideIcon } from "lucide-react";
 import { GithubIcon } from "@/components/icons/github-icon";
 import type { CompanySkillListItem } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 export interface AgentSkillSourceMeta {
   icon: LucideIcon;
@@ -78,33 +79,33 @@ function isFilesystemLikeLabel(value: string) {
 
 function displayLocalSourceLabel(label: string | null | undefined) {
   const trimmed = label?.trim();
-  if (!trimmed || isFilesystemLikeLabel(trimmed)) return "Local folder";
+  if (!trimmed || isFilesystemLikeLabel(trimmed)) return t("Local folder");
   return trimmed;
 }
 
 function displayCatalogSourceLabel(label: string | null | undefined) {
   const trimmed = label?.trim();
-  if (!trimmed || isFilesystemLikeLabel(trimmed)) return "Catalog";
+  if (!trimmed || isFilesystemLikeLabel(trimmed)) return t("Catalog");
   return trimmed;
 }
 
 export function buildAgentSkillSourceMeta(skill: SourceSkill): AgentSkillSourceMeta {
   if (skill.sourceBadge === "github" || skill.sourceType === "github") {
     const repo = githubRepoLabel(skill.sourceLabel) ?? githubRepoLabel(skill.sourceLocator);
-    return { icon: GithubIcon, label: repo ? `GitHub · ${repo}` : "GitHub" };
+    return { icon: GithubIcon, label: repo ? t("GitHub · {{repo}}", { repo }) : t("GitHub") };
   }
 
   if (skill.sourceBadge === "skills_sh" || skill.sourceType === "skills_sh") {
     const repo = githubRepoLabel(skill.sourceLabel) ?? githubRepoLabel(skill.sourceLocator);
-    return { icon: GithubIcon, label: repo ? `skills.sh · ${repo}` : "skills.sh" };
+    return { icon: GithubIcon, label: repo ? t("skills.sh · {{repo}}", { repo }) : "skills.sh" };
   }
 
   if (skill.sourceBadge === "url" || skill.sourceType === "url") {
-    return { icon: Link2, label: hostLabel(skill.sourceLabel) ?? hostLabel(skill.sourceLocator) ?? "URL" };
+    return { icon: Link2, label: hostLabel(skill.sourceLabel) ?? hostLabel(skill.sourceLocator) ?? t("URL") };
   }
 
   if (skill.sourceBadge === "paperclip") {
-    return { icon: Paperclip, label: skill.sourceLabel?.trim() || "Paperclip managed" };
+    return { icon: Paperclip, label: skill.sourceLabel?.trim() || t("Paperclip managed") };
   }
 
   if (skill.sourceBadge === "catalog" || skill.sourceType === "catalog") {

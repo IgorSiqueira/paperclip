@@ -1,9 +1,5 @@
 {
-  "app": {
-    "noCompanies": {
-      "title": "اولین شرکت خود را ایجاد کنید",
-      "description": "با ایجاد یک شرکت شروع کنید.",
-      "newCompany": "شرکت جدید"
-    }
-  }
+  "Create your first organization": "اولین شرکت خود را ایجاد کنید",
+  "Get started by creating an organization.": "با ایجاد یک شرکت شروع کنید.",
+  "New Organization": "شرکت جدید"
 }

@@ -4,6 +4,7 @@ import { resolvePaperclipRunnerModel } from "@paperclipai/adapter-utils";
 import { DEFAULT_GROK_LOCAL_MODEL, grokLocalReasoningEffortsForModel } from "@paperclipai/adapter-grok-local";
 import { DEFAULT_KIMI_LOCAL_MODEL, modelSupportsEffort, KIMI_SUPPORTED_EFFORTS } from "@paperclipai/adapter-kimi-local";
 import { aiConnectionBindingSchema, aiRuntimeConnectionBindingSchema, agentHarnessType, type Agent, type IssueAssigneeAdapterOverrides } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 export interface ComposerRunSettings {
   model: string | null;
@@ -13,8 +14,8 @@ export interface ComposerRunSettings {
 
 export const DEFAULT_COMPOSER_RUN_SETTINGS: ComposerRunSettings = { model: null, effort: null, fast: false };
 export const EFFORT_LABELS: Record<string, string> = {
-  off: "Off", minimal: "Minimal", low: "Low", medium: "Medium", high: "High",
-  xhigh: "Extra High", max: "Max", ultra: "Ultra",
+  off: t("Off"), minimal: t("Minimal"), low: t("Low"), medium: t("Medium"), high: t("High"),
+  xhigh: t("Extra High"), max: t("Max"), ultra: t("Ultra"),
 };
 
 const MODEL_ADAPTERS = new Set([

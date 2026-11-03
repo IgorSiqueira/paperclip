@@ -28,6 +28,7 @@ import {
   type IssueThreadInteractionResolverPolicyProvenance,
 } from "@paperclipai/shared";
 import type { IssueThreadInteraction } from "./issue-thread-interactions";
+import { t } from "@/i18n";
 
 /**
  * The open default. Creation surfaces present this first and requesters omit
@@ -37,9 +38,9 @@ export const DEFAULT_RESOLVER_POLICY: IssueThreadInteractionCanonicalResolverPol
 
 /** Short label for a resolver audience — badges, select options, table cells. */
 const RESOLVER_POLICY_LABELS: Record<IssueThreadInteractionCanonicalResolverPolicy, string> = {
-  anyone: "Anyone",
-  not_creator: "Anyone except creator",
-  human_only: "Human only",
+  anyone: t("Anyone"),
+  not_creator: t("Anyone except creator"),
+  human_only: t("Human only"),
 };
 
 /**
@@ -50,10 +51,10 @@ const RESOLVER_POLICY_LABELS: Record<IssueThreadInteractionCanonicalResolverPoli
  */
 const RESOLVER_POLICY_EFFECTS: Record<IssueThreadInteractionCanonicalResolverPolicy, string> = {
   anyone:
-    "Anyone in the organization can respond — the board or any agent, including the one that asked.",
+    t("Anyone in the organization can respond — the board or any agent, including the one that asked."),
   not_creator:
-    "Anyone in the organization except the agent that created the card, and its run. Use this when the answer has to come from someone else.",
-  human_only: "Only a person on the board can respond. Agents are turned away.",
+    t("Anyone in the organization except the agent that created the card, and its run. Use this when the answer has to come from someone else."),
+  human_only: t("Only a person on the board can respond. Agents are turned away."),
 };
 
 /** Accepts canonical values and the deprecated `board_*` compatibility aliases. */
@@ -189,28 +190,28 @@ export function describeResolverAudience({
   const creator = midSentence(creatorLabel?.trim() || "the agent that created it");
 
   const summary = isUserAddressee
-    ? `Only ${addressee} can respond.`
+    ? t("Only {{addressee}} can respond.", { addressee })
     : policy === "human_only"
-    ? `${hasAddressee ? `Assigned to ${addressee}. ` : ""}Only a person on the board can respond — agents cannot resolve this card.`
+    ? t("{{value}}Only a person on the board can respond — agents cannot resolve this card.", { value: hasAddressee ? `Assigned to ${addressee}. ` : "" })
     : hasAddressee
-      ? `Only ${addressee} or a person on the board can respond.`
+      ? t("Only {{addressee}} or a person on the board can respond.", { addressee })
       : policy === "not_creator"
-        ? `Anyone in the organization except ${creator} can respond.`
-        : "Anyone in the organization can respond — the board or any agent, including the one that asked.";
+        ? t("Anyone in the organization except {{creator}} can respond.", { creator })
+        : t("Anyone in the organization can respond — the board or any agent, including the one that asked.");
 
   // Same fact, fewer words: a collapsed row has to answer "is this mine to
   // decide?" in one glance, next to the buttons that act on the answer.
   const shortSummary = isUserAddressee
-    ? `Only ${addressee} can respond`
+    ? t("Only {{addressee}} can respond", { addressee })
     : policy === "human_only"
     ? hasAddressee
-      ? `Assigned to ${addressee} · board only`
-      : "Only the board can respond"
+      ? t("Assigned to {{addressee}} · board only", { addressee })
+      : t("Only the board can respond")
     : hasAddressee
-      ? `Only ${addressee} or the board can respond`
+      ? t("Only {{addressee}} or the board can respond", { addressee })
       : policy === "not_creator"
-        ? `Anyone except ${creator} can respond`
-        : "Anyone can respond";
+        ? t("Anyone except {{creator}} can respond", { creator })
+        : t("Anyone can respond");
 
   const source = facts.effectiveResolverPolicySource;
   const provenance = facts.resolverPolicyProvenance;
@@ -220,11 +221,11 @@ export function describeResolverAudience({
   // open resolution existed. An explicitly requested restriction is already
   // fully described by `summary`.
   const narrowedNote = source === "governed_action"
-    ? "This card runs a governed action, so it stays human-only whatever audience was requested."
+    ? t("This card runs a governed action, so it stays human-only whatever audience was requested.")
     : source === "company_cap"
-      ? `Organization interaction governance narrowed this from ${RESOLVER_POLICY_LABELS[requestedPolicy]} to ${RESOLVER_POLICY_LABELS[policy]}.`
+      ? t("Organization interaction governance narrowed this from {{RESOLVER_POLICY_LABELS}} to {{RESOLVER_POLICY_LABELS2}}.", { RESOLVER_POLICY_LABELS: RESOLVER_POLICY_LABELS[requestedPolicy], RESOLVER_POLICY_LABELS2: RESOLVER_POLICY_LABELS[policy] })
       : provenance === "legacy_inherited_restriction"
-        ? "Created before Anyone became the default, so it stays restricted. A new card would be open."
+        ? t("Created before Anyone became the default, so it stays restricted. A new card would be open.")
         : null;
 
   const narrowedBy: InteractionAudienceNarrowing | null = source === "governed_action"
@@ -246,7 +247,7 @@ export function describeResolverAudience({
     // while the sentence next to it names one actor. `human_only` wins for an
     // agent addressee, while a user addressee is the narrower human audience.
     label: (policy !== "human_only" || isUserAddressee) && hasAddressee
-      ? "Addressed"
+      ? t("Addressed")
       : RESOLVER_POLICY_LABELS[policy],
     summary,
     shortSummary,

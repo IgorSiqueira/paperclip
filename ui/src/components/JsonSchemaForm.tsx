@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SecretBindingPicker, type SecretBindingValue } from "./SecretBindingPicker";
+import { t as translate } from "@/i18n";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -553,12 +554,12 @@ const EnumField = React.memo(({
         disabled={disabled}
       >
         <SelectTrigger className="w-full" aria-label={label} aria-required={isRequired}>
-          <SelectValue placeholder="Select an option" />
+          <SelectValue placeholder={translate("Select an option")} />
         </SelectTrigger>
         <SelectContent>
           {showUnsetOption && (
             <SelectItem value={ENUM_UNSET_VALUE} textValue="None">
-              <span className="text-muted-foreground">None</span>
+              <span className="text-muted-foreground">{translate("None")}</span>
             </SelectItem>
           )}
           {options.map((option) => (
@@ -691,7 +692,7 @@ const SecretField = React.memo(({
           <Eye className="h-4 w-4 text-muted-foreground" />
         )}
         <span className="sr-only">
-          {isVisible ? "Hide secret" : "Show secret"}
+          {isVisible ? translate("Hide secret") : translate("Show secret")}
         </span>
       </Button>
     </div>
@@ -722,7 +723,7 @@ const SecretField = React.memo(({
           <Eye className="h-4 w-4 text-muted-foreground" />
         )}
         <span className="sr-only">
-          {isVisible ? "Hide secret" : "Show secret"}
+          {isVisible ? translate("Hide secret") : translate("Show secret")}
         </span>
       </Button>
     </div>
@@ -733,7 +734,7 @@ const SecretField = React.memo(({
       label={label}
       description={
         description ||
-        "Pick an existing organization secret, or paste a raw value (Paperclip will store it as a secret on save)."
+        translate("Pick an existing organization secret, or paste a raw value (Paperclip will store it as a secret on save).")
       }
       required={isRequired}
       error={error}
@@ -744,7 +745,7 @@ const SecretField = React.memo(({
           value={bindingValue}
           onChange={handlePickerChange}
           label=""
-          placeholder="Select an existing secret"
+          placeholder={translate("Select an existing secret")}
           allowVersionSelector={false}
           emptyHint="No active secrets yet. Create one or paste a raw value below."
           disabled={disabled}
@@ -763,7 +764,7 @@ const SecretField = React.memo(({
                   }}
                   disabled={disabled}
                 >
-                  Hide raw value input
+                  {translate("Hide raw value input")}
                 </button>
               ) : null}
             </div>
@@ -774,7 +775,7 @@ const SecretField = React.memo(({
               onClick={() => setShowRawInput(true)}
               disabled={disabled}
             >
-              Or paste a raw value
+              {translate("Or paste a raw value")}
             </button>
           )
         ) : null}
@@ -975,7 +976,7 @@ const ArrayField = React.memo(({
           }}
         >
           <Plus className="mr-2 h-4 w-4" />
-          {isComplex ? "Add item" : "Add"}
+          {isComplex ? translate("Add item") : translate("Add")}
         </Button>
       </div>
 
@@ -987,7 +988,7 @@ const ArrayField = React.memo(({
           >
             <div className="flex-1">
               <div className="mb-2 text-xs font-medium text-muted-foreground">
-                Item {index + 1}
+                {translate("Item")} {index + 1}
               </div>
               <FormField
                 propSchema={itemSchema}
@@ -1020,13 +1021,13 @@ const ArrayField = React.memo(({
               }}
             >
               <Trash2 className="h-4 w-4" />
-              <span className="sr-only">Remove item</span>
+              <span className="sr-only">{translate("Remove item")}</span>
             </Button>
           </div>
         ))}
         {items.length === 0 && (
           <div className="rounded-lg border border-dashed p-4 text-center text-xs text-muted-foreground">
-            No items added yet.
+            {translate("No items added yet.")}
           </div>
         )}
       </div>
@@ -1061,8 +1062,8 @@ function JsonObjectField({ value, onChange, disabled, label, error }: {
     onChange(next);
   };
   return <div className="space-y-2">
-    <Textarea aria-label={`${label} JSON`} aria-invalid={!!error} value={text} onChange={(event) => change(event.target.value)} disabled={disabled} rows={5} className="font-mono text-sm" />
-    <p className="text-xs text-muted-foreground">Enter a JSON object using the action's argument names.</p>
+    <Textarea aria-label={translate("{{label}} JSON", { label })} aria-invalid={!!error} value={text} onChange={(event) => change(event.target.value)} disabled={disabled} rows={5} className="font-mono text-sm" />
+    <p className="text-xs text-muted-foreground">{translate("Enter a JSON object using the action's argument names.")}</p>
     {error && <p role="alert" className="text-xs text-destructive">{error}</p>}
   </div>;
 }
@@ -1283,7 +1284,7 @@ export function JsonSchemaForm({
   errors = {},
   disabled,
   className,
-  advancedLabel = "Advanced options",
+  advancedLabel = translate("Advanced options"),
 }: JsonSchemaFormProps) {
   const type = resolveType(schema);
 
@@ -1389,7 +1390,7 @@ export function JsonSchemaForm({
           className,
         )}
       >
-        No configuration options available.
+        {translate("No configuration options available.")}
       </div>
     );
   }

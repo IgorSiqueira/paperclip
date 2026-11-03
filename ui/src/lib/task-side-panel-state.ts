@@ -1,5 +1,6 @@
 import type { WorkspaceFileSelector } from "@paperclipai/shared";
 import type { SidePanelTabRecord, SidePanelTabsState } from "@/components/side-panel";
+import { t } from "@/i18n";
 
 const STORAGE_VERSION = 1;
 const MAX_TASK_STATES = 50;
@@ -239,7 +240,7 @@ export function taskPanelArtifactsTab(): SidePanelTabRecord<TaskSidePanelTabPayl
   return { id: "artifacts", type: "artifacts", label: "Artifacts", closable: true, contentMode: "padded", payload: { kind: "artifacts" } };
 }
 
-export function taskPanelSkillTab(skillId: string, label = "Skill"): SidePanelTabRecord<TaskSidePanelTabPayload> {
+export function taskPanelSkillTab(skillId: string, label = t("Skill")): SidePanelTabRecord<TaskSidePanelTabPayload> {
   return { id: `skill:${skillId}`, type: "skill", label, closable: true, contentMode: "prose", payload: { kind: "skill", skillId } };
 }
 

@@ -3,6 +3,7 @@ import { AppLogo } from "@/pages/apps/AppLogo";
 import { UnverifiedServerBadge } from "@/pages/apps/UnverifiedServerBadge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { t } from "@/i18n";
 
 export function StepHeader({
   title,
@@ -39,14 +40,14 @@ export function StepHeader({
           ) : null}
           <div>
             <h1 ref={headingRef} tabIndex={headingRef ? -1 : undefined} className="text-2xl font-bold tracking-tight outline-none">
-              {title ?? (appIdentity ? `Connect ${appIdentity.name}` : "Connect your own MCP server")}
+              {title ?? (appIdentity ? t("Connect {{name}}", { name: appIdentity.name }) : t("Connect your own MCP server"))}
             </h1>
             {subtitle && <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>}
             {unverifiedHost ? <UnverifiedServerBadge host={unverifiedHost} className="mt-2" /> : null}
           </div>
         </div>
         {onCancel && <Button variant="ghost" size="sm" onClick={onCancel}>
-          Cancel
+          {t("Cancel")}
         </Button>}
       </div>
       {step !== "gallery" && labels.length > 1 && (
@@ -54,7 +55,7 @@ export function StepHeader({
         // guessing at Tailwind classes. The dots are decoration — the label
         // line below already says the same thing, so announcing both would
         // read every step name twice.
-        <nav className="mt-4" aria-label="Setup progress" data-testid="wizard-stepper">
+        <nav className="mt-4" aria-label={t("Setup progress")} data-testid="wizard-stepper">
           <ol className="flex gap-2" aria-hidden="true">
             {labels.map((label, i) => (
               <li

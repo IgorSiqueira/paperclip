@@ -143,6 +143,7 @@ import { issuesApi } from "@/api/issues";
 import { queryKeys } from "@/lib/queryKeys";
 import { useQueryClient } from "@tanstack/react-query";
 import { TaskChatPresentationProvider } from "@/components/task-chat/presentation-mode";
+import { t } from "@/i18n";
 
 const EMPTY_BROWSERS: TaskBrowser[] = [];
 const COMPACT_RUN_LOG_READ_LIMIT_BYTES = 32_000;
@@ -170,8 +171,8 @@ function safeResourceHref(value: string | null | undefined): string | null {
 
 function formatResourceBytes(value: number): string {
   if (value < 1024) return `${value} B`;
-  if (value < 1024 * 1024) return `${(value / 1024).toFixed(1)} KB`;
-  return `${(value / (1024 * 1024)).toFixed(1)} MB`;
+  if (value < 1024 * 1024) return t("{{toFixed}} KB", { toFixed: (value / 1024).toFixed(1) });
+  return t("{{toFixed}} MB", { toFixed: (value / (1024 * 1024)).toFixed(1) });
 }
 
 function interactionTargetsPlanRevision(
@@ -461,26 +462,26 @@ function durableInputLabel(
   interaction: TaskChatInteractionItem["interaction"],
 ): string {
   if (interaction.kind === "ask_user_questions")
-    return interaction.title ?? "Questions";
+    return interaction.title ?? t("Questions");
   if (interaction.kind === "suggest_tasks")
-    return interaction.title ?? "Suggested tasks";
+    return interaction.title ?? t("Suggested tasks");
   if (interaction.kind === "request_checkbox_confirmation")
-    return interaction.title ?? "Choose options";
+    return interaction.title ?? t("Choose options");
   if (interaction.kind === "request_item_verdicts")
-    return interaction.title ?? "Review items";
+    return interaction.title ?? t("Review items");
   if (interaction.kind === "connection_intent")
-    return interaction.title ?? "Connect service";
+    return interaction.title ?? t("Connect service");
   if (
     interaction.payload.target?.type === "issue_document" &&
     interaction.payload.target.key === "plan"
   ) {
-    return interaction.title ?? "Review plan";
+    return interaction.title ?? t("Review plan");
   }
   if (interaction.payload.toolAction)
-    return interaction.title ?? "Approve tool action";
+    return interaction.title ?? t("Approve tool action");
   if (interaction.payload.secretProposal)
-    return interaction.title ?? "Review secret proposal";
-  return interaction.title ?? "Confirmation";
+    return interaction.title ?? t("Review secret proposal");
+  return interaction.title ?? t("Confirmation");
 }
 
 /**
@@ -535,7 +536,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
     showComposer = true,
     composerPause,
     composerDisabledReason,
-    emptyMessage = "No messages yet.",
+    emptyMessage = t("No messages yet."),
     companyId,
     linkedRuns,
     liveRuns,
@@ -1392,7 +1393,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
           surface: "resource",
           resourceKind: "document",
           title: documentDisplayTitle(document),
-          subtitle: `Document · rev ${document.latestRevisionNumber}`,
+          subtitle: t("Document · rev {{latestRevisionNumber}}", { latestRevisionNumber: document.latestRevisionNumber }),
           href: buildDocumentAnnotationHash({
             documentKey: document.key,
             threadId: null,
@@ -1443,7 +1444,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
           kind: "protocol",
           surface: "resource",
           resourceKind: "attachment",
-          title: attachment.originalFilename ?? "Agent attachment",
+          title: attachment.originalFilename ?? t("Agent attachment"),
           subtitle: `${attachment.contentType} · ${formatResourceBytes(attachment.byteSize)}`,
           href: safeResourceHref(attachment.openPath ?? attachment.contentPath),
           timestamp: new Date(attachment.createdAt).toISOString(),
@@ -1489,7 +1490,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
           id,
           kind: "browser",
           browser,
-          label: browsers.length > 1 ? `Browser ${index + 1}` : "Browser",
+          label: browsers.length > 1 ? t("Browser {{index}}", { index: index + 1 }) : t("Browser"),
           timestamp: browser.createdAt,
         },
       });
@@ -1692,8 +1693,8 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             id,
             item: {
               id, kind: "marker", variant: "interrupted", tone: "neutral",
-              label: "Waiting to resume",
-              detail: "The previous execution needs to be checked before work can continue. See the task’s execution hold for the next action. Individual checks remain in the run history.",
+              label: t("Waiting to resume"),
+              detail: t("The previous execution needs to be checked before work can continue. See the task’s execution hold for the next action. Individual checks remain in the run history."),
             },
           });
         }
@@ -1897,7 +1898,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             id,
             kind: "marker",
             variant: "interrupted",
-            label: branchUnavailable ? "Starting branch unavailable" : restoreFailed ? "Workspace restore failed" : aiRequest?.status === "pending" ? "AI connection needed" : source.status === "cancelled" ? (meta?.startedAt ? "Stopped" : "Couldn't start") : "Run failed",
+            label: branchUnavailable ? t("Starting branch unavailable") : restoreFailed ? t("Workspace restore failed") : aiRequest?.status === "pending" ? t("AI connection needed") : source.status === "cancelled" ? (meta?.startedAt ? t("Stopped") : t("Couldn't start")) : t("Run failed"),
             runId: source.status === "cancelled" ? undefined : source.id,
             ...(branchUnavailable || aiRequest?.status === "pending" ? { retryable: false } : {}),
             ...(restoreFailed ? {
@@ -1982,8 +1983,8 @@ export function TaskChatThread(props: TaskChatThreadProps) {
               id,
               kind: "marker",
               variant: "turn_boundary",
-              label: source.status === "cancelled" ? "Stopped" : "Run completed",
-              detail: source.status === "cancelled" ? "This turn was cancelled before it returned a response." : "The runner returned no user-facing response.",
+              label: source.status === "cancelled" ? t("Stopped") : t("Run completed"),
+              detail: source.status === "cancelled" ? t("This turn was cancelled before it returned a response.") : t("The runner returned no user-facing response."),
             },
           });
         }
@@ -2015,8 +2016,8 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             id,
             kind: "marker",
             variant: "turn_boundary",
-            label: "Run completed",
-            detail: "The runner returned no user-facing response.",
+            label: t("Run completed"),
+            detail: t("The runner returned no user-facing response."),
           },
         });
       }
@@ -2673,8 +2674,8 @@ export function TaskChatThread(props: TaskChatThreadProps) {
         label:
           pendingRuntimeRequest.questionSet?.title ??
           (pendingRuntimeRequest.requestType === "permission"
-            ? "Runtime permission"
-            : "Runtime input"),
+            ? t("Runtime permission")
+            : t("Runtime input")),
       });
     }
     const durable = (interactions ?? [])
@@ -2887,7 +2888,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
           disabled={isInterrupting}
           onClick={() => void onInterruptQueued(runId)}
         >
-          {isInterrupting ? "Interrupting…" : "Interrupt"}
+          {isInterrupting ? t("Interrupting…") : t("Interrupt")}
         </Button>
       );
     },
@@ -2954,7 +2955,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
   const historyControl = props.historyControl ?? (
     props.compactHistory && props.onExpandHistory
     && (deferredTranscriptRunIds.size > 0 || logRuns.some((run) => truncatedRunIds?.has(run.id)))
-      ? <Button type="button" variant="ghost" size="sm" onClick={props.onExpandHistory}>More run output</Button>
+      ? <Button type="button" variant="ghost" size="sm" onClick={props.onExpandHistory}>{t("More run output")}</Button>
       : null
   );
   const renderBrief = useCallback(
@@ -3231,10 +3232,10 @@ export function TaskChatThread(props: TaskChatThreadProps) {
                   role="status"
                   className="absolute inset-x-0 top-0 z-20 mx-auto flex w-full max-w-(--tc-shell-max-w) items-center gap-2 border border-border bg-background px-4 py-2 text-sm text-muted-foreground"
                 >
-                  {historyError ? "Some task history could not be loaded." : "Some task history is still loading."}
+                  {historyError ? t("Some task history could not be loaded.") : t("Some task history is still loading.")}
                   {historyError ? (
                     <Button variant="ghost" size="sm" onClick={retryHistory}>
-                      Retry
+                      {t("Retry")}
                     </Button>
                   ) : null}
                 </div>
@@ -3376,15 +3377,15 @@ export function TaskChatThread(props: TaskChatThreadProps) {
                                         items={tailItems}
                                         emptyMessage={
                                           tailStatus === "queued"
-                                            ? "Waiting to start..."
+                                            ? t("Waiting to start...")
                                             : (liveRun && liveRun.id === tailRunId
                                                 ? liveRun.currentStatusMessage
                                                 : null) ||
                                               (tailStatus === "failed"
                                                 ? linkedRunMetaById.get(tailRunId ?? "")?.errorCode?.startsWith("workspace_git_scan_")
-                                                  ? "Workspace setup failed before the agent started."
-                                                  : "This run stopped before a response was available. Review the task’s connection or recovery action below."
-                                                : "Waiting for transcript...")
+                                                  ? t("Workspace setup failed before the agent started.")
+                                                  : t("This run stopped before a response was available. Review the task’s connection or recovery action below.")
+                                                : t("Waiting for transcript..."))
                                         }
                                       />
                                     </TaskChatShimmerScope>
@@ -3520,7 +3521,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
                             pendingReminderInputs.length > 0
                               ? {
                                   count: pendingReminderInputs.length,
-                                  label: `${pendingReminderInputs.length} pending input${pendingReminderInputs.length === 1 ? "" : "s"}`,
+                                  label: (pendingReminderInputs.length === 1 ? t("{{length}} pending input", { length: pendingReminderInputs.length }) : t("{{length}} pending inputs", { length: pendingReminderInputs.length })),
                                   onOpen: openPendingTakeover,
                                 }
                               : null

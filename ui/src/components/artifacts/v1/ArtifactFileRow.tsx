@@ -12,6 +12,7 @@ import { isImageLikeOutput, isVideoLikeOutput } from "@/lib/issue-output";
 import type { FileRowSource } from "./adapters";
 import { ArtifactRow } from "./ArtifactRow";
 import type { ArtifactSubject } from "./kinds";
+import { t } from "@/i18n";
 
 /** A small control beside a row, as the shipped rows draw theirs. */
 export const ROW_ACTION_CLASS = "shrink-0 rounded-md px-1.5 py-1.5 text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring";
@@ -63,16 +64,16 @@ export function ArtifactFileRow({
       {statusBadge}
       {localCsv && !tooLarge && !data.data && !data.isError ? (
         <Button variant="ghost" size="sm" className="h-7 px-2 text-xs" disabled={data.isFetching} onClick={() => setCsvRequested(true)}>
-          {data.isFetching ? "Loading preview…" : "Preview data"}
+          {data.isFetching ? t("Loading preview…") : t("Preview data")}
         </Button>
       ) : null}
       {openPath ? (
-        <a href={openPath} target="_blank" rel="noreferrer" aria-label={`Open raw ${filename}`} title="Open raw" className={ROW_ACTION_CLASS}>
+        <a href={openPath} target="_blank" rel="noreferrer" aria-label={t("Open raw {{filename}}", { filename })} title={t("Open raw")} className={ROW_ACTION_CLASS}>
           <ExternalLink className="h-3 w-3" aria-hidden />
         </a>
       ) : null}
       {downloadPath ? (
-        <a href={downloadPath} download={filename} aria-label={`Download ${filename}`} title="Download" className={ROW_ACTION_CLASS}>
+        <a href={downloadPath} download={filename} aria-label={t("Download {{filename}}", { filename })} title={t("Download")} className={ROW_ACTION_CLASS}>
           <Download className="h-3 w-3" aria-hidden />
         </a>
       ) : null}
@@ -98,10 +99,10 @@ export function ArtifactFileRow({
       ) : null}
       {csv && (tooLarge || data.isError) ? (
         <div className="px-2 text-xs text-muted-foreground" role="status">
-          {tooLarge ? "CSV is too large to preview. Download the file to view it." : data.error?.message}
+          {tooLarge ? t("CSV is too large to preview. Download the file to view it.") : data.error?.message}
           {data.isError ? (
             <Button variant="ghost" size="sm" onClick={() => void data.refetch()}>
-              Retry preview
+              {t("Retry preview")}
             </Button>
           ) : null}
         </div>

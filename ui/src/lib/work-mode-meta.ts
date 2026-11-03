@@ -1,5 +1,6 @@
 import type { IssueWorkMode } from "@paperclipai/shared";
 import { ClipboardList, Hammer, MessageCircleQuestion, type LucideIcon } from "lucide-react";
+import { t } from "@/i18n";
 
 export type WorkModeTone = "neutral" | "ask" | "planning";
 
@@ -45,21 +46,21 @@ export function workModeMetaList(): WorkModeMeta[] {
   return [
     {
       value: "standard",
-      label: "Auto mode",
+      label: t("Auto mode"),
       icon: Hammer,
       tone: "neutral",
       classes: STANDARD_CLASSES,
     },
     {
       value: "planning",
-      label: "Plan mode",
+      label: t("Plan mode"),
       icon: ClipboardList,
       tone: "planning",
       classes: PLANNING_CLASSES,
     },
     {
       value: "ask",
-      label: "Ask mode",
+      label: t("Ask mode"),
       icon: MessageCircleQuestion,
       tone: "ask",
       classes: ASK_CLASSES,

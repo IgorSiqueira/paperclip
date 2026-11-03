@@ -1,102 +1,99 @@
 import { describe, expect, it } from "vitest";
 import { t } from ".";
-import en from "./locales/en.json";
-import { localeMessages } from "./locales";
+import { matchLocale, resolveInitialLocale, localeMessages, AVAILABLE_LOCALES } from "./locales";
 import { validateLocaleMessages } from "./locale-validation";
 
-describe("locale validation", () => {
-  it("resolves English messages with key and default fallbacks", () => {
-    expect(t("app.noCompanies.title")).toBe(en.app.noCompanies.title);
-    expect(t("app.missing", { defaultValue: "Fallback" })).toBe("Fallback");
-    expect(t("app.missing")).toBe("app.missing");
+const localeFiles = import.meta.glob("./locales/*.json", { eager: true, import: "default" }) as Record<string, unknown>;
+
+describe("locale resolution", () => {
+  it("uses English under Vitest regardless of the host locale", () => {
+    expect(resolveInitialLocale()).toBe("en");
   });
 
-  it("accepts registered locale files", () => {
-    expect(Object.keys(localeMessages)).toContain("en");
-    for (const [locale, messages] of Object.entries(localeMessages)) {
-      expect(validateLocaleMessages(messages), locale).toEqual([]);
+  it("matches browser languages exactly, then by base language", () => {
+    expect(matchLocale(["pt-br"])).toBe("pt-BR");
+    expect(matchLocale(["pt-PT"])).toBe("pt-BR");
+    expect(matchLocale(["pt"])).toBe("pt-BR");
+    expect(matchLocale(["es", "pt-BR"])).toBe("pt-BR");
+    expect(matchLocale(["en-GB"])).toBe("en");
+    expect(matchLocale(["fr"])).toBeNull();
+    expect(matchLocale([])).toBeNull();
+  });
+
+  it("bundles messages for every non-English available locale", () => {
+    for (const locale of AVAILABLE_LOCALES) {
+      if (locale === "en") continue;
+      expect(localeMessages[locale], locale).toBeDefined();
+    }
+  });
+});
+
+describe("translation lookup", () => {
+  it("returns the natural-language key when no translation exists", () => {
+    expect(t("Create your first organization")).toBe("Create your first organization");
+    expect(t("Missing key", { defaultValue: "Fallback" })).toBe("Fallback");
+    expect(t("Missing key")).toBe("Missing key");
+  });
+
+  it("keeps dots and colons inside keys intact", () => {
+    expect(t("Get started by creating an organization.")).toBe("Get started by creating an organization.");
+    expect(t("Status: ready")).toBe("Status: ready");
+  });
+
+  it("interpolates placeholders inside natural-language keys", () => {
+    expect(t("Assigned to {{name}}", { name: "Ada" })).toBe("Assigned to Ada");
+  });
+});
+
+describe("locale validation", () => {
+  it("accepts every locale file", () => {
+    for (const [path, messages] of Object.entries(localeFiles)) {
+      expect(validateLocaleMessages(messages), path).toEqual([]);
     }
   });
 
-  it("rejects missing and extra nested keys", () => {
-    expect(
-      validateLocaleMessages({
-        app: {
-          noCompanies: {
-            title: en.app.noCompanies.title,
-            description: en.app.noCompanies.description,
-            unexpected: "Unexpected",
-          },
-        },
-      }),
-    ).toEqual(
-      expect.arrayContaining([
-        "app.noCompanies.newCompany is missing",
-        "app.noCompanies.unexpected is not defined in English",
-      ]),
-    );
+  it("rejects non-object catalogs and non-string values", () => {
+    expect(validateLocaleMessages(["x"])).toEqual(["<root> must be an object"]);
+    expect(validateLocaleMessages({ Save: ["Salvar"] })).toEqual(['"Save" must be a string']);
   });
 
-  it("rejects non-string leaves", () => {
-    expect(
-      validateLocaleMessages({
-        app: {
-          noCompanies: {
-            ...en.app.noCompanies,
-            title: ["Create your first company"],
-          },
-        },
-      }),
-    ).toEqual(expect.arrayContaining(["app.noCompanies.title must be a string"]));
-  });
-
-  it("requires interpolation placeholders to match English", () => {
-    const reference = {
-      message: "Invite {{name}} to {{company}}",
-    };
-
-    expect(validateLocaleMessages({ message: "Invite {{name}}" }, reference)).toEqual([
-      'message interpolation placeholders must match English exactly: expected ["company","name"], received ["name"]',
+  it("requires interpolation placeholders to match the key", () => {
+    expect(validateLocaleMessages({ "Invite {{name}} to {{company}}": "Convidar {{name}}" })).toEqual([
+      '"Invite {{name}} to {{company}}" interpolation placeholders must match the key exactly: expected ["company","name"], received ["name"]',
     ]);
   });
 
-  it("rejects executable, raw HTML, and unexpected link payloads not present in English", () => {
-    const reference = {
-      script: "Create company",
-      handler: "Create company",
-      js: "Create company",
-      data: "Create company",
-      url: "Create company",
-      html: "Create company",
-    };
-
+  it("rejects executable, raw HTML, and unexpected link payloads not present in the key", () => {
     expect(
-      validateLocaleMessages(
-        {
-          script: "<script>alert(1)</script>",
-          handler: '<span ONCLICK="alert(1)">Create</span>',
-          js: "javascript:alert(1)",
-          data: "data:text/html,hello",
-          url: "https://example.test",
-          html: "<strong>Create company</strong>",
-        },
-        reference,
-      ),
+      validateLocaleMessages({
+        "Create organization": "<script>alert(1)</script>",
+        "Create company": '<span ONCLICK="alert(1)">Create</span>',
+        "Open docs": "javascript:alert(1)",
+        "Download": "data:text/html,hello",
+        "Learn more": "https://example.test",
+        "Save": "<strong>Salvar</strong>",
+      }),
     ).toEqual(
       expect.arrayContaining([
-        "script contains disallowed <script",
-        "handler contains disallowed event-handler attribute",
-        "js contains disallowed javascript:",
-        "data contains disallowed data:",
-        "url contains disallowed unexpected URL",
-        "html contains disallowed raw HTML tag",
+        '"Create organization" contains disallowed <script',
+        '"Create company" contains disallowed event-handler attribute',
+        '"Open docs" contains disallowed javascript:',
+        '"Download" contains disallowed data:',
+        '"Learn more" contains disallowed unexpected URL',
+        '"Save" contains disallowed raw HTML tag',
       ]),
     );
   });
 
-  it("caps localized string length relative to English", () => {
-    expect(validateLocaleMessages({ message: "x".repeat(200) }, { message: "Short" })).toEqual([
-      "message is too long: 200 characters exceeds 133",
+  it("caps localized string length relative to the key", () => {
+    expect(validateLocaleMessages({ Short: "x".repeat(200) })).toEqual([
+      '"Short" is too long: 200 characters exceeds 133',
+    ]);
+  });
+
+  it("reports keys the UI no longer uses when known keys are supplied", () => {
+    expect(validateLocaleMessages({ Save: "Salvar", Gone: "Sumiu" }, new Set(["Save"]))).toEqual([
+      '"Gone" is not used by the UI',
     ]);
   });
 });

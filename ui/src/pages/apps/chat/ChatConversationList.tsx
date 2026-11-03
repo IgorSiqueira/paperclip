@@ -5,6 +5,7 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { Link } from "@/lib/router";
 import { formatDateTime } from "@/lib/utils";
 import { AppLogo } from "../AppLogo";
+import { t } from "@/i18n";
 
 export function conversationDestination(
   row: ChatConversation,
@@ -38,19 +39,19 @@ export function ChatConversationList({
     return (
       <EmptyState
         icon={MessageSquare}
-        message="No conversations yet"
+        message={t("No conversations yet")}
         description={
           provider === "speko"
-            ? "Open an assigned task and choose Talk to agent."
+            ? t("Open an assigned task and choose Talk to agent.")
             : provider === "agentmail"
-            ? "Send an email to this agent’s address to start one."
-            : "Mention the agent in an enabled destination to start one."
+            ? t("Send an email to this agent’s address to start one.")
+            : t("Mention the agent in an enabled destination to start one.")
         }
       />
     );
   return (
     <ul
-      aria-label="Conversations"
+      aria-label={t("Conversations")}
       className="divide-y divide-border border-y border-border"
     >
       {rows.map((row) => (
@@ -73,11 +74,11 @@ export function ChatConversationList({
                   className="break-words font-medium hover:underline"
                   to={`/issues/${row.issueId}`}
                 >
-                  {row.issueTitle ?? row.issueIdentifier ?? "Paperclip task"}
+                  {row.issueTitle ?? row.issueIdentifier ?? t("Paperclip task")}
                 </Link>
               ) : (
                 <span className="font-medium">
-                  {row.issueTitle ?? "Waiting for task"}
+                  {row.issueTitle ?? t("Waiting for task")}
                 </span>
               )}
             </div>
@@ -99,7 +100,7 @@ export function ChatConversationList({
                   {formatDateTime(row.updatedAt)}
                 </time>
               )}
-              {row.state === "completed" && <span>Completed</span>}
+              {row.state === "completed" && <span>{t("Completed")}</span>}
             </div>
           </div>
           {row.state !== "active" && row.state !== "completed" && (

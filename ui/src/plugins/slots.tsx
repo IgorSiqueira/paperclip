@@ -48,6 +48,7 @@ import {
   PluginBridgeContext,
   type PluginHostContext,
 } from "./bridge";
+import { t as translate } from "@/i18n";
 
 export type PluginSlotContext = {
   companyId?: string | null;
@@ -758,7 +759,7 @@ class PluginSlotErrorBoundary extends Component<PluginSlotErrorBoundaryProps, Pl
       if (this.props.fallback !== undefined) return this.props.fallback;
       return (
         <div className={cn("rounded-md border border-destructive/30 bg-destructive/5 px-2 py-1 text-xs text-destructive", this.props.className)}>
-          {this.props.slot.pluginDisplayName}: failed to render
+          {this.props.slot.pluginDisplayName}{translate(": failed to render")}
         </div>
       );
     }

@@ -1,4 +1,5 @@
 import type { HeartbeatRun } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 export type SourceResolvedFoldCleanupOutcome =
   | "terminated"
@@ -121,11 +122,11 @@ export function formatSilenceAgeMs(ms: number | null | undefined): string | null
   if (!ms || ms <= 0) return null;
   const totalMinutes = Math.floor(ms / 60_000);
   if (totalMinutes < 1) return "under 1 minute";
-  if (totalMinutes < 60) return `${totalMinutes} minute${totalMinutes === 1 ? "" : "s"}`;
+  if (totalMinutes < 60) return (totalMinutes === 1 ? t("{{totalMinutes}} minute", { totalMinutes }) : t("{{totalMinutes}} minutes", { totalMinutes }));
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
-  if (minutes === 0) return `${hours} hour${hours === 1 ? "" : "s"}`;
-  return `${hours}h ${minutes}m`;
+  if (minutes === 0) return (hours === 1 ? t("{{hours}} hour", { hours }) : t("{{hours}} hours", { hours }));
+  return t("{{hours}}h {{minutes}}m", { hours, minutes });
 }
 
 export function shortenEvidenceId(id: string): string {

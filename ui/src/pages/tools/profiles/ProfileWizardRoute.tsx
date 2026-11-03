@@ -6,6 +6,7 @@ import { advancedTabHref } from "../tool-tabs";
 import { ToolsAdminGate } from "./ToolsAdminGate";
 import { ProfileWizard } from "./ProfileWizard";
 import { TEMPLATES, type TemplateKey } from "./profile-model";
+import { t as translate } from "@/i18n";
 
 /**
  * Full-page host for the access-profile create/resume wizard (PAP-10997 §B).
@@ -28,16 +29,16 @@ export function ProfileWizardRoute({ mode }: { mode: "new" | "edit" }) {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: selectedCompany?.name ?? "Organization", href: "/dashboard" },
-      { label: "Apps", href: "/apps" },
-      { label: "Access profiles", href: advancedTabHref("profiles") },
-      { label: mode === "edit" ? "Resume draft" : "New profile" },
+      { label: selectedCompany?.name ?? translate("Organization"), href: "/dashboard" },
+      { label: translate("Apps"), href: "/apps" },
+      { label: translate("Access profiles"), href: advancedTabHref("profiles") },
+      { label: mode === "edit" ? translate("Resume draft") : translate("New profile") },
     ]);
     return () => setBreadcrumbs([]);
   }, [setBreadcrumbs, selectedCompany?.name, mode]);
 
   if (!selectedCompanyId) {
-    return <div className="p-6 text-sm text-muted-foreground">Select an organization to create a profile.</div>;
+    return <div className="p-6 text-sm text-muted-foreground">{translate("Select an organization to create a profile.")}</div>;
   }
 
   return (
@@ -45,10 +46,10 @@ export function ProfileWizardRoute({ mode }: { mode: "new" | "edit" }) {
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-5 p-4 sm:p-6">
         <header>
           <h1 className="text-xl font-bold text-foreground">
-            {mode === "edit" ? "Finish your profile" : "New access profile"}
+            {mode === "edit" ? translate("Finish your profile") : translate("New access profile")}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Choose which tools this profile allows, then assign it to the agents that need them.
+            {translate("Choose which tools this profile allows, then assign it to the agents that need them.")}
           </p>
         </header>
         <ProfileWizard

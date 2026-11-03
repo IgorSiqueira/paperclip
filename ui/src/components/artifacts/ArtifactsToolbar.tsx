@@ -6,29 +6,30 @@ import { Button } from "@/components/ui/button";
 import { ToolbarSearch } from "@/components/ToolbarSearch";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { t } from "@/i18n";
 
 export const ARTIFACT_KIND_FILTERS: { value: ArtifactKindFilter; label: string }[] = [
-  { value: "all", label: "All" },
-  { value: "image", label: "Images" },
-  { value: "video", label: "Videos" },
-  { value: "document", label: "Documents" },
-  { value: "text", label: "Text" },
-  { value: "file", label: "Files" },
+  { value: "all", label: t("All") },
+  { value: "image", label: t("Images") },
+  { value: "video", label: t("Videos") },
+  { value: "document", label: t("Documents") },
+  { value: "text", label: t("Text") },
+  { value: "file", label: t("Files") },
 ];
 
 export const ARTIFACT_GROUP_OPTIONS: { value: ArtifactGroupBy; label: string }[] = [
-  { value: "none", label: "None" },
-  { value: "task", label: "Task" },
-  { value: "parent_task", label: "Parent task" },
+  { value: "none", label: t("None") },
+  { value: "task", label: t("Task") },
+  { value: "parent_task", label: t("Parent task") },
 ];
 
 export function artifactGroupByLabel(value: ArtifactGroupBy): string {
-  return ARTIFACT_GROUP_OPTIONS.find((option) => option.value === value)?.label ?? "None";
+  return ARTIFACT_GROUP_OPTIONS.find((option) => option.value === value)?.label ?? t("None");
 }
 
 /** Canonical collection filters; compact standalone, standard in the toolbar. */
 export function ArtifactKindFilters({ kind, onKindChange, size = "compact" }: { kind: ArtifactKindFilter; onKindChange: (value: ArtifactKindFilter) => void; size?: TabSize }) {
-  return <TabFilters items={ARTIFACT_KIND_FILTERS} value={kind} onValueChange={onKindChange} size={size} label="Filter artifacts by type" />;
+  return <TabFilters items={ARTIFACT_KIND_FILTERS} value={kind} onValueChange={onKindChange} size={size} label={t("Filter artifacts by type")} />;
 }
 
 export interface ArtifactsToolbarProps {
@@ -46,9 +47,9 @@ export interface ArtifactsToolbarProps {
 export function ArtifactsToolbar({ query: draftQuery, onQueryChange: setDraftQuery, groupBy, onGroupByChange: selectGroupBy, kind, onKindChange: selectKind, filters }: ArtifactsToolbarProps) {
   const grouping = groupBy !== "none";
   return (
-    <div data-canonical-toolbar="artifacts" role="toolbar" aria-label="Artifacts controls" className="flex flex-col items-start gap-4">
+    <div data-canonical-toolbar="artifacts" role="toolbar" aria-label={t("Artifacts controls")} className="flex flex-col items-start gap-4">
       <div className="design-toolbar-controls flex w-full flex-wrap items-center gap-4">
-        <ToolbarSearch query={draftQuery} onQueryChange={setDraftQuery} label="Search artifacts" placeholder="Search artifacts…" clearLabel="Clear artifact search" />
+        <ToolbarSearch query={draftQuery} onQueryChange={setDraftQuery} label={t("Search artifacts")} placeholder={t("Search artifacts…")} clearLabel="Clear artifact search" />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -56,8 +57,8 @@ export function ArtifactsToolbar({ query: draftQuery, onQueryChange: setDraftQue
               type="button"
               variant="outline"
               size="icon"
-              aria-label={`Group artifacts (currently ${artifactGroupByLabel(groupBy)})`}
-              title="Group artifacts"
+              aria-label={t("Group artifacts (currently {{artifactGroupByLabel}})", { artifactGroupByLabel: artifactGroupByLabel(groupBy) })}
+              title={t("Group artifacts")}
               data-testid="artifact-group-control"
               data-group-by={groupBy}
               data-active={grouping}
@@ -67,7 +68,7 @@ export function ArtifactsToolbar({ query: draftQuery, onQueryChange: setDraftQue
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-44">
-            <DropdownMenuLabel>Group by</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("Group by")}</DropdownMenuLabel>
             {ARTIFACT_GROUP_OPTIONS.map((option) => (
               <DropdownMenuItem
                 key={option.value}

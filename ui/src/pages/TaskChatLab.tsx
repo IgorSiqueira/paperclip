@@ -168,9 +168,9 @@ export function TaskChatLab() {
   return (
     <div className="flex h-full min-h-0 flex-col">
       <header className="border-b border-border px-4 py-2">
-        <h1 className="text-sm font-semibold">Task Chat Lab</h1>
+        <h1 className="text-sm font-semibold">{"Task Chat Lab"}</h1>
         <p className="text-xs text-muted-foreground">
-          Synthetic harness for the task chat redesign · every state renders here with no live agent.
+          {"Synthetic harness for the task chat redesign · every state renders here with no live agent."}
         </p>
       </header>
 
@@ -223,10 +223,10 @@ export function TaskChatLab() {
               className="flex items-center gap-1 rounded border border-border px-2 py-1 hover:bg-accent"
             >
               <RotateCcw className="h-3.5 w-3.5" />
-              Replay
+              {"Replay"}
             </button>
             <label className="flex items-center gap-2">
-              <span className="text-muted-foreground">Speed</span>
+              <span className="text-muted-foreground">{"Speed"}</span>
               <input
                 type="range"
                 min={0.1}
@@ -240,7 +240,7 @@ export function TaskChatLab() {
               <span className="w-10 tabular-nums">{speed.toFixed(1)}×</span>
             </label>
             <div className="ml-auto flex items-center gap-2">
-              <span className="text-muted-foreground">Agent bubble</span>
+              <span className="text-muted-foreground">{"Agent bubble"}</span>
               <div className="flex items-center gap-0.5 rounded border border-border p-0.5" role="group" aria-label="Agent bubble treatment">
                 {BUBBLE_VARIANTS.map((v) => (
                   <button

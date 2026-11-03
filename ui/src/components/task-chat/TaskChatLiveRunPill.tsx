@@ -7,6 +7,7 @@ import { formatDurationWords } from "@/lib/issue-chat-messages";
 import { isCommandTool } from "@/lib/transcriptPresentation";
 import { isTerminalRunStatus } from "@/components/task-chat/transcript-adapter";
 import { useTaskChatShimmer } from "./TaskChatShimmer";
+import { t } from "@/i18n";
 
 /**
  * "ran N commands, called M tools" for the live tail's status pill, counted off
@@ -70,7 +71,7 @@ export function TaskChatLiveRunPill({
     ? formatDurationWords(elapsedMs)
     : null;
   const failed = ["failed", "timed_out", "cancelled", "interrupted"].includes(status);
-  const verb = active ? "Working" : failed ? "Stopped" : "Worked";
+  const verb = active ? t("Working") : failed ? t("Stopped") : t("Worked");
   const suffix = elapsed ? `for ${elapsed}` : null;
 
   return (

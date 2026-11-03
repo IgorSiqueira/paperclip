@@ -1,9 +1,5 @@
 {
-  "app": {
-    "noCompanies": {
-      "title": "உங்கள் முதல் நிறுவனத்தை உருவாக்குங்கள்",
-      "description": "ஒரு நிறுவனத்தை உருவாக்கி தொடங்குங்கள்.",
-      "newCompany": "புதிய நிறுவனம்"
-    }
-  }
+  "Create your first organization": "உங்கள் முதல் நிறுவனத்தை உருவாக்குங்கள்",
+  "Get started by creating an organization.": "ஒரு நிறுவனத்தை உருவாக்கி தொடங்குங்கள்.",
+  "New Organization": "புதிய நிறுவனம்"
 }

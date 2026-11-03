@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { PROVIDER_QUOTA_MONITOR_SERVICE_NAME } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 const SECOND_MS = 1_000;
 const MINUTE_MS = 60 * SECOND_MS;
@@ -92,9 +93,9 @@ function formatDuration(durationMs: number): string {
 
 export function formatMonitorEta(nextCheckAt: MonitorDate, now: MonitorDate = new Date()): string {
   const deltaMs = toTimestamp(nextCheckAt) - toTimestamp(now);
-  if (deltaMs > 0) return `in ${formatDuration(deltaMs)}`;
-  if (deltaMs > -DUE_NOW_GRACE_MS) return "due now";
-  return `overdue by ${formatDuration(Math.abs(deltaMs))}`;
+  if (deltaMs > 0) return t("in {{duration}}", { duration: formatDuration(deltaMs) });
+  if (deltaMs > -DUE_NOW_GRACE_MS) return t("due now");
+  return t("overdue by {{duration}}", { duration: formatDuration(Math.abs(deltaMs)) });
 }
 
 export function formatMonitorEtaLabel(nextCheckAt: MonitorDate, now: MonitorDate = new Date()): string {
@@ -145,7 +146,7 @@ export function formatMonitorAbsolute(
     targetYmd.year === referenceYmd.year &&
     targetYmd.month === referenceYmd.month &&
     targetYmd.day === referenceYmd.day;
-  if (isToday) return `Today, ${time}`;
+  if (isToday) return t("Today, {{time}}", { time });
 
   const weekday = new Intl.DateTimeFormat(options.locale, {
     weekday: "short",
@@ -272,9 +273,8 @@ export function useMonitorCountdown(nextCheckAt: MonitorDate | null | undefined)
 export function formatMonitorOffset(nextCheckAt: MonitorDate): string {
   const now = new Date(Date.now());
   const deltaMs = toTimestamp(nextCheckAt) - now.getTime();
-  if (Math.round(Math.abs(deltaMs) / MINUTE_MS) === 0) return "now";
-  const eta = formatMonitorEta(nextCheckAt, now);
-  if (eta === "due now") return "now";
-  if (eta.startsWith("overdue by ")) return `${eta.slice("overdue by ".length)} ago`;
-  return eta;
+  if (Math.round(Math.abs(deltaMs) / MINUTE_MS) === 0) return t("now");
+  if (deltaMs <= 0 && deltaMs > -DUE_NOW_GRACE_MS) return t("now");
+  if (deltaMs < 0) return t("{{duration}} ago", { duration: formatDuration(Math.abs(deltaMs)) });
+  return t("in {{duration}}", { duration: formatDuration(deltaMs) });
 }

@@ -12,6 +12,7 @@ import {
 import { OutputVideoPlayer } from "./OutputVideoPlayer";
 import { OutputFileTile } from "./OutputFileTile";
 import { Card } from "@/components/ui/card";
+import { t } from "@/i18n";
 
 interface OutputPrimaryCardProps {
   item: IssueOutputItem;
@@ -44,7 +45,7 @@ export function OutputPrimaryCard({ item, creatorName, onMediaClick }: OutputPri
           <button
             type="button"
             className="block aspect-video w-full overflow-hidden bg-black"
-            aria-label={`Browse ${filename} in gallery`}
+            aria-label={t("Browse {{filename}} in gallery", { filename })}
             onClick={() => onMediaClick(item)}
           >
             <img src={meta.contentPath} alt={filename} className="h-full w-full object-contain" />
@@ -55,7 +56,7 @@ export function OutputPrimaryCard({ item, creatorName, onMediaClick }: OutputPri
             target="_blank"
             rel="noreferrer"
             className="block aspect-video w-full overflow-hidden bg-black"
-            aria-label={`Open ${filename}`}
+            aria-label={t("Open {{filename}}", { filename })}
           >
             <img src={meta.contentPath} alt={filename} className="h-full w-full object-contain" />
           </a>
@@ -72,13 +73,13 @@ export function OutputPrimaryCard({ item, creatorName, onMediaClick }: OutputPri
           <p className="break-words text-sm font-semibold text-foreground">{filename}</p>
           {item.degraded ? (
             <p className="mt-0.5 text-(length:--text-micro) text-destructive">
-              Output metadata is unavailable — this file can’t be played or downloaded here.
+              {t("Output metadata is unavailable — this file can’t be played or downloaded here.")}
             </p>
           ) : (
             <div className="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-(length:--text-micro) text-muted-foreground">
               {item.isPrimary && (
                 <Badge variant="secondary" className="px-1.5 py-0 text-(length:--text-nano)">
-                  Primary
+                  {t("Primary")}
                 </Badge>
               )}
               {meta && <span>{meta.contentType}</span>}
@@ -102,21 +103,21 @@ export function OutputPrimaryCard({ item, creatorName, onMediaClick }: OutputPri
                 onClick={() => onMediaClick(item)}
               >
                 <Maximize2 className="h-4 w-4" />
-                Browse
+                {t("Browse")}
               </Button>
             ) : null}
             {!isMedia || !onMediaClick || isVideo ? (
               <Button asChild variant="outline" size="sm" className="max-md:flex-1">
                 <a href={meta.openPath} target="_blank" rel="noreferrer">
                   <ExternalLink className="h-4 w-4" />
-                  Open
+                  {t("Open")}
                 </a>
               </Button>
             ) : null}
             <Button asChild size="sm" className="max-md:flex-1">
-              <a href={meta.downloadPath} aria-label={`Download ${filename}`}>
+              <a href={meta.downloadPath} aria-label={t("Download {{filename}}", { filename })}>
                 <Download className="h-4 w-4" />
-                Download
+                {t("Download")}
               </a>
             </Button>
           </div>

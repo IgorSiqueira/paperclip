@@ -23,6 +23,7 @@ import type {
   ExternalObjectSummary,
   ExternalObjectSummaryItem,
 } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 /**
  * Lucide icon for each status category. The mapping is host-owned per the
@@ -77,18 +78,18 @@ export function externalObjectIconForLiveness(liveness: string): LucideIcon | nu
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
-  unknown: "Not yet resolved",
-  open: "Open",
-  waiting: "Waiting",
-  running: "Running",
-  succeeded: "Succeeded",
-  failed: "Failed",
-  blocked: "Blocked",
-  closed: "Closed",
-  archived: "Archived",
-  auth_required: "Authorization required",
-  rate_limited: "Rate limited",
-  unreachable: "Unreachable",
+  unknown: t("Not yet resolved"),
+  open: t("Open"),
+  waiting: t("Waiting"),
+  running: t("Running"),
+  succeeded: t("Succeeded"),
+  failed: t("Failed"),
+  blocked: t("Blocked"),
+  closed: t("Closed"),
+  archived: t("Archived"),
+  auth_required: t("Authorization required"),
+  rate_limited: t("Rate limited"),
+  unreachable: t("Unreachable"),
 };
 
 export function externalObjectCategoryLabel(category: string): string {
@@ -96,12 +97,12 @@ export function externalObjectCategoryLabel(category: string): string {
 }
 
 const LIVENESS_LABELS: Record<string, string> = {
-  unknown: "Not yet refreshed",
-  fresh: "Fresh",
-  stale: "Stale",
-  auth_required: "Requires auth",
-  rate_limited: "Rate limited",
-  unreachable: "Unreachable",
+  unknown: t("Not yet refreshed"),
+  fresh: t("Fresh"),
+  stale: t("Stale"),
+  auth_required: t("Requires auth"),
+  rate_limited: t("Rate limited"),
+  unreachable: t("Unreachable"),
 };
 
 export function externalObjectLivenessLabel(liveness: string): string {
@@ -120,7 +121,7 @@ export function externalObjectDisplayStatusLabel(input: {
   const isGenericUrl = input.providerKey === "url" && input.objectType === "link";
   const hasKnownObjectType = Boolean(input.providerKey && input.objectType);
   if (input.statusCategory === "unknown" && hasKnownObjectType && !isGenericUrl) {
-    if (input.liveness === "fresh") return "Status unavailable";
+    if (input.liveness === "fresh") return t("Status unavailable");
     return externalObjectLivenessLabel(input.liveness);
   }
   return externalObjectCategoryLabel(input.statusCategory);
@@ -166,18 +167,18 @@ export function externalObjectFallbackTone(
 }
 
 const PROVIDER_LABELS: Record<string, string> = {
-  github: "GitHub",
-  github_pull_request: "GitHub",
-  github_issue: "GitHub",
-  hubspot: "HubSpot",
-  linear: "Linear",
-  jira: "Jira",
-  notion: "Notion",
-  asana: "Asana",
+  github: t("GitHub"),
+  github_pull_request: t("GitHub"),
+  github_issue: t("GitHub"),
+  hubspot: t("HubSpot"),
+  linear: t("Linear"),
+  jira: t("Jira"),
+  notion: t("Notion"),
+  asana: t("Asana"),
 };
 
 export function externalObjectProviderLabel(providerKey: string | null | undefined): string {
-  if (!providerKey) return "External";
+  if (!providerKey) return t("External");
   const lookup = PROVIDER_LABELS[providerKey];
   if (lookup) return lookup;
   return providerKey
@@ -208,7 +209,7 @@ export function externalObjectDisplayLabel(
 ): string {
   const trimmedDisplayKey = displayKey?.trim();
   if (trimmedDisplayKey) return trimmedDisplayKey;
-  if (providerKey === "url" && objectType === "link") return "URL";
+  if (providerKey === "url" && objectType === "link") return t("URL");
   return `${externalObjectProviderLabel(providerKey)} ${externalObjectTypeLabel(objectType)}`;
 }
 

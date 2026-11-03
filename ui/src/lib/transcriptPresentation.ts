@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 type TranscriptDensity = "comfortable" | "compact";
 
 type TranscriptActivity = {
@@ -135,7 +136,7 @@ export function summarizeToolInput(
   const record = asRecord(input);
   if (!record) {
     const serialized = compactWhitespace(formatUnknown(input));
-    return serialized ? truncate(serialized, compactMax) : `Inspect ${name} input`;
+    return serialized ? truncate(serialized, compactMax) : t("Inspect {{name}} input", { name });
   }
 
   const command = typeof record.command === "string"
@@ -167,7 +168,7 @@ export function summarizeToolInput(
   }
 
   const keys = Object.keys(record);
-  if (keys.length === 0) return `No ${name} input`;
+  if (keys.length === 0) return t("No {{name}} input", { name });
   if (keys.length === 1) return truncate(`${keys[0]} payload`, compactMax);
   return truncate(`${keys.length} fields: ${keys.slice(0, 3).join(", ")}`, compactMax);
 }
@@ -186,7 +187,7 @@ function readToolDetailValue(value: unknown, max = 200): string | null {
 export function describeToolInput(name: string, input: unknown): ToolInputDetail[] {
   if (typeof input === "string") {
     const summary = compactWhitespace(isCommandTool(name, input) ? stripWrappedShell(input) : input);
-    return summary ? [{ label: isCommandTool(name, input) ? "Command" : "Input", value: truncate(summary, 200), tone: "code" }] : [];
+    return summary ? [{ label: isCommandTool(name, input) ? t("Command") : t("Input"), value: truncate(summary, 200), tone: "code" }] : [];
   }
 
   const record = asRecord(input);
@@ -242,15 +243,15 @@ export function summarizeToolResult(
   isError: boolean | undefined,
   density: TranscriptDensity = "comfortable",
 ): string {
-  if (!result) return isError ? "Tool failed" : "Waiting for result";
+  if (!result) return isError ? t("Tool failed") : t("Waiting for result");
   const structured = parseStructuredToolResult(result);
   if (structured) {
     if (structured.body) {
       return truncate(structured.body.split("\n")[0] ?? structured.body, density === "compact" ? 84 : 140);
     }
-    if (structured.status === "completed") return "Completed";
+    if (structured.status === "completed") return t("Completed");
     if (structured.status === "failed" || structured.status === "error") {
-      return structured.exitCode ? `Failed with exit code ${structured.exitCode}` : "Failed";
+      return structured.exitCode ? t("Failed with exit code {{exitCode}}", { exitCode: structured.exitCode }) : t("Failed");
     }
   }
   const lines = result

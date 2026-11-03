@@ -3,6 +3,7 @@ import type { Issue, Project } from "@paperclipai/shared";
 import { extractProviderIdWithFallback } from "../../lib/model-utils";
 import type { IssueModelLane } from "../../lib/issue-assignee-overrides";
 import { codexReasoningEffortOptions } from "../../lib/codex-reasoning-effort";
+import { t } from "@/i18n";
 
 export function defaultProjectWorkspaceIdForProject(project: {
   workspaces?: Array<{ id: string; isPrimary: boolean }>;
@@ -55,19 +56,19 @@ export function toDateTimeLocalValue(value: string | null | undefined) {
 
 export const ISSUE_THINKING_EFFORT_OPTIONS = {
   claude_local: [
-    { value: "", label: "Default" },
-    { value: "low", label: "Low" },
-    { value: "medium", label: "Medium" },
-    { value: "high", label: "High" },
+    { value: "", label: t("Default") },
+    { value: "low", label: t("Low") },
+    { value: "medium", label: t("Medium") },
+    { value: "high", label: t("High") },
   ],
   opencode_local: [
-    { value: "", label: "Default" },
-    { value: "minimal", label: "Minimal" },
-    { value: "low", label: "Low" },
-    { value: "medium", label: "Medium" },
-    { value: "high", label: "High" },
+    { value: "", label: t("Default") },
+    { value: "minimal", label: t("Minimal") },
+    { value: "low", label: t("Low") },
+    { value: "medium", label: t("Medium") },
+    { value: "high", label: t("High") },
     { value: "xhigh", label: "X-High" },
-    { value: "max", label: "Max" },
+    { value: "max", label: t("Max") },
   ],
 } as const;
 

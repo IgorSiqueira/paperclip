@@ -5,6 +5,7 @@ import { MarkdownBody } from "@/components/MarkdownBody";
 import type { TaskChatThinkingItem } from "./task-chat-model";
 import { flattenSelfTalk } from "./transcript-adapter";
 import { useTaskChatShimmer } from "./TaskChatShimmer";
+import { t } from "@/i18n";
 
 /** Provider-authored reasoning summaries and deltas; never reconstructed hidden reasoning. */
 export function TaskChatThinking({
@@ -27,8 +28,8 @@ export function TaskChatThinking({
   const preview = flattenSelfTalk(body);
   const baseLabel = item.channel === "detail" ? "Reasoning detail" : "Reasoning";
   const label = active
-    ? body ? `${baseLabel}…` : "Thinking…"
-    : item.summaryLabel ?? (body ? baseLabel : "Thought");
+    ? body ? `${baseLabel}…` : t("Thinking…")
+    : item.summaryLabel ?? (body ? baseLabel : t("Thought"));
 
   if (body && !active) {
     return (

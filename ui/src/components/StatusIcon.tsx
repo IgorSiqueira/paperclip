@@ -4,6 +4,7 @@ import { cn } from "../lib/utils";
 import { StatusGlyph, type StatusGlyphSize } from "./StatusGlyph";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { t } from "@/i18n";
 
 const allStatuses = ["backlog", "todo", "in_progress", "in_review", "done", "cancelled", "blocked"];
 
@@ -27,32 +28,32 @@ interface StatusIconProps {
 }
 
 function blockedAttentionLabel(blockerAttention: IssueBlockerAttention | null | undefined) {
-  if (!blockerAttention || blockerAttention.state === "none") return "Blocked";
+  if (!blockerAttention || blockerAttention.state === "none") return t("Blocked");
 
   if (blockerAttention.reason === "active_child") {
     const count = blockerAttention.coveredBlockerCount;
     if (count === 1 && blockerAttention.sampleBlockerIdentifier) {
-      return `Blocked · waiting on active sub-task ${blockerAttention.sampleBlockerIdentifier}`;
+      return t("Blocked · waiting on active sub-task {{sampleBlockerIdentifier}}", { sampleBlockerIdentifier: blockerAttention.sampleBlockerIdentifier });
     }
-    if (count === 1) return "Blocked · waiting on 1 active sub-task";
-    return `Blocked · waiting on ${count} active sub-tasks`;
+    if (count === 1) return t("Blocked · waiting on 1 active sub-task");
+    return t("Blocked · waiting on {{count}} active sub-tasks", { count });
   }
 
   if (blockerAttention.reason === "active_dependency") {
     const count = blockerAttention.coveredBlockerCount;
     if (count === 1 && blockerAttention.sampleBlockerIdentifier) {
-      return `Blocked · covered by active dependency ${blockerAttention.sampleBlockerIdentifier}`;
+      return t("Blocked · covered by active dependency {{sampleBlockerIdentifier}}", { sampleBlockerIdentifier: blockerAttention.sampleBlockerIdentifier });
     }
-    if (count === 1) return "Blocked · covered by 1 active dependency";
-    return `Blocked · covered by ${count} active dependencies`;
+    if (count === 1) return t("Blocked · covered by 1 active dependency");
+    return t("Blocked · covered by {{count}} active dependencies", { count });
   }
 
   if (blockerAttention.reason === "stalled_review") {
     const count = blockerAttention.stalledBlockerCount;
     const leaf = blockerAttention.sampleStalledBlockerIdentifier ?? blockerAttention.sampleBlockerIdentifier;
-    if (count === 1 && leaf) return `Blocked · review stalled on ${leaf}`;
-    if (count === 1) return "Blocked · review stalled with no clear next step";
-    return `Blocked · ${count} reviews stalled with no clear next step`;
+    if (count === 1 && leaf) return t("Blocked · review stalled on {{leaf}}", { leaf });
+    if (count === 1) return t("Blocked · review stalled with no clear next step");
+    return t("Blocked · {{count}} reviews stalled with no clear next step", { count });
   }
 
   if (blockerAttention.reason === "attention_required") {
@@ -60,12 +61,12 @@ function blockedAttentionLabel(blockerAttention: IssueBlockerAttention | null | 
     const attentionCopy = `${count} ${count === 1 ? "blocker needs" : "blockers need"} attention`;
     const coveredCount = blockerAttention.coveredBlockerCount;
     if (coveredCount > 0) {
-      return `Blocked · ${attentionCopy}; ${coveredCount} covered by active work`;
+      return t("Blocked · {{attentionCopy}}; {{coveredCount}} covered by active work", { attentionCopy, coveredCount });
     }
-    return `Blocked · ${attentionCopy}`;
+    return t("Blocked · {{attentionCopy}}", { attentionCopy });
   }
 
-  return "Blocked";
+  return t("Blocked");
 }
 
 /** Shared accessible/tooltip copy, including waiting and covered-blocker states. */
@@ -121,7 +122,7 @@ export function StatusIcon({ status, displayStatus: presentationStatus, external
   const trigger = showLabel ? (
     <button
       type="button"
-      aria-label={`Change status (current: ${ariaLabel})`}
+      aria-label={t("Change status (current: {{ariaLabel}})", { ariaLabel })}
       className="inline-flex min-h-5 items-center gap-1.5 cursor-pointer hover:bg-accent/50 rounded px-1 -mx-1 py-0.5 transition-colors"
     >
       {glyph}
@@ -131,7 +132,7 @@ export function StatusIcon({ status, displayStatus: presentationStatus, external
     <button
       type="button"
       data-slot="icon-button"
-      aria-label={`Change status (current: ${ariaLabel})`}
+      aria-label={t("Change status (current: {{ariaLabel}})", { ariaLabel })}
       className="inline-flex cursor-pointer items-center justify-center rounded-sm focus-visible:outline-none focus-visible:ring-(length:--rad-3) focus-visible:ring-ring"
     >
       {glyph}

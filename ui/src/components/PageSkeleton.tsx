@@ -1,4 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { t } from "@/i18n";
 
 interface PageSkeletonProps {
   collectionHeading?: "date" | "group" | null;
@@ -114,12 +115,12 @@ export function PageSkeleton({ variant = "list", collectionHeading }: PageSkelet
 
   if (variant === "issues-list" || variant === "inbox") {
     return (
-      <div role="status" aria-label="Loading tasks" className="-mx-2 sm:mx-0">
+      <div role="status" aria-label={t("Loading tasks")} className="-mx-2 sm:mx-0">
         {collectionHeading ? (
           <div aria-hidden="true" className={collectionHeading === "date"
             ? "flex items-center justify-center py-1.5 text-(length:--text-nano)"
             : "flex items-center py-1.5 text-sm"}>
-            <span className="invisible">Loading</span>
+            <span className="invisible">{t("Loading")}</span>
           </div>
         ) : null}
         {Array.from({ length: 8 }, (_, index) => (

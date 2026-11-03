@@ -1,11 +1,12 @@
 import type { Issue } from "@paperclipai/shared";
 import { timeAgo } from "@/lib/timeAgo";
 import { IssueRow } from "./IssueRow";
+import { t } from "@/i18n";
 
 /** Flat, read-style summary of caller-ordered tasks. Reuses the canonical row's
  * navigation, status tooltip, hover, focus and cell-local marquee. Rendering a
  * summary never changes the task's actual read state. */
-export function TaskSummaryList({ issues, label = "Recent tasks", showIdentifier = true, showUpdated = true, issueLinkState }: {
+export function TaskSummaryList({ issues, label = t("Recent tasks"), showIdentifier = true, showUpdated = true, issueLinkState }: {
   issues: readonly Issue[];
   label?: string;
   showIdentifier?: boolean;

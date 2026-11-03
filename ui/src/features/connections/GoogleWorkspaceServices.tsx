@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { NativeSelect } from "@/components/ui/select";
 import { ToggleSwitch } from "@/components/ui/toggle-switch";
 import { AppLogo } from "@/pages/apps/AppLogo";
+import { t } from "@/i18n";
 
 export function GoogleWorkspaceServiceFields({ value, onChange }: {
   value: GoogleWorkspaceServiceSelection;
@@ -19,10 +20,10 @@ export function GoogleWorkspaceServiceFields({ value, onChange }: {
         <label htmlFor={`workspace-service-${group.id}`} className="text-sm font-medium">{group.name}</label>
         {"description" in group && <p className="text-xs text-muted-foreground">{group.description}</p>}
       </div>
-      <NativeSelect aria-label={`${group.name} access`} disabled={!value[group.id]} value={value[group.id] ?? "write"}
+      <NativeSelect aria-label={t("{{name}} access", { name: group.name })} disabled={!value[group.id]} value={value[group.id] ?? "write"}
         className="w-auto shrink-0 disabled:opacity-50"
         onChange={event => onChange({ ...value, [group.id]: event.target.value as "read" | "write" })}>
-        <option value="read">Read only</option><option value="write">Read &amp; write</option>
+        <option value="read">{t("Read only")}</option><option value="write">{t("Read & write")}</option>
       </NativeSelect>
       <ToggleSwitch id={`workspace-service-${group.id}`} aria-label={group.name} checked={Boolean(value[group.id])}
         onCheckedChange={checked => {
@@ -48,8 +49,8 @@ export function GoogleWorkspaceServicesDialog(props: DialogProps) {
   const pendingRequests = oauth?.pendingWorkspaceServiceRequests;
   const grants = useQuery({ queryKey: ["workspace-service-consent", existing?.id], queryFn: () => toolsApi.listConnectionGrants(existing!.id), enabled: Boolean(existing) });
   if (existing && !grants.data) return <Dialog open onOpenChange={open => { if (!open) props.onCancel(); }}><DialogContent>
-    <DialogTitle>Connect Google Workspace</DialogTitle><DialogDescription>{grants.isError ? "Could not load your saved service access. Your connection has not changed." : "Loading your saved service access…"}</DialogDescription>
-    <footer className="flex items-center justify-between gap-3"><Button variant="ghost" onClick={() => props.onCancel()}>Cancel</Button>{grants.isError && <Button onClick={() => void grants.refetch()}>Try again</Button>}</footer>
+    <DialogTitle>{t("Connect Google Workspace")}</DialogTitle><DialogDescription>{grants.isError ? t("Could not load your saved service access. Your connection has not changed.") : t("Loading your saved service access…")}</DialogDescription>
+    <footer className="flex items-center justify-between gap-3"><Button variant="ghost" onClick={() => props.onCancel()}>{t("Cancel")}</Button>{grants.isError && <Button onClick={() => void grants.refetch()}>{t("Try again")}</Button>}</footer>
   </DialogContent></Dialog>;
   const grant = grants.data?.grants.find(grant => existing?.credentialPolicy === "per_user"
     ? grant.kind === "user" && grant.subjectUserId === grants.data?.currentUserId
@@ -81,14 +82,14 @@ function ServicePicker({ onContinue, onCancel, initial = GOOGLE_WORKSPACE_DEFAUL
   return <Dialog open onOpenChange={open => { if (!open) onCancel(selection); }}>
     <DialogContent className="sm:max-w-3xl">
       <DialogHeader className="text-left">
-        <div className="flex items-center gap-3"><AppLogo name="Google Workspace" brandKey="google" size={40} /><DialogTitle>Connect Google Workspace</DialogTitle></div>
-        <DialogDescription className="sr-only">Choose the Google services to connect.</DialogDescription>
+        <div className="flex items-center gap-3"><AppLogo name="Google Workspace" brandKey="google" size={40} /><DialogTitle>{t("Connect Google Workspace")}</DialogTitle></div>
+        <DialogDescription className="sr-only">{t("Choose the Google services to connect.")}</DialogDescription>
       </DialogHeader>
       <GoogleWorkspaceServiceFields value={selection} onChange={setSelection} />
-      {empty && <p role="status" className="text-xs text-muted-foreground">Select at least one service to continue.</p>}
+      {empty && <p role="status" className="text-xs text-muted-foreground">{t("Select at least one service to continue.")}</p>}
       <footer className="flex items-center justify-between gap-3 pt-4">
-        <Button variant="ghost" onClick={() => onCancel(selection)}>Cancel</Button>
-        <Button disabled={empty} onClick={() => onContinue(selection)}>Continue</Button>
+        <Button variant="ghost" onClick={() => onCancel(selection)}>{t("Cancel")}</Button>
+        <Button disabled={empty} onClick={() => onContinue(selection)}>{t("Continue")}</Button>
       </footer>
     </DialogContent>
   </Dialog>;

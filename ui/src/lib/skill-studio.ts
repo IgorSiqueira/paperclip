@@ -17,6 +17,7 @@ import {
   isImageContentType,
   isVideoLikeOutput,
 } from "./issue-output";
+import { t } from "@/i18n";
 
 /**
  * Pure logic for the Skill Studio UI (PAP-12962). Kept free of React so the
@@ -94,7 +95,7 @@ export function testTaskLinkState(run: {
   harnessIssue?: { id: string } | null;
 }): { enabled: boolean; reason: string | null } {
   if (run.taskExpired || !run.harnessIssue) {
-    return { enabled: false, reason: "Test task expired" };
+    return { enabled: false, reason: t("Test task expired") };
   }
   return { enabled: true, reason: null };
 }
@@ -129,19 +130,19 @@ export interface RunGateResult {
  */
 export function evaluateRunGate(input: RunGateInput): RunGateResult {
   if (input.skillFileCount <= 0) {
-    return { disabled: true, reason: "This skill has no files to test" };
+    return { disabled: true, reason: t("This skill has no files to test") };
   }
   if (!input.hasAgent) {
-    return { disabled: true, reason: "Pick an agent to run" };
+    return { disabled: true, reason: t("Pick an agent to run") };
   }
   if (!input.hasInput) {
-    return { disabled: true, reason: "Add or paste input text to run" };
+    return { disabled: true, reason: t("Add or paste input text to run") };
   }
   if (input.hasUnsavedSkillEdits) {
-    return { disabled: true, reason: "Save skill edits before running" };
+    return { disabled: true, reason: t("Save skill edits before running") };
   }
   if (input.runInFlight) {
-    return { disabled: true, reason: "A run is already in progress" };
+    return { disabled: true, reason: t("A run is already in progress") };
   }
   return { disabled: false, reason: null };
 }
@@ -357,9 +358,9 @@ export interface RunMediaGalleryItem {
 }
 
 function runHarnessUnavailableTitle(reason: CompanySkillTestRunHarnessContentUnavailableReason | null) {
-  if (reason === "expired") return "Test task expired";
-  if (reason === "deleted") return "Test task deleted";
-  return "Test task unavailable";
+  if (reason === "expired") return t("Test task expired");
+  if (reason === "deleted") return t("Test task deleted");
+  return t("Test task unavailable");
 }
 
 export function runHarnessUnavailableCopy(
@@ -368,7 +369,7 @@ export function runHarnessUnavailableCopy(
   if (detail.harnessContent.available) return null;
   return {
     title: runHarnessUnavailableTitle(detail.harnessContent.unavailableReason),
-    body: "Stored run snapshots are still shown. Harness documents, attachments, and work products are no longer available.",
+    body: t("Stored run snapshots are still shown. Harness documents, attachments, and work products are no longer available."),
   };
 }
 

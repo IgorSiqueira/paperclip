@@ -1,10 +1,11 @@
 import type { Issue } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 export const taskListViews = [
-  { value: "inbox", label: "Inbox" },
-  { value: "unread", label: "Unread" },
-  { value: "blocked", label: "Needs attention" },
-  { value: "all", label: "All tasks" },
+  { value: "inbox", label: t("Inbox") },
+  { value: "unread", label: t("Unread") },
+  { value: "blocked", label: t("Needs attention") },
+  { value: "all", label: t("All tasks") },
 ] as const;
 
 export type TaskListView = typeof taskListViews[number]["value"];

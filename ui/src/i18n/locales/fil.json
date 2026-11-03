@@ -1,9 +1,5 @@
 {
-  "app": {
-    "noCompanies": {
-      "title": "Gumawa ng iyong unang kumpanya",
-      "description": "Magsimula sa paggawa ng kumpanya.",
-      "newCompany": "Bagong Kumpanya"
-    }
-  }
+  "Create your first organization": "Gumawa ng iyong unang kumpanya",
+  "Get started by creating an organization.": "Magsimula sa paggawa ng kumpanya.",
+  "New Organization": "Bagong Kumpanya"
 }

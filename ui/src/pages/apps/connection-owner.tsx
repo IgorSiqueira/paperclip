@@ -2,6 +2,7 @@ import type { McpConnection, ToolConnection } from "@paperclipai/shared";
 import { humanizeConnectionDisplayName } from "@paperclipai/shared";
 import { Identity } from "@/components/Identity";
 import type { CompanyUserProfile } from "@/lib/company-members";
+import { t } from "@/i18n";
 
 export type ConnectionOwnerProfile = CompanyUserProfile;
 
@@ -11,7 +12,7 @@ export function connectionOwnerProfile(
 ): ConnectionOwnerProfile | null {
   if (!connection.createdByUserId) return null;
   return profiles.get(connection.createdByUserId) ?? {
-    label: connection.createdByUserId === "local-board" ? "Board" : "Board member",
+    label: connection.createdByUserId === "local-board" ? t("Board") : t("Board member"),
     image: null,
   };
 }
@@ -60,7 +61,7 @@ export function assistantConnectionDisplayName(connection: McpConnection): strin
 }
 
 export function ConnectionOwnerIdentity({ owner }: { owner: ConnectionOwnerProfile | null }) {
-  if (!owner) return <span className="text-xs text-muted-foreground">Unknown</span>;
+  if (!owner) return <span className="text-xs text-muted-foreground">{t("Unknown")}</span>;
   return (
     <Identity
       name={owner.label}

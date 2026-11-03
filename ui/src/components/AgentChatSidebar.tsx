@@ -6,6 +6,7 @@ import { useSidebar } from "@/context/SidebarContext";
 import type { Agent } from "@paperclipai/shared";
 import { agentRouteRef, cn } from "@/lib/utils";
 import { orderChatAgents } from "@/lib/recent-agent-chats";
+import { t } from "@/i18n";
 export function AgentChatSidebar({
   activeId,
   starredIds,
@@ -47,7 +48,7 @@ export function AgentChatSidebar({
             size="icon-xs"
             aria-label={`${pinned ? "Unstar" : "Star"} ${agent.name}`}
             aria-pressed={pinned}
-            title={pinned ? "Unstar agent" : "Star agent to pin"}
+            title={pinned ? t("Unstar agent") : t("Star agent to pin")}
             onClick={(event) => {
               event.stopPropagation();
               onToggleStar(agent.id);
@@ -64,15 +65,15 @@ export function AgentChatSidebar({
     );
   };
   return (
-    <section aria-label="Chats" className="group/chats flex flex-col gap-0.5">
+    <section aria-label={t("Chats")} className="group/chats flex flex-col gap-0.5">
       <div className="relative flex min-h-9 items-center px-4 py-1.5">
-        <span className={cn("font-mono text-(length:--text-nano) font-medium uppercase tracking-widest text-muted-foreground/60", rail && "sr-only")}>Chats</span>
+        <span className={cn("font-mono text-(length:--text-nano) font-medium uppercase tracking-widest text-muted-foreground/60", rail && "sr-only")}>{t("Chats")}</span>
         <Button
           type="button"
           variant="ghost"
           size="icon-xs"
-          aria-label="Chat with an agent"
-          title="Chat with an agent"
+          aria-label={t("Chat with an agent")}
+          title={t("Chat with an agent")}
           onClick={onOpenChat}
           className="absolute right-2 top-(--pct-50) -translate-y-(--pct-50) text-muted-foreground opacity-0 group-hover/chats:opacity-100 focus-visible:opacity-100 pointer-coarse:opacity-100"
         >

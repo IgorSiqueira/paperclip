@@ -1,9 +1,10 @@
 import { getAppStoreDefinition } from "@paperclipai/shared";
 import { ApiKeyCredentialField } from "./ApiKeyCredentialField";
+import { t } from "@/i18n";
 
 export const AGENTMAIL_API_KEYS_URL = getAppStoreDefinition("agentmail")!.methods[0]!.consoleLinks!.keys!;
 
-export function AgentMailApiKeyField({ value, onChange, disabled = false, label = "API key" }: {
+export function AgentMailApiKeyField({ value, onChange, disabled = false, label = t("API key") }: {
   value: string;
   onChange(value: string): void;
   disabled?: boolean;

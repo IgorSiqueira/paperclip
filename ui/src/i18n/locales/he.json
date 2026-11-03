@@ -1,9 +1,5 @@
 {
-  "app": {
-    "noCompanies": {
-      "title": "צרו את החברה הראשונה שלכם",
-      "description": "התחילו ביצירת חברה.",
-      "newCompany": "חברה חדשה"
-    }
-  }
+  "Create your first organization": "צרו את החברה הראשונה שלכם",
+  "Get started by creating an organization.": "התחילו ביצירת חברה.",
+  "New Organization": "חברה חדשה"
 }

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { RelationNavigationList, TaskDetailSubtasksPanel, TaskDetailTaskList } from "./TaskDetailRelationsPanel";
 import { IssueCreatedFromNote } from "./IssueCreatedFromNote";
+import { t } from "@/i18n";
 
 function TaskGroup({ name, projectPath, children }: { name: string; projectPath?: string; children: ReactNode }) {
   return (
@@ -23,7 +24,7 @@ function TaskGroup({ name, projectPath, children }: { name: string; projectPath?
             </CollapsibleTrigger>
           </h2>
           {projectPath && (
-            <Link to={projectPath} aria-label={`Go to ${name} project`} title={`Go to ${name} project`} className="ml-auto inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-muted-foreground opacity-0 transition-opacity duration-(--motion-duration-fast) ease-(--motion-ease-standard) hover:bg-accent hover:text-foreground group-hover/header:opacity-100 group-focus-within/header:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            <Link to={projectPath} aria-label={t("Go to {{name}} project", { name })} title={t("Go to {{name}} project", { name })} className="ml-auto inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-muted-foreground opacity-0 transition-opacity duration-(--motion-duration-fast) ease-(--motion-ease-standard) hover:bg-accent hover:text-foreground group-hover/header:opacity-100 group-focus-within/header:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
               <ArrowUpRight aria-hidden className="h-3.5 w-3.5" />
             </Link>
           )}
@@ -65,7 +66,7 @@ export function TaskDetailTasksPanel({ ancestors = [], createdFrom = null, subta
     groups.set(key, group);
   }
   return (
-    <section className="flex flex-col gap-6" aria-label="Related tasks">
+    <section className="flex flex-col gap-6" aria-label={t("Related tasks")}>
       {createdFrom && (
         <TaskGroup name="Created from">
           <IssueCreatedFromNote createdFrom={createdFrom} issueLinkState={issueLinkState} className="px-2 text-sm" />
@@ -76,7 +77,7 @@ export function TaskDetailTasksPanel({ ancestors = [], createdFrom = null, subta
           <RelationNavigationList
             items={[...ancestors].reverse()}
             emptyMessage=""
-            ariaLabel="Ancestor tasks, root to parent"
+            ariaLabel={t("Ancestor tasks, root to parent")}
             issueLinkState={issueLinkState}
           />
         </TaskGroup>
@@ -88,18 +89,18 @@ export function TaskDetailTasksPanel({ ancestors = [], createdFrom = null, subta
       )}
       {[...groups.entries()].sort(([, a], [, b]) => a.name.localeCompare(b.name)).map(([id, group]) => (
         <TaskGroup key={id} name={group.name} projectPath={group.path}>
-          <TaskDetailTaskList items={group.tasks} ariaLabel={`${group.name} tasks`} issueLinkState={issueLinkState} />
+          <TaskDetailTaskList items={group.tasks} ariaLabel={t("{{name}} tasks", { name: group.name })} issueLinkState={issueLinkState} />
         </TaskGroup>
       ))}
-      {isLoading && <p role="status" className="text-sm text-muted-foreground">Loading tasks…</p>}
+      {isLoading && <p role="status" className="text-sm text-muted-foreground">{t("Loading tasks…")}</p>}
       {hasError && (
         <div role="alert" className="flex items-center gap-2 text-sm text-destructive">
-          <span>Could not load all tasks.</span>
-          {onRetry && <Button variant="ghost" size="sm" onClick={onRetry}>Retry</Button>}
+          <span>{t("Could not load all tasks.")}</span>
+          {onRetry && <Button variant="ghost" size="sm" onClick={onRetry}>{t("Retry")}</Button>}
         </div>
       )}
       {!isLoading && !hasError && !createdFrom && ancestors.length === 0 && subtasks.length === 0 && createdTasks.length === 0 && (
-        <p className="py-6 text-center text-sm text-muted-foreground">No tasks yet.</p>
+        <p className="py-6 text-center text-sm text-muted-foreground">{t("No tasks yet.")}</p>
       )}
     </section>
   );

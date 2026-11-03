@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 /**
  * Prosumer copy for the Apps surface (PAP-10856).
  *
@@ -51,110 +52,110 @@ export interface AppCopy {
  */
 const APP_COPY: Record<string, AppCopy> = {
   zapier: {
-    tagline: "Reach 9,000+ apps your team already uses.",
-    short: "Reach 9,000+ apps from your agents.",
+    tagline: t("Reach 9,000+ apps your team already uses."),
+    short: t("Reach 9,000+ apps from your agents."),
   },
   github: {
-    tagline: "Read code and pull requests, comment on issues.",
-    short: "Read code and pull requests, comment on issues.",
+    tagline: t("Read code and pull requests, comment on issues."),
+    short: t("Read code and pull requests, comment on issues."),
   },
   slack: {
-    tagline: "Send and read messages in your team's channels.",
-    short: "Send and read messages in your channels.",
+    tagline: t("Send and read messages in your team's channels."),
+    short: t("Send and read messages in your channels."),
   },
   notion: {
-    tagline: "Read and update pages in your workspace.",
-    short: "Read and update pages in your workspace.",
+    tagline: t("Read and update pages in your workspace."),
+    short: t("Read and update pages in your workspace."),
   },
   railway: {
-    tagline: "Inspect services, read logs, and manage deployments.",
-    short: "Connect Railway for deployments, logs, and container access.",
+    tagline: t("Inspect services, read logs, and manage deployments."),
+    short: t("Connect Railway for deployments, logs, and container access."),
   },
   posthog: {
-    tagline: "Explore product usage, errors, flags, and experiments.",
-    short: "Sign in with PostHog. Project pinning and access controls are optional.",
+    tagline: t("Explore product usage, errors, flags, and experiments."),
+    short: t("Sign in with PostHog. Project pinning and access controls are optional."),
   },
   ditto: {
-    tagline: "Reuse approved product copy and follow your style guide.",
-    short: "Sign in with Ditto. API keys are optional.",
+    tagline: t("Reuse approved product copy and follow your style guide."),
+    short: t("Sign in with Ditto. API keys are optional."),
   },
   gauge: {
-    tagline: "Track your brand in AI answers and run content workflows.",
-    short: "Sign in with Gauge and pick an organization. API keys are optional.",
+    tagline: t("Track your brand in AI answers and run content workflows."),
+    short: t("Sign in with Gauge and pick an organization. API keys are optional."),
   },
   neon: {
-    tagline: "Manage Postgres projects, branches, and queries.",
-    short: "Sign in with Neon. Project pinning and read-only mode are optional.",
+    tagline: t("Manage Postgres projects, branches, and queries."),
+    short: t("Sign in with Neon. Project pinning and read-only mode are optional."),
   },
   superagent: {
-    tagline: "Review security findings and run red-team checks.",
-    short: "Connect with a Superagent API key. Billable and destructive tools stay under action policies.",
+    tagline: t("Review security findings and run red-team checks."),
+    short: t("Connect with a Superagent API key. Billable and destructive tools stay under action policies."),
   },
   linear: {
-    tagline: "Create, update and read tickets.",
-    short: "Create, update and read tickets.",
+    tagline: t("Create, update and read tickets."),
+    short: t("Create, update and read tickets."),
   },
   "google-sheets": {
-    tagline: "Read and update selected spreadsheets.",
-    short: "Read spreadsheets or update the files you choose.",
+    tagline: t("Read and update selected spreadsheets."),
+    short: t("Read spreadsheets or update the files you choose."),
   },
   gmail: {
-    tagline: "Read mail and create drafts for your review.",
-    short: "Read mail and create drafts for your review.",
+    tagline: t("Read mail and create drafts for your review."),
+    short: t("Read mail and create drafts for your review."),
   },
   "google-drive": {
-    tagline: "Find, read, and create files in Drive.",
-    short: "Find, read, and create files in Drive.",
+    tagline: t("Find, read, and create files in Drive."),
+    short: t("Find, read, and create files in Drive."),
   },
   "google-docs": {
-    tagline: "Read and update documents.",
-    short: "Read and update documents.",
+    tagline: t("Read and update documents."),
+    short: t("Read and update documents."),
   },
   "google-slides": {
-    tagline: "Read and update presentations.",
-    short: "Read and update presentations.",
+    tagline: t("Read and update presentations."),
+    short: t("Read and update presentations."),
   },
   "google-calendar": {
-    tagline: "Review calendars and manage events.",
-    short: "Review calendars and manage events.",
+    tagline: t("Review calendars and manage events."),
+    short: t("Review calendars and manage events."),
   },
   "google-chat": {
-    tagline: "Read conversations and send messages.",
-    short: "Read conversations and send messages.",
+    tagline: t("Read conversations and send messages."),
+    short: t("Read conversations and send messages."),
   },
   "google-people": {
-    tagline: "Look up contacts and people in your directory.",
-    short: "Look up contacts and people in your directory.",
+    tagline: t("Look up contacts and people in your directory."),
+    short: t("Look up contacts and people in your directory."),
   },
   "google-workspace-search": {
-    tagline: "Search across your Google workspace.",
-    short: "Search across your Google workspace.",
+    tagline: t("Search across your Google workspace."),
+    short: t("Search across your Google workspace."),
   },
   hubspot: {
-    tagline: "Look up contacts and update deal stages.",
-    short: "Look up contacts and update deal stages.",
+    tagline: t("Look up contacts and update deal stages."),
+    short: t("Look up contacts and update deal stages."),
   },
   intercom: {
-    tagline: "Read and reply to customer conversations.",
-    short: "Read and reply to customer conversations.",
+    tagline: t("Read and reply to customer conversations."),
+    short: t("Read and reply to customer conversations."),
   },
   figma: {
-    tagline: "Read files and post comments on frames.",
-    short: "Read files and post comments on frames.",
+    tagline: t("Read files and post comments on frames."),
+    short: t("Read files and post comments on frames."),
   },
   stripe: {
-    tagline: "Read customers, invoices, and payouts.",
-    short: "Read customers, invoices, and payouts.",
+    tagline: t("Read customers, invoices, and payouts."),
+    short: t("Read customers, invoices, and payouts."),
   },
   context7: {
-    tagline: "Look up up-to-date docs for your libraries.",
-    short: "Look up up-to-date docs for your libraries.",
+    tagline: t("Look up up-to-date docs for your libraries."),
+    short: t("Look up up-to-date docs for your libraries."),
   },
 };
 
 const GENERIC: AppCopy = {
-  tagline: "Give your agents access to this app.",
-  short: "Give your agents access to this app.",
+  tagline: t("Give your agents access to this app."),
+  short: t("Give your agents access to this app."),
 };
 
 /** Curated, gate-safe copy for a gallery app. */
@@ -180,7 +181,7 @@ export function credentialFieldLabel(
   fieldCount: number,
 ): string {
   if (/^Paste your\b/.test(rawLabel)) return sanitizeProsumerCopy(rawLabel);
-  if (fieldCount <= 1) return `Your ${appName} key`;
+  if (fieldCount <= 1) return t("Your {{appName}} key", { appName });
   const cleaned = sanitizeProsumerCopy(rawLabel);
-  return cleaned || `Your ${appName} key`;
+  return cleaned || t("Your {{appName}} key", { appName });
 }

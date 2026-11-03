@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { MarkdownBody } from "./MarkdownBody";
 import { cn } from "../lib/utils";
 import { Loader2, Send, CheckCircle2, ArrowRight } from "lucide-react";
+import { t } from "@/i18n";
 
 interface OnboardingChatProps {
   taskId: string;
@@ -67,15 +68,15 @@ function getRunStatusMessage(status: string, agentName: string, elapsed: number)
     case "running":
       return getCyclingMessage(RUNNING_MESSAGES, elapsed, agentName);
     case "succeeded":
-      return `${agentName} finished`;
+      return t("{{agentName}} finished", { agentName });
     case "failed":
-      return `${agentName} encountered an error`;
+      return t("{{agentName}} encountered an error", { agentName });
     case "cancelled":
-      return `${agentName}'s run was cancelled`;
+      return t("{{agentName}}'s run was cancelled", { agentName });
     case "timed_out":
-      return `${agentName}'s run timed out`;
+      return t("{{agentName}}'s run timed out", { agentName });
     default:
-      return `${agentName} is thinking...`;
+      return t("{{agentName}} is thinking...", { agentName });
   }
 }
 
@@ -242,14 +243,14 @@ export function OnboardingChat({
   }, [waitingSince]);
 
   const elapsedStr = elapsed >= 60
-    ? `${Math.floor(elapsed / 60)}m ${elapsed % 60}s`
+    ? t("{{floor}}m {{elapsed}}s", { floor: Math.floor(elapsed / 60), elapsed: elapsed % 60 })
     : `${elapsed}s`;
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-8 text-muted-foreground text-sm">
         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-        Loading conversation...
+        {t("Loading conversation...")}
       </div>
     );
   }
@@ -296,12 +297,12 @@ export function OnboardingChat({
                       : "text-foreground/70",
                   )}
                 >
-                  {isAgent ? agentName : "You"}
+                  {isAgent ? agentName : t("You")}
                 </span>
                 {isPlan && (
                   <span className="inline-flex items-center gap-0.5 text-(length:--text-nano) text-green-600 dark:text-green-400 font-medium">
                     <CheckCircle2 className="h-3 w-3" />
-                    Hiring plan detected
+                    {t("Hiring plan detected")}
                   </span>
                 )}
               </div>
@@ -350,15 +351,15 @@ export function OnboardingChat({
               <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
               <div>
                 <p className="text-sm font-medium">
-                  {agentName} has prepared a hiring plan
+                  {agentName} {t("has prepared a hiring plan")}
                 </p>
                 <p className="text-(length:--text-micro) text-muted-foreground">
-                  Review it, make edits, then approve.
+                  {t("Review it, make edits, then approve.")}
                 </p>
               </div>
             </div>
             <Button size="sm" onClick={onReviewPlan}>
-              Review plan
+              {t("Review plan")}
               <ArrowRight className="h-3.5 w-3.5 ml-1" />
             </Button>
           </div>
@@ -371,7 +372,7 @@ export function OnboardingChat({
           ref={inputRef}
           type="text"
           className="flex-1 rounded-md border border-border bg-transparent px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-ring placeholder:text-muted-foreground/50"
-          placeholder={detectedPlanCommentId ? `Ask ${agentName} to revise the plan...` : `Message ${agentName}...`}
+          placeholder={detectedPlanCommentId ? t("Ask {{agentName}} to revise the plan...", { agentName }) : t("Message {{agentName}}...", { agentName })}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -432,13 +433,13 @@ function WelcomeMessage({
             </span>
           </div>
           <p>
-            Hi! Thanks for bringing me on to lead <strong>{companyName}</strong>.
+            {t("Hi! Thanks for bringing me on to lead")} <strong>{companyName}</strong>.
           </p>
           <p className="mt-1">
-            Our mission is: <em>{companyGoal}</em>
+            {t("Our mission is:")} <em>{companyGoal}</em>
           </p>
           <p className="mt-1">
-            I'm ready to put together a plan for who we should bring on. Want me to get started?
+            {t("I'm ready to put together a plan for who we should bring on. Want me to get started?")}
           </p>
         </div>
       )}
@@ -450,13 +451,13 @@ function WelcomeMessage({
             className="rounded-full border border-border px-3 py-1 text-xs hover:bg-accent/50 transition-colors text-muted-foreground hover:text-foreground"
             onClick={onDiscuss}
           >
-            Let's discuss first
+            {t("Let's discuss first")}
           </button>
           <button
             className="rounded-full border border-foreground bg-foreground text-background px-3 py-1 text-xs hover:opacity-90 transition-opacity"
             onClick={onStart}
           >
-            Yes, get started!
+            {t("Yes, get started!")}
           </button>
         </div>
       )}
@@ -472,8 +473,8 @@ function WelcomeMessage({
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500" />
           </span>
           {phase === "waking"
-            ? `${agentName} is waking up...`
-            : `${agentName} is composing a message...`}
+            ? t("{{agentName}} is waking up...", { agentName })
+            : t("{{agentName}} is composing a message...", { agentName })}
         </div>
       )}
     </>
